@@ -1,8 +1,7 @@
 package resources;
 
 import api.PingService;
-
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 public class PingResource implements PingService {
 
