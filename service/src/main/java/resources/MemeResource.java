@@ -1,7 +1,7 @@
 package resources;
 
 import api.MemeService;
-import jakarta.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
 import models.Meme;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
