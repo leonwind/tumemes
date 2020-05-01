@@ -1,55 +1,55 @@
-package models;
+package core;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import java.io.*;
 import java.util.Date;
+import java.util.UUID;
 
-@Entity
-@Table(name = "memeDatabase")
 public class Meme {
 
     private final static String MEME_FILE_LOCATION = "src/main/resources/memes/";
 
     // id is unique to distinguish pictures
     // with same title
-    @Id
-    @Column(name = "id", nullable = false)
-    @NotNull
-    private final String id;
-
-    @Column(name = "title", length = 100, nullable = false)
-    @NotNull
-    @JsonProperty
+    private final String memeID;
     private final String title;
-
-    @Column(name = "author", length = 100, nullable = false)
-    @NotNull
-    @JsonProperty
     private final String author;
-    @Column(name = "created", nullable = false)
-    @NotNull
-    private final Date created;
-    @Column(name = "voteCount", nullable = false)
-    @NotNull
+    private final String memeFilePath;
     private int voteCount;
+    private final Date created;
 
+    /*
+     * Create Meme object for uploaded
+     * meme through the POST request
+     */
     public Meme(
             @JsonProperty("title") String title,
             @JsonProperty("author") String author) {
-        this.id = "";
+        this.memeID = UUID.randomUUID().toString().replace("-", "");
+        this.memeFilePath = MEME_FILE_LOCATION + memeID;
         this.title = title;
         this.author = author;
         voteCount = 0;
         created = new Date();
     }
 
-    public String getId() {
-        return id;
+    /*
+     * Create Meme object for existing Meme
+     * in the database
+     */
+    public Meme(String memeID, String title, String author,
+                String memeFilePath, int voteCount, Date created) {
+        this.memeID = memeID;
+        this.title = title;
+        this.author = author;
+        this.memeFilePath = memeFilePath;
+        this.voteCount = voteCount;
+        this.created = created;
+    }
+
+    public String getMemeID() {
+        return memeID;
     }
 
     public String getTitle() {
@@ -77,7 +77,21 @@ public class Meme {
     }
 
     public String getMemeFilePath() {
-        return MEME_FILE_LOCATION + id;
+        return memeFilePath;
+    }
+
+    public void saveMemeImage(InputStream image) throws IOException {
+        int read = 0;
+        byte[] bytes = new byte[1024];
+
+        OutputStream outputStream = new FileOutputStream(new File(memeFilePath));
+
+        while ((read = image.read(bytes)) != -1) {
+            outputStream.write(bytes, 0, read);
+        }
+
+        outputStream.flush();
+        outputStream.close();
     }
 
     @Override
@@ -91,12 +105,13 @@ public class Meme {
         }
 
         Meme newMeme = (Meme) object;
-        return this.getId().equals(newMeme.getId());
+        return this.getMemeID().equals(newMeme.getMemeID());
     }
 
     @Override
     public String toString() {
-        return "title: " + title + '\n' +
+        return "memeID: " + memeID + '\n' +
+                "title: " + title + '\n' +
                 "author: " + author + '\n' +
                 "vote count: " + voteCount + '\n' +
                 "created: " + created;

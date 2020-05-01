@@ -10,6 +10,11 @@ public class Configuration extends io.dropwizard.Configuration {
     private DataSourceFactory database = new DataSourceFactory();
 
     @JsonProperty("database")
+    public void setDataSourceFactory(DataSourceFactory factory) {
+        database = factory;
+    }
+
+    @JsonProperty("database")
     public DataSourceFactory getDataSourceFactory() {
         return database;
     }

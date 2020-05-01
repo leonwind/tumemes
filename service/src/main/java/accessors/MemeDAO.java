@@ -1,33 +1,21 @@
 package accessors;
 
-import io.dropwizard.hibernate.AbstractDAO;
-import models.Meme;
-import org.hibernate.SessionFactory;
+import org.jdbi.v3.sqlobject.customizer.Bind;
+import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import java.util.Date;
 
-public class MemeDAO extends AbstractDAO<Meme> {
+public interface MemeDAO {
 
-    public MemeDAO(SessionFactory factory) {
-        super(factory);
-    }
+    @SqlUpdate("create table memeDB " +
+            "(memeID varchar(32) primary key, title varchar, author varchar," +
+            "memeFilePath varchar, voteCount int, created Date)")
+    void createMemeDBTable();
 
-    public Meme insert(Meme meme) {
-        return persist(meme);
-    }
-
-    public void delete(Meme meme) {
-        currentSession().delete(meme);
-    }
-
-    public void update(Meme meme) {
-        currentSession().merge(meme);
-    }
-
-    public Meme findById(String id) {
-        return currentSession().get(Meme.class, id);
-    }
-
-    public boolean idExists(String id) {
-        return false;
-    }
+    @SqlUpdate("insert into memeDB " +
+            "(memeID, title, author, memeFilePath, voteCount, created)" +
+            "values (:memeID, :title, :author, :memeFilePath, :voteCount, :created)")
+    void insert(@Bind("memeID") String memeID, @Bind("title") String title,
+                @Bind("author") String author, @Bind("memeFilePath") String memeFilePath,
+                @Bind("voteCount") int voteCount, @Bind("Created") Date created);
 }

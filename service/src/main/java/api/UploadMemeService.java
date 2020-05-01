@@ -1,6 +1,6 @@
 package api;
 
-import models.Meme;
+import core.Meme;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -12,12 +12,12 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
-@Path("/meme")
+@Path("/memes")
 public interface UploadMemeService {
 
+    @Path("/upload")
     @POST
     @Consumes({MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA})
-    @Path("/upload")
     Response uploadMeme(
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,

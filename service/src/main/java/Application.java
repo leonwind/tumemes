@@ -1,22 +1,13 @@
-import accessors.MemeDAO;
-import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.forms.MultiPartBundle;
-import io.dropwizard.hibernate.HibernateBundle;
+import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import models.Meme;
+import org.jdbi.v3.core.Jdbi;
 import resources.PingResource;
 import resources.UploadMemeResource;
 
 
 public class Application extends io.dropwizard.Application<Configuration> {
-
-    private final HibernateBundle<Configuration> hibernate = new HibernateBundle<>(Meme.class) {
-        @Override
-        public DataSourceFactory getDataSourceFactory(Configuration configuration) {
-            return configuration.getDataSourceFactory();
-        }
-    };
 
     public static void main(String[] args) throws Exception {
         new Application().run(args);
@@ -30,15 +21,16 @@ public class Application extends io.dropwizard.Application<Configuration> {
     @Override
     public void initialize(Bootstrap<Configuration> bootstrap) {
         bootstrap.addBundle(new MultiPartBundle());
-        bootstrap.addBundle(hibernate);
     }
 
     @Override
     public void run(Configuration configuration, Environment environment) {
-        final MemeDAO dao = new MemeDAO(hibernate.getSessionFactory());
+        final JdbiFactory factory = new JdbiFactory();
+        final Jdbi memeDAO = factory.build(environment,
+                configuration.getDataSourceFactory(), "postgresql");
 
         final PingResource ping = new PingResource();
-        final UploadMemeResource uploadMeme = new UploadMemeResource(dao);
+        final UploadMemeResource uploadMeme = new UploadMemeResource(memeDAO);
 
         environment.jersey().register(ping);
         environment.jersey().register(uploadMeme);
