@@ -10,3 +10,9 @@ build
 gradle
 gradlew
 gradlew.bat
+
+# meme folder
+*.png
+*.jpeg
+*.jpg
+*.gif
