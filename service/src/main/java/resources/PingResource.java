@@ -6,8 +6,8 @@ import javax.ws.rs.core.Response;
 
 public class PingResource implements PingService {
 
-    @Override
-    public Response ping() {
-        return Response.ok("ok").build();
-    }
+  @Override
+  public Response ping() {
+    return Response.ok("ok").build();
+  }
 }

@@ -15,36 +15,30 @@ import java.io.File;
 
 public class sendFileClient {
 
-    @Test
-    public void testGetIt() throws Exception {
+  @Test
+  public void testGetIt() throws Exception {
 
-        final Client client = ClientBuilder.newBuilder()
-                .register(MultiPartFeature.class)
-                .build();
-        WebTarget t = client.target("http://localhost:8080/memes/upload");
+    final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
+    WebTarget t = client.target("http://localhost:8080/memes/upload");
 
-        File f = new File("download.jpeg");
+    File f = new File("download.jpeg");
 
-        FileDataBodyPart filePart = new FileDataBodyPart("file", f);
-        filePart.setContentDisposition(
-                FormDataContentDisposition.name("file")
-                        .fileName("meme1.jpg").build());
+    FileDataBodyPart filePart = new FileDataBodyPart("file", f);
+    filePart.setContentDisposition(
+        FormDataContentDisposition.name("file").fileName("file.jpg").build());
 
-        String meme
-                = "{"
-                + "  \"title\": \"meme1\","
-                + "  \"author\": \"leon\""
-                + "}";
+    String meme = "{" + "  \"title\": \"meme1\"," + "  \"author\": \"leon\"" + "}";
 
-        MultiPart multipartEntity = new FormDataMultiPart()
-                .field("meme", meme, MediaType.APPLICATION_JSON_TYPE)
-                .bodyPart(filePart);
+    MultiPart multipartEntity =
+        new FormDataMultiPart()
+            .field("meme", meme, MediaType.APPLICATION_JSON_TYPE)
+            .bodyPart(filePart);
 
-        Response response = t.request().post(
-                Entity.entity(multipartEntity, multipartEntity.getMediaType()));
-        System.out.println(response.getStatus());
-        System.out.println(response.readEntity(String.class));
+    Response response =
+        t.request().post(Entity.entity(multipartEntity, multipartEntity.getMediaType()));
+    System.out.println(response.getStatus());
+    System.out.println(response.readEntity(String.class));
 
-        response.close();
-    }
+    response.close();
+  }
 }
