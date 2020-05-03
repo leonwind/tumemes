@@ -21,7 +21,7 @@ public class sendFileClient {
     final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
     WebTarget t = client.target("http://localhost:8080/memes/upload");
 
-    File f = new File("download.jpeg");
+    File f = new File("meme1.jpg");
 
     FileDataBodyPart filePart = new FileDataBodyPart("file", f);
     filePart.setContentDisposition(

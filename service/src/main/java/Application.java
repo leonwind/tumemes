@@ -30,10 +30,10 @@ public class Application extends io.dropwizard.Application<Configuration> {
         factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
 
-    final PingResource ping = new PingResource();
-    final MemeResource uploadMeme = new MemeResource(memeDAO);
+    final PingResource pingResource = new PingResource();
+    final MemeResource memeResource = new MemeResource(memeDAO);
 
-    environment.jersey().register(ping);
-    environment.jersey().register(uploadMeme);
+    environment.jersey().register(pingResource);
+    environment.jersey().register(memeResource);
   }
 }

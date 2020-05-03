@@ -39,6 +39,8 @@ public class MemeResource implements MemeService {
       return Response.status(400).entity("Error while saving new image").build();
     }
 
+    System.out.println("SAVED MEME SUCCESSFULLY");
+
     memeDAO.insert(
         meme.getMemeID().toString(),
         meme.getTitle(),

@@ -1,7 +1,5 @@
 package core;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.util.Date;
 import java.util.UUID;
 
@@ -15,7 +13,10 @@ public class Meme {
   private final int voteCount;
   private final Date created;
 
-
+  /**
+   * Convert new uploaded NewMeme object
+   * into Meme object
+   */
   public static Meme fromNewMeme(NewMeme newMeme) {
     UUID memeID = UUID.randomUUID();
     return new Meme(memeID, newMeme.getTitle(), newMeme.getAuthor());
