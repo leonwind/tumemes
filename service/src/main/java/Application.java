@@ -1,11 +1,14 @@
 import accessors.MemeDAO;
+import accessors.VoteDAO;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.jdbi.v3.core.Jdbi;
-import resources.PingResource;
 import resources.MemeResource;
+import resources.PingResource;
+import resources.UploadResource;
+import resources.VoteResource;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 
@@ -26,14 +29,23 @@ public class Application extends io.dropwizard.Application<Configuration> {
   @Override
   public void run(Configuration configuration, Environment environment) {
     final JdbiFactory factory = new JdbiFactory();
-    final Jdbi jdbi =
-        factory.build(environment, configuration.getDataSourceFactory(), "postgresql");
-    final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
+
+    final Jdbi memesJdbi =
+        factory.build(environment, configuration.getMemesDataSourceFactory(), "postgresql");
+    final MemeDAO memeDAO = memesJdbi.onDemand(MemeDAO.class);
+
+    final Jdbi memeVotesJdbi =
+        factory.build(environment, configuration.getMemeVotesDataSourceFactory(), "postgres");
+    final VoteDAO voteDAO = memeVotesJdbi.onDemand(VoteDAO.class);
 
     final PingResource pingResource = new PingResource();
     final MemeResource memeResource = new MemeResource(memeDAO);
+    final UploadResource uploadResource = new UploadResource(memeDAO);
+    final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
 
     environment.jersey().register(pingResource);
     environment.jersey().register(memeResource);
+    environment.jersey().register(uploadResource);
+    environment.jersey().register(voteResource);
   }
 }

@@ -1,5 +1,6 @@
 package core;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -10,7 +11,6 @@ public class Meme {
   private final UUID memeID;
   private final String title;
   private final String author;
-  private final int voteCount;
   private final Date created;
 
   /**
@@ -30,7 +30,6 @@ public class Meme {
     this.memeID = memeID;
     this.title = title;
     this.author = author;
-    voteCount = 0;
     created = new Date();
   }
 
@@ -42,7 +41,6 @@ public class Meme {
     this.memeID = memeID;
     this.title = title;
     this.author = author;
-    this.voteCount = voteCount;
     this.created = created;
   }
 
@@ -56,10 +54,6 @@ public class Meme {
 
   public String getAuthor() {
     return author;
-  }
-
-  public int getVoteCount() {
-    return voteCount;
   }
 
   public Date getCreated() {
@@ -90,9 +84,6 @@ public class Meme {
         + '\n'
         + "author: "
         + author
-        + '\n'
-        + "vote count: "
-        + voteCount
         + '\n'
         + "created: "
         + created;

@@ -5,15 +5,26 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 public class Configuration extends io.dropwizard.Configuration {
-  @Valid @NotNull private DataSourceFactory database = new DataSourceFactory();
+  @Valid @NotNull private DataSourceFactory memes = new DataSourceFactory();
+  @Valid @NotNull private DataSourceFactory memeVotes = new DataSourceFactory();
 
-  @JsonProperty("database")
-  public void setDataSourceFactory(DataSourceFactory factory) {
-    database = factory;
+  @JsonProperty("memes")
+  public void setMemesDataSourceFactory(DataSourceFactory factory) {
+    memes = factory;
   }
 
-  @JsonProperty("database")
-  public DataSourceFactory getDataSourceFactory() {
-    return database;
+  @JsonProperty("memes")
+  public DataSourceFactory getMemesDataSourceFactory() {
+    return memes;
+  }
+
+  @JsonProperty("memeVotes")
+  public void setMemeVotesDataSourceFactory(DataSourceFactory factory) {
+    memeVotes = factory;
+  }
+
+  @JsonProperty("memeVotes")
+  public DataSourceFactory getMemeVotesDataSourceFactory() {
+    return memeVotes;
   }
 }

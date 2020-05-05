@@ -19,7 +19,7 @@ public class sendFileClient {
   public void testGetIt() throws Exception {
 
     final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
-    WebTarget t = client.target("http://localhost:8080/memes/upload");
+    WebTarget t = client.target("http://localhost:8080/upload");
 
     File f = new File("meme1.jpg");
 
