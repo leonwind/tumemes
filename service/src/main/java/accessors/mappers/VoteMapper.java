@@ -15,6 +15,6 @@ public class VoteMapper implements RowMapper<Vote> {
         return new Vote(
                 UUID.fromString(rs.getString("memeID")),
                 rs.getString("username"),
-                rs.getBoolean("upvoted"));
+                rs.getInt("vote"));
     }
 }

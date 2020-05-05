@@ -26,24 +26,7 @@ public class VoteResource implements VoteService {
   public Response upvoteMeme(@PathParam("memeID") String memeID) {
     String username = "mock_username";
 
-    if (!memeDAO.memeIDExists(memeID)) {
-      return Response.status(400).build();
-    }
-
-    Vote existingVote = voteDAO.getVote(memeID, username);
-
-    if (existingVote == null) {
-      voteDAO.insertVote(memeID, username, true);
-      return Response.ok().build();
-    }
-
-    // update vote from upvoted to downvoted
-    if (!existingVote.isUpvoted()) {
-      voteDAO.updateVote(memeID, username, true);
-    }
-
-    return Response.ok().build();
-
+    return voteMeme(memeID, username, 1);
   }
 
   @Path("/downvote/{memeID}")
@@ -51,6 +34,10 @@ public class VoteResource implements VoteService {
   public Response downvoteMeme(@PathParam("memeID") String memeID) {
     String username = "mock_username";
 
+    return voteMeme(memeID, username, -1);
+  }
+
+  private Response voteMeme(String memeID, String username, int vote) {
     if (!memeDAO.memeIDExists(memeID)) {
       return Response.status(400).build();
     }
@@ -58,15 +45,15 @@ public class VoteResource implements VoteService {
     Vote existingVote = voteDAO.getVote(memeID, username);
 
     if (existingVote == null) {
-      voteDAO.insertVote(memeID, username, false);
+      voteDAO.insertVote(memeID, username, vote);
       return Response.ok().build();
     }
 
     // update vote from upvoted to downvoted
     if (existingVote.isUpvoted()) {
-      voteDAO.updateVote(memeID, username, false);
+      voteDAO.updateVote(memeID, username, vote);
     }
 
-    return Response.ok().build();
+    return Response.ok("").build();
   }
 }

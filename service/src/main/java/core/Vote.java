@@ -8,10 +8,10 @@ public class Vote {
     private final String username;
     private final boolean upvoted;
 
-    public Vote(UUID memeID, String username, boolean upvoted) {
+    public Vote(UUID memeID, String username, int vote) {
         this.memeID = memeID;
         this.username = username;
-        this.upvoted = upvoted;
+        this.upvoted = vote == 1;
     }
 
     public UUID getMemeID() {
