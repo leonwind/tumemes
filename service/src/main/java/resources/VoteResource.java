@@ -5,7 +5,6 @@ import accessors.VoteDAO;
 import api.VoteService;
 import core.Vote;
 
-import javax.validation.constraints.Null;
 import javax.ws.rs.PATCH;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -37,6 +36,10 @@ public class VoteResource implements VoteService {
     return voteMeme(memeID, username, -1);
   }
 
+  /**
+   * Add vote to memeVote database
+   * @param vote is either 1 (upvote) or -1 (downvote)
+   */
   private Response voteMeme(String memeID, String username, int vote) {
     if (!memeDAO.memeIDExists(memeID)) {
       return Response.status(400).build();
@@ -46,14 +49,17 @@ public class VoteResource implements VoteService {
 
     if (existingVote == null) {
       voteDAO.insertVote(memeID, username, vote);
-      return Response.ok().build();
+      return Response.ok("Meme voted").build();
     }
 
-    // update vote from upvoted to downvoted
-    if (existingVote.isUpvoted()) {
+    /*
+     * Toggle the current vote from down to upvote or the other way around
+     * if the new given vote is different from the existing one
+     */
+    if (existingVote.isUpvoted() != (1 == vote)) {
       voteDAO.updateVote(memeID, username, vote);
     }
 
-    return Response.ok("").build();
+    return Response.ok("Meme voted").build();
   }
 }
