@@ -1,6 +1,5 @@
 package core;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -11,36 +10,29 @@ public class Meme {
   private final UUID memeID;
   private final String title;
   private final String author;
+  private final int voteCount;
   private final Date created;
 
-  /**
-   * Convert new uploaded NewMeme object
-   * into Meme object
-   */
+  /** Convert new uploaded NewMeme object into Meme object */
   public static Meme fromNewMeme(NewMeme newMeme) {
-    UUID memeID = UUID.randomUUID();
-    return new Meme(memeID, newMeme.getTitle(), newMeme.getAuthor());
+    return new Meme(newMeme.getTitle(), newMeme.getAuthor());
   }
 
-  /**
-   * Create Meme object from new posted
-   * meme
-   */
-  public Meme(UUID memeID, String title, String author) {
-    this.memeID = memeID;
+  /** Create Meme object from new posted meme */
+  public Meme(String title, String author) {
+    this.memeID = UUID.randomUUID();
     this.title = title;
     this.author = author;
+    voteCount = 0;
     created = new Date();
   }
 
-  /**
-   * Create Meme object for existing Meme
-   * in the database
-   */
+  /** Create Meme object for existing Meme in the database */
   public Meme(UUID memeID, String title, String author, int voteCount, Date created) {
     this.memeID = memeID;
     this.title = title;
     this.author = author;
+    this.voteCount = voteCount;
     this.created = created;
   }
 
@@ -54,6 +46,10 @@ public class Meme {
 
   public String getAuthor() {
     return author;
+  }
+
+  public int getVoteCount() {
+    return voteCount;
   }
 
   public Date getCreated() {
@@ -84,6 +80,9 @@ public class Meme {
         + '\n'
         + "author: "
         + author
+        + '\n'
+        + "voteCount: "
+        + voteCount
         + '\n'
         + "created: "
         + created;

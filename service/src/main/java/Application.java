@@ -31,11 +31,13 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final JdbiFactory factory = new JdbiFactory();
 
     final Jdbi memesJdbi =
-        factory.build(environment, configuration.getMemesDataSourceFactory(), "postgresql");
+        factory.build(environment, configuration.getMemesDataSourceFactory(),
+                "memes");
     final MemeDAO memeDAO = memesJdbi.onDemand(MemeDAO.class);
 
     final Jdbi memeVotesJdbi =
-        factory.build(environment, configuration.getMemeVotesDataSourceFactory(), "postgres");
+        factory.build(environment,
+                configuration.getMemeVotesDataSourceFactory(), "memeVotes");
     final VoteDAO voteDAO = memeVotesJdbi.onDemand(VoteDAO.class);
 
     final PingResource pingResource = new PingResource();

@@ -23,4 +23,8 @@ public class MemeImageDAO {
         outputStream.close();
     }
 
+    public static String getMemeImagePath(Meme meme) {
+       return MEME_FILE_LOCATION + meme.getMemeID().toString();
+    }
+
 }

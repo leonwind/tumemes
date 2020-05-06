@@ -42,7 +42,7 @@ public class VoteResource implements VoteService {
    */
   private Response voteMeme(String memeID, String username, int vote) {
     if (!memeDAO.memeIDExists(memeID)) {
-      return Response.status(400).build();
+      return Response.status(400).entity("Meme does not exist").build();
     }
 
     Vote existingVote = voteDAO.getVote(memeID, username);

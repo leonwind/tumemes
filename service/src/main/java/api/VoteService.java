@@ -6,11 +6,11 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public interface VoteService {
 
-    @Path("/upvote/{memeID}")
     @PATCH
+    @Path("/upvote/{memeID}")
     Response upvoteMeme(@PathParam("memeID") String memeID);
 
-    @Path("/downvote/{memeID}")
     @PATCH
+    @Path("/downvote/{memeID}")
     Response downvoteMeme(@PathParam("memeID") String memeID);
 }
