@@ -18,7 +18,16 @@ public class MemeResource implements MemeService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public List<Meme> getMemes() {
+  public List<Meme> getMemes(@QueryParam("sortBy") String sortBy) {
+
+    if (sortBy == null) {
+      return memeDAO.getAllMemesByVotes();
+    }
+
+    if (sortBy.equals("created")) {
+      return memeDAO.getAllMemesByDate();
+    }
+
     return memeDAO.getAllMemesByVotes();
   }
 

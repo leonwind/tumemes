@@ -33,11 +33,19 @@ public interface MemeDAO {
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByVotes();
 
-  @SqlQuery("SELECT memes.memeID as memeID, memes.title as title, memes" +
-          ".author as author, COALESCE(sum(memevotes.vote), 0) as " +
-          "voteCount, memes.created as" +
-          " created FROM memes LEFT JOIN memeVotes ON :currMemeID = memeVotes" +
-          ".memeID GROUP BY memes.memeID")
+  @SqlQuery(
+      "SELECT memes.memeID as memeID, memes.title as title, memes.author as author, "
+          + "COALESCE(sum(memevotes.vote), 0) as voteCount, memes.created as created "
+          + "FROM memes LEFT JOIN memeVotes ON memes.memeID = memeVotes.memeID "
+          + "GROUP BY memes.memeID ORDER BY created DESC")
+  @RegisterRowMapper(MemeMapper.class)
+  List<Meme> getAllMemesByDate();
+
+  @SqlQuery(
+      "SELECT memes.memeID as memeID, memes.title as title, memes"
+          + ".author as author, COALESCE(sum(memevotes.vote), 0) as "
+          + "voteCount, memes.created as created FROM memes LEFT JOIN "
+          + "memeVotes ON :currMemeID = memeVotes.memeID GROUP BY memes.memeID")
   @RegisterRowMapper(MemeMapper.class)
   Meme getMemeByID(@Bind("currMemeID") String currMemeID);
 }
