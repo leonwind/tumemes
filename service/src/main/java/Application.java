@@ -23,7 +23,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
   @Override
   public String getName() {
-    return "tu-memes";
+    return "TUMemes";
   }
 
   @Override
@@ -35,7 +35,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
   public void run(Configuration configuration, Environment environment) {
     // Enable CORS headers
     final FilterRegistration.Dynamic cors =
-            environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        environment.servlets().addFilter("CORS", CrossOriginFilter.class);
 
     // Configure CORS parameters
     cors.setInitParameter("allowedOrigins", "*");
@@ -49,13 +49,11 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final JdbiFactory factory = new JdbiFactory();
 
     final Jdbi memesJdbi =
-        factory.build(environment, configuration.getMemesDataSourceFactory(),
-                "memes");
+        factory.build(environment, configuration.getMemesDataSourceFactory(), "memes");
     final MemeDAO memeDAO = memesJdbi.onDemand(MemeDAO.class);
 
     final Jdbi memeVotesJdbi =
-        factory.build(environment,
-                configuration.getMemeVotesDataSourceFactory(), "memeVotes");
+        factory.build(environment, configuration.getMemeVotesDataSourceFactory(), "memeVotes");
     final VoteDAO voteDAO = memeVotesJdbi.onDemand(VoteDAO.class);
 
     final PingResource pingResource = new PingResource();
