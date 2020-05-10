@@ -1,5 +1,7 @@
 package core;
 
+import accessors.MemeImageDAO;
+
 import java.util.Date;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ public class Meme {
   private final String author;
   private final int voteCount;
   private final Date created;
+  private final String imagePath;
 
   /** Convert new uploaded NewMeme object into Meme object */
   public static Meme fromNewMeme(NewMeme newMeme) {
@@ -25,6 +28,7 @@ public class Meme {
     this.author = author;
     voteCount = 0;
     created = new Date();
+    imagePath = MemeImageDAO.getMemeImagePath(memeID);
   }
 
   /** Create Meme object for existing Meme in the database */
@@ -34,6 +38,7 @@ public class Meme {
     this.author = author;
     this.voteCount = voteCount;
     this.created = created;
+    imagePath = MemeImageDAO.getMemeImagePath(memeID);
   }
 
   public UUID getMemeID() {
@@ -54,6 +59,10 @@ public class Meme {
 
   public Date getCreated() {
     return created;
+  }
+
+  public String getImagePath() {
+    return imagePath;
   }
 
   @Override

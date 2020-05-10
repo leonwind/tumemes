@@ -3,6 +3,7 @@ package accessors;
 import core.Meme;
 
 import java.io.*;
+import java.util.UUID;
 
 public class MemeImageDAO {
     private static final String MEME_FILE_LOCATION = "memeImages/";
@@ -23,8 +24,8 @@ public class MemeImageDAO {
         outputStream.close();
     }
 
-    public static String getMemeImagePath(Meme meme) {
-       return MEME_FILE_LOCATION + meme.getMemeID().toString();
+    public static String getMemeImagePath(UUID memeID) {
+       return MEME_FILE_LOCATION + memeID;
     }
 
 }

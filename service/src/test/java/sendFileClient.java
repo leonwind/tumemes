@@ -27,7 +27,8 @@ public class sendFileClient {
     filePart.setContentDisposition(
         FormDataContentDisposition.name("file").fileName("file.jpg").build());
 
-    String meme = "{" + "  \"title\": \"meme1\"," + "  \"author\": \"leon\"" + "}";
+    String meme = "{" + "  \"title\": \"newMeme\"," + "  \"author\": " +
+            "\"leon\"" + "}";
 
     MultiPart multipartEntity =
         new FormDataMultiPart()
