@@ -5,6 +5,9 @@ import accessors.MemeImageDAO;
 import api.UploadService;
 import core.Meme;
 import core.NewMeme;
+import enums.SupportedFiles;
+import exceptions.FileExceedsLimitExceptions;
+import exceptions.FileNotSupportedException;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -14,6 +17,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 
 public class UploadResource implements UploadService {
 
@@ -36,13 +40,14 @@ public class UploadResource implements UploadService {
     }
 
     Meme meme = Meme.fromNewMeme(newMeme);
-    System.out.println(meme.toString());
 
     try {
-      MemeImageDAO.saveImage(inputStream, meme);
-    } catch (IOException e) {
-      e.printStackTrace();
-      return Response.status(400).entity("Error while saving new image").build();
+      MemeImageDAO.saveImage(inputStream, fileDetail, meme);
+    } catch (FileExceedsLimitExceptions | FileNotSupportedException ex) {
+      return Response.status(400).entity(ex.getMessage()).build();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return Response.status(400).entity("Error while saving image").build();
     }
 
     memeDAO.insert(

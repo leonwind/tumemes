@@ -16,16 +16,18 @@ import java.io.File;
 public class sendFileClient {
 
   @Test
-  public void testGetIt() throws Exception {
+  public void testGetIt() {
 
     final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
     WebTarget t = client.target("http://localhost:8080/upload");
 
-    File f = new File("meme1.jpg");
+    String fileName = "meme1.jpg";
+
+    File f = new File(fileName);
 
     FileDataBodyPart filePart = new FileDataBodyPart("file", f);
     filePart.setContentDisposition(
-        FormDataContentDisposition.name("file").fileName("file.jpg").build());
+        FormDataContentDisposition.name("file").fileName(fileName).build());
 
     String meme = "{\"title\": \"newMeme\", \"author\": \"leon\"}";
 

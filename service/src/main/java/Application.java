@@ -48,7 +48,6 @@ public class Application extends io.dropwizard.Application<Configuration> {
         factory.build(environment, configuration.getMemeVotesDataSourceFactory(), "memeVotes");
     final VoteDAO voteDAO = memeVotesJdbi.onDemand(VoteDAO.class);
 
-
     final PingResource pingResource = new PingResource();
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);

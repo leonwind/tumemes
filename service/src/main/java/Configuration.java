@@ -10,7 +10,6 @@ public class Configuration extends io.dropwizard.Configuration
     implements AssetsBundleConfiguration {
 
   @Valid @NotNull private DataSourceFactory memes = new DataSourceFactory();
-
   @Valid @NotNull private DataSourceFactory memeVotes = new DataSourceFactory();
 
   @Valid @NotNull @JsonProperty
