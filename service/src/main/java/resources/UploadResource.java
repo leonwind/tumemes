@@ -5,7 +5,6 @@ import accessors.MemeImageDAO;
 import api.UploadService;
 import core.Meme;
 import core.NewMeme;
-import enums.SupportedFiles;
 import exceptions.FileExceedsLimitExceptions;
 import exceptions.FileNotSupportedException;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
@@ -15,9 +14,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
 
 public class UploadResource implements UploadService {
 

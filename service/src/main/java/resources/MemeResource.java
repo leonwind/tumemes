@@ -3,11 +3,9 @@ package resources;
 import accessors.MemeDAO;
 import api.MemeService;
 import core.Meme;
-import enums.SupportedFiles;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Arrays;
 import java.util.List;
 
 public class MemeResource implements MemeService {
