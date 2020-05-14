@@ -6,26 +6,27 @@ import java.io.*;
 import java.util.UUID;
 
 public class MemeImageDAO {
-    private static final String MEME_FILE_LOCATION = "memeImages/";
 
-    public static void saveImage(InputStream image, Meme meme) throws IOException {
-        int read = 0;
-        byte[] bytes = new byte[1024];
+  private static final String MEME_FILE_LOCATION = "images/";
 
-        File savedImage = new File(MEME_FILE_LOCATION + meme.getMemeID().toString());
+  public static void saveImage(InputStream image, Meme meme) throws IOException {
+    System.out.println("SAVE IMAGE NOW");
+    int read = 0;
+    byte[] bytes = new byte[1024];
 
-        OutputStream outputStream = new FileOutputStream(savedImage);
+    File savedImage = new File(MEME_FILE_LOCATION + meme.getMemeID().toString());
 
-        while ((read = image.read(bytes)) != -1) {
-            outputStream.write(bytes, 0, read);
-        }
+    OutputStream outputStream = new FileOutputStream(savedImage);
 
-        outputStream.flush();
-        outputStream.close();
+    while ((read = image.read(bytes)) != -1) {
+      outputStream.write(bytes, 0, read);
     }
 
-    public static String getMemeImagePath(UUID memeID) {
-       return MEME_FILE_LOCATION + memeID;
-    }
+    outputStream.flush();
+    outputStream.close();
+  }
 
+  public static String getMemeImagePath(UUID memeID) {
+    return MEME_FILE_LOCATION + memeID;
+  }
 }

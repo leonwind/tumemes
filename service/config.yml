@@ -39,3 +39,7 @@ memeVotes:
   evictionInterval: 10s
   # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
   minIdleTime: 1 minute
+
+assets:
+  overrides:
+    /images: images/

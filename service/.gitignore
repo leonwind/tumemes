@@ -12,4 +12,5 @@ gradlew
 gradlew.bat
 
 # Image library
-memeImages/**
+images/*
+!images/.gitkeep

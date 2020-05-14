@@ -1,17 +1,28 @@
 import React from 'react'
 
-const Memes = ({memes}:any) => {
-    let memesArr = Array.from(memes);
-    return (
-        <div>
-            {memesArr.map((meme:any) => (
-                <div className="card">
+{/*<div className="card">
                     <div className="card-body">
                         <h5 className="card-title">{meme.title}</h5>
                         <h6 className="card-subtitle">{meme.voteCount}</h6>
                         <h6 className="card-subtitle">{meme.author}</h6>
-                        <h6 className="card-subtitle">{meme.imagePath}</h6>
+                        <img src={require("../meme1.jpg")} alt={"Could not load image"}/>
                         <h6 className="card-subtitle">{meme.created}</h6>
+                    </div>
+                </div>*/
+}
+
+const Memes = ({memes}: any) => {
+    let memesArr = Array.from(memes);
+    return (
+        <div>
+            {memesArr.map((meme: any) => (
+                <div className="card">
+                    <h5 className={"card-title"}>{meme.title}</h5>
+                    <h6 className={"card-subtitle mb-2 text-muted"}>Posted by {meme.author}</h6>
+                    <img className="card-img-bottom" src={require("../meme1.jpg")} alt={"Card image cap"}/>
+                    <div className="card-body">
+                        {meme.voteCount}
+                        <a href="#" className="btn btn-primary">Go somewhere</a>
                     </div>
                 </div>
             ))}
