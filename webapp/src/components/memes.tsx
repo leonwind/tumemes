@@ -19,7 +19,7 @@ const Memes = ({memes}: any) => {
                 <div className="card">
                     <h5 className={"card-title"}>{meme.title}</h5>
                     <h6 className={"card-subtitle mb-2 text-muted"}>Posted by {meme.author}</h6>
-                    <img className="card-img-bottom" src={require("../meme1.jpg")} alt={"Card image cap"}/>
+                    <img className="card-img-bottom" src={"http://localhost:8080/" + meme.imagePath} alt={"Cannot find image"}/>
                     <div className="card-body">
                         {meme.voteCount}
                         <a href="#" className="btn btn-primary">Go somewhere</a>
