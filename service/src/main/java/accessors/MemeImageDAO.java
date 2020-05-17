@@ -61,7 +61,7 @@ public class MemeImageDAO {
   private static boolean isFileExtensionSupported(FormDataContentDisposition fileDetail) {
     String fileName = fileDetail.getFileName();
     String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
-    System.out.println(fileExtension);
+
     for (SupportedFiles file : SupportedFiles.values()) {
       if (file.name().equals(fileExtension)) {
         return true;

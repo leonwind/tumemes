@@ -1,25 +1,22 @@
 import React, {Component} from "react"
-import Memes from './components/memes'
+import {MemeTable} from './components/MemeTable'
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import {Upload} from "./components/Upload";
 
-class App extends Component {
-    state = {
-        memes: []
-    }
-    componentDidMount() {
-        fetch("http://localhost:8080/memes")
-            .then(res => res.json())
-            .then((data) => {
-                this.setState({memes: data})
-        })
-            .catch(console.log)
-    }
+export class App extends Component {
 
     render() {
         return (
-            <Memes memes={this.state.memes} />
+            <Router>
+                <Switch>
+                    <Route path="/upload" exact={true}>
+                        <Upload/>
+                    </Route>
+                    <Route path="/">
+                        <MemeTable/>
+                    </Route>
+                </Switch>
+            </Router>
         )
     }
 }
-
-export default App
-

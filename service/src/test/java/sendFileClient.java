@@ -21,7 +21,7 @@ public class sendFileClient {
     final Client client = ClientBuilder.newBuilder().register(MultiPartFeature.class).build();
     WebTarget t = client.target("http://localhost:8080/upload");
 
-    String fileName = "meme1.jpg";
+    String fileName = "meme2.jpeg";
 
     File f = new File(fileName);
 
