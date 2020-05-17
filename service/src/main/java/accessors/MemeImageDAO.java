@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.UUID;
 
 public class MemeImageDAO {
@@ -36,9 +37,7 @@ public class MemeImageDAO {
     byte[] bytes = new byte[1024];
 
     File savedImage = new File(MEME_FILE_LOCATION + meme.getMemeID() + IMAGE_EXTENSION);
-    OutputStream outputStream = new FileOutputStream(savedImage);
-
-    try {
+    try (OutputStream outputStream = new FileOutputStream(savedImage)) {
       while ((read = image.read(bytes)) != -1) {
         outputStream.write(bytes, 0, read);
 
@@ -48,9 +47,8 @@ public class MemeImageDAO {
           break;
         }
       }
-    } finally {
       outputStream.flush();
-      outputStream.close();
+    } finally {
       if (isExceeded) {
         savedImage.delete();
         throw new FileExceedsLimitExceptions();
@@ -61,13 +59,7 @@ public class MemeImageDAO {
   private static boolean isFileExtensionSupported(FormDataContentDisposition fileDetail) {
     String fileName = fileDetail.getFileName();
     String fileExtension = fileName.substring(fileName.lastIndexOf('.') + 1);
-
-    for (SupportedFiles file : SupportedFiles.values()) {
-      if (file.name().equals(fileExtension)) {
-        return true;
-      }
-    }
-    return false;
+    return Arrays.stream(SupportedFiles.values()).anyMatch(file -> file.name().equals(fileExtension));
   }
 
   public static String getMemeImagePath(UUID memeID) {

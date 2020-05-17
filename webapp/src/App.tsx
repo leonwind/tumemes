@@ -1,5 +1,5 @@
 import React, {Component} from "react"
-import {MemeTable} from './components/MemeTable'
+import {FrontPage} from './components/FrontPage'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {Upload} from "./components/Upload";
 
@@ -13,7 +13,7 @@ export class App extends Component {
                         <Upload/>
                     </Route>
                     <Route path="/">
-                        <MemeTable/>
+                        <FrontPage/>
                     </Route>
                 </Switch>
             </Router>

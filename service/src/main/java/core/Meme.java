@@ -3,6 +3,7 @@ package core;
 import accessors.MemeImageDAO;
 
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Meme {
@@ -66,34 +67,32 @@ public class Meme {
   }
 
   @Override
-  public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Meme meme = (Meme) o;
+    return voteCount == meme.voteCount &&
+        Objects.equals(memeID, meme.memeID) &&
+        Objects.equals(title, meme.title) &&
+        Objects.equals(author, meme.author) &&
+        Objects.equals(created, meme.created) &&
+        Objects.equals(imagePath, meme.imagePath);
+  }
 
-    if (object == null || object.getClass() != this.getClass()) {
-      return false;
-    }
-
-    Meme newMeme = (Meme) object;
-    return this.getMemeID().equals(newMeme.getMemeID());
+  @Override
+  public int hashCode() {
+    return Objects.hash(memeID, title, author, voteCount, created, imagePath);
   }
 
   @Override
   public String toString() {
-    return "memeID: "
-        + memeID
-        + '\n'
-        + "title: "
-        + title
-        + '\n'
-        + "author: "
-        + author
-        + '\n'
-        + "voteCount: "
-        + voteCount
-        + '\n'
-        + "created: "
-        + created;
+    return "Meme{" +
+        "memeID=" + memeID +
+        ", title='" + title + '\'' +
+        ", author='" + author + '\'' +
+        ", voteCount=" + voteCount +
+        ", created=" + created +
+        ", imagePath='" + imagePath + '\'' +
+        '}';
   }
 }

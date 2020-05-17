@@ -6,3 +6,8 @@ export interface Meme {
     created: Date,
     imagePath: string,
 };
+
+export interface NewMeme {
+    title: string,
+    image: null,
+}

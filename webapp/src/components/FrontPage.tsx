@@ -11,7 +11,7 @@ interface State {
 }
 
 
-export class MemeTable extends Component<{}, State> {
+export class FrontPage extends Component<{}, State> {
 
     constructor(props: any) {
         super(props);

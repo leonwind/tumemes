@@ -7,6 +7,7 @@ import core.Meme;
 import core.NewMeme;
 import exceptions.FileExceedsLimitExceptions;
 import exceptions.FileNotSupportedException;
+import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 
@@ -32,11 +33,16 @@ public class UploadResource implements UploadService {
       @FormDataParam("file") FormDataContentDisposition fileDetail,
       @FormDataParam("meme") NewMeme newMeme) {
 
+
     if (inputStream == null || fileDetail == null || newMeme == null) {
+      System.out.println(newMeme);
+      System.out.println(inputStream);
+      System.out.println(fileDetail);
       return Response.status(400).entity("Uploaded object is null").build();
     }
 
     Meme meme = Meme.fromNewMeme(newMeme);
+    System.out.println(meme);
 
     try {
       MemeImageDAO.saveImage(inputStream, fileDetail, meme);
