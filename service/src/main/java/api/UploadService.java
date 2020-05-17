@@ -21,6 +21,6 @@ public interface UploadService {
     Response uploadMeme(
             @FormDataParam("file") InputStream inputStream,
             @FormDataParam("file") FormDataContentDisposition fileDetail,
-            @FormDataParam("meme") NewMeme newMeme)
+            @FormDataParam("meme") FormDataBodyPart newMeme)
             throws IOException;
 }

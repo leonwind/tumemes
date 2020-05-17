@@ -31,8 +31,10 @@ public class UploadResource implements UploadService {
   public Response uploadMeme(
       @FormDataParam("file") InputStream inputStream,
       @FormDataParam("file") FormDataContentDisposition fileDetail,
-      @FormDataParam("meme") NewMeme newMeme) {
+      @FormDataParam("meme") FormDataBodyPart newMemeJSON) {
 
+    newMemeJSON.setMediaType(MediaType.APPLICATION_JSON_TYPE);
+    NewMeme newMeme = newMemeJSON.getValueAs(NewMeme.class);
 
     if (inputStream == null || fileDetail == null || newMeme == null) {
       System.out.println(newMeme);
