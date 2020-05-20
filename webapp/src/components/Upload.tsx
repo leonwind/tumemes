@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
-import {uploadMeme} from "../service/memeService";
+import {MemeService} from "../service/memeService";
 
 interface State {
     title: string,
@@ -18,16 +18,17 @@ export class Upload extends Component<{}, State> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    handleTitleChange(event: any) {
-        this.setState({title: event.target.value})
+    private handleTitleChange(event: any) {
+        this.setState({title: event.target.value});
     }
 
-    handleImageChange(event: any) {
-        this.setState({image: event.target.files[0]})
+    private handleImageChange(event: any) {
+        this.setState({image: event.target.files[0]});
     }
 
-    handleSubmit() {
-        uploadMeme({title: this.state.title, image: this.state.image})
+    private handleSubmit() {
+        MemeService.uploadMeme({title: this.state.title, image: this.state.image})
+            .then(() => {});
     }
 
     render() {
@@ -36,7 +37,6 @@ export class Upload extends Component<{}, State> {
                 <label>
                     Title:
                     <input type="text" value={this.state.title} onChange={this.handleTitleChange}/>
-
                     <input type="file" name="file" onChange={this.handleImageChange}/>
                 </label>
                 <button onClick={this.handleSubmit}>Submit</button>

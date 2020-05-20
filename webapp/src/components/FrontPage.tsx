@@ -2,7 +2,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from 'react'
 import {MemeInfo} from "./Meme";
 import {Meme} from "../types";
-import {getMemes} from "../service/memeService";
+import {MemeService} from "../service/memeService";
 import {Link} from "react-router-dom";
 
 
@@ -19,7 +19,7 @@ export class FrontPage extends Component<{}, State> {
     }
 
     componentDidMount() {
-        getMemes().then((memes: Meme[]) => {
+        MemeService.getMemes().then((memes: Meme[]) => {
             this.setState({memes});
         });
     }

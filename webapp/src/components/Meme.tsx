@@ -1,14 +1,15 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from 'react'
 import {Meme} from "../types";
-import {downvoteMeme, upvoteMeme} from "../service/memeService";
+import {MemeService} from "../service/memeService";
 
 interface Props {
     meme: Meme,
 }
 
 interface State {
-    /* currVote represents if meme got voted by active user
+    /**
+     *  currVote represents if meme got voted by active user
      * 0 => not voted yet
      * 1 => upvoted
      * -1 => downvoted
@@ -26,22 +27,26 @@ export class MemeInfo extends Component<Props, State> {
        this.downvote = this.downvote.bind(this);
    }
 
-   upvote() {
+   private upvote() {
       if (this.state.currVote === 1) {
           return;
       }
-      upvoteMeme(this.props.meme.memeID);
-      this.props.meme.voteCount++;
-      this.setState({currVote: 1});
+      MemeService.upvoteMeme(this.props.meme.memeID)
+          .then(() => {
+              this.props.meme.voteCount++;
+              this.setState({currVote: 1});
+          });
    }
 
-   downvote() {
+   private downvote() {
         if (this.state.currVote === -1) {
             return;
         }
-        downvoteMeme(this.props.meme.memeID);
-        this.props.meme.voteCount--;
-        this.setState({currVote: -1});
+        MemeService.downvoteMeme(this.props.meme.memeID)
+            .then(() => {
+                this.props.meme.voteCount--;
+                this.setState({currVote: -1});
+            });
    }
 
    render() {
@@ -62,8 +67,3 @@ export class MemeInfo extends Component<Props, State> {
        );
    }
 }
-
-
-/*
-
- */
