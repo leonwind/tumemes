@@ -33,6 +33,8 @@ public class UploadResource implements UploadService {
       @FormDataParam("file") FormDataContentDisposition fileDetail,
       @FormDataParam("meme") FormDataBodyPart newMemeJSON) {
 
+    // Some clients are unable to set individual content-type for each type
+    // correct. Thus we need to set the content-type for newMeme to json by hand
     newMemeJSON.setMediaType(MediaType.APPLICATION_JSON_TYPE);
     NewMeme newMeme = newMemeJSON.getValueAs(NewMeme.class);
 

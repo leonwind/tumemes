@@ -6,6 +6,7 @@ import api.VoteService;
 import core.Vote;
 
 import javax.ws.rs.PATCH;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
@@ -21,7 +22,7 @@ public class VoteResource implements VoteService {
   }
 
   @Path("/upvote/{memeID}")
-  @PATCH
+  @POST
   public Response upvoteMeme(@PathParam("memeID") String memeID) {
     String username = "mock_username";
 
@@ -29,7 +30,7 @@ public class VoteResource implements VoteService {
   }
 
   @Path("/downvote/{memeID}")
-  @PATCH
+  @POST
   public Response downvoteMeme(@PathParam("memeID") String memeID) {
     String username = "mock_username";
 

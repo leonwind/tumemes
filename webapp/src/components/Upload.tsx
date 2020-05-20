@@ -26,7 +26,7 @@ export class Upload extends Component<{}, State> {
         this.setState({image: event.target.files[0]})
     }
 
-    handleSubmit(event: any) {
+    handleSubmit() {
         uploadMeme({title: this.state.title, image: this.state.image})
     }
 

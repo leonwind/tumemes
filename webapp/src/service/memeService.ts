@@ -1,7 +1,9 @@
 import {Meme, NewMeme} from "../types";
 
 export const getMemes = (): Promise<Meme[]> => {
-    return fetch("http://localhost:8080/memes")
+    return fetch("http://localhost:8080/memes", {
+        method: "GET"
+    })
         .then(res => res.json())
 };
 
@@ -22,6 +24,22 @@ export const uploadMeme = (newMeme: NewMeme): void => {
     fetch("http://localhost:8080/upload", {
         method: "POST",
         body: data
+    })
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}
+
+export const upvoteMeme = (memeID: string): void => {
+    fetch("http://localhost:8080/upvote/" + memeID, {
+        method: "POST"
+    })
+        .then(response => response.json())
+        .catch(error => console.log(error));
+}
+
+export const downvoteMeme = (memeID: string): void => {
+    fetch("http://localhost:8080/downvote/" + memeID, {
+        method: "POST"
     })
         .then(response => response.json())
         .catch(error => console.log(error));

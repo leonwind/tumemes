@@ -1,6 +1,5 @@
 package api;
 
-import core.NewMeme;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -16,11 +15,11 @@ import java.io.InputStream;
 @Path("/upload")
 public interface UploadService {
 
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA})
-    Response uploadMeme(
-            @FormDataParam("file") InputStream inputStream,
-            @FormDataParam("file") FormDataContentDisposition fileDetail,
-            @FormDataParam("meme") FormDataBodyPart newMeme)
-            throws IOException;
+  @POST
+  @Consumes({MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA})
+  Response uploadMeme(
+      @FormDataParam("file") InputStream inputStream,
+      @FormDataParam("file") FormDataContentDisposition fileDetail,
+      @FormDataParam("meme") FormDataBodyPart newMeme)
+      throws IOException;
 }
