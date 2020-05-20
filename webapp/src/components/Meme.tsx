@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {useState} from 'react'
+import React, {Component} from 'react'
 import {Meme} from "../types";
 import {downvoteMeme, upvoteMeme} from "../service/memeService";
 
@@ -7,39 +7,63 @@ interface Props {
     meme: Meme,
 }
 
-function useForceUpdate() {
-    let [value, setState] = useState(true);
-    return () => setState(!value);
+interface State {
+    /* currVote represents if meme got voted by active user
+     * 0 => not voted yet
+     * 1 => upvoted
+     * -1 => downvoted
+     */
+    currVote: number,
 }
 
-export const MemeInfo = (props: Props) => {
-    let forceUpdate = useForceUpdate();
+export class MemeInfo extends Component<Props, State> {
 
-    function upvote() {
-        upvoteMeme(props.meme.memeID);
-        props.meme.voteCount++;
-        forceUpdate()
-    }
+   constructor(props: Props) {
+       super(props);
+       this.state = {currVote: 0};
 
-    function downvote() {
-        downvoteMeme(props.meme.memeID);
-        props.meme.voteCount--;
-        forceUpdate();
-    }
+       this.upvote = this.upvote.bind(this);
+       this.downvote = this.downvote.bind(this);
+   }
 
-    return (
-        <div>
-            <div className={"card"} style={{width: "50%"}}>
-                <h5 className={"card-title"}>{props.meme.title}</h5>
-                <h6 className={"card-subtitle mb-2 text-muted"}>Posted by {props.meme.author}</h6>
-                <img className="card-img-bottom" src={"http://localhost:8080/" + props.meme.imagePath}
-                     alt={"Excellent meme"}/>
-                <div className="card-body">
-                    {props.meme.voteCount} points
-                    <button onClick={upvote}>Upvote</button>
-                    <button onClick={downvote}>Downvote</button>
-                </div>
-            </div>
-        </div>
-    );
+   upvote() {
+      if (this.state.currVote === 1) {
+          return;
+      }
+      upvoteMeme(this.props.meme.memeID);
+      this.props.meme.voteCount++;
+      this.setState({currVote: 1});
+   }
+
+   downvote() {
+        if (this.state.currVote === -1) {
+            return;
+        }
+        downvoteMeme(this.props.meme.memeID);
+        this.props.meme.voteCount--;
+        this.setState({currVote: -1});
+   }
+
+   render() {
+       return (
+           <div>
+               <div className={"card"} style={{width: "50%"}}>
+                   <h5 className={"card-title"}>{this.props.meme.title}</h5>
+                   <h6 className={"card-subtitle mb-2 text-muted"}>Posted by {this.props.meme.author}</h6>
+                   <img className="card-img-bottom" src={"http://localhost:8080/" + this.props.meme.imagePath}
+                        alt={"Excellent meme"}/>
+                   <div className="card-body">
+                       {this.props.meme.voteCount} points
+                       <button onClick={this.upvote}>Upvote</button>
+                       <button onClick={this.downvote}>Downvote</button>
+                   </div>
+               </div>
+           </div>
+       );
+   }
 }
+
+
+/*
+
+ */
