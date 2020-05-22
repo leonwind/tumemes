@@ -25,14 +25,12 @@ export class MemeService {
         });
     }
 
-    static async upvoteMeme(memeID: string)  {
-        const url = "upvote/" + memeID;
-        await this.sendRequest(url, {method: "POST"})
-    }
-
-    static async downvoteMeme(memeID: string) {
-        const url = "downvote/" + memeID;
-        await this.sendRequest(url, {method: "POST"})
+    static async voteMeme(memeID: string, vote: number) {
+        const data: string = JSON.stringify({memeID: memeID, vote: vote})
+        console.log(data);
+        await this.sendRequest("vote", {method: "POST", body: data, headers: {
+                'Content-Type': 'application/json'
+            }});
     }
 
     private static async sendRequest(url: string, options: any) {

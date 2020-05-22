@@ -14,7 +14,7 @@ public class VoteMapper implements RowMapper<Vote> {
     public Vote map(ResultSet rs, StatementContext ctx) throws SQLException {
         return new Vote(
                 UUID.fromString(rs.getString("memeID")),
-                rs.getString("username"),
-                rs.getInt("vote"));
+                rs.getInt("vote"),
+                rs.getString("username"));
     }
 }
