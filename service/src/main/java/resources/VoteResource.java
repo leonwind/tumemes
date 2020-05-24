@@ -25,8 +25,6 @@ public class VoteResource implements VoteService {
   @Path("/vote/")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response voteMeme(NewVote newVote) {
-    System.out.println("HERE I AM");
-    System.out.println(newVote);
     if (newVote == null) {
       return Response.status(400).entity("Vote object is null").build();
     }

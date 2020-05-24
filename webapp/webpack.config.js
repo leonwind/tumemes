@@ -16,7 +16,7 @@ module.exports = {
     },
     resolve: {
         alias: {'@src': PATHS.src},
-        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
+        extensions: ['.ts', '.tsx', '.js', '.jsx', '.json', '.css'],
         modules: ['src', 'node_modules'],
     },
     module: {
@@ -25,9 +25,29 @@ module.exports = {
                 test: /\.tsx?$/,
                 loader: "ts-loader"
             },
+            // rule for custom css which is imported as module
             {
                 test: /\.css$/i,
-                use: ['style-loader', 'css-loader'],
+                exclude: /node_modules/,
+                use: ['style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: true
+                        },
+                    }]
+            },
+            // rule for bootstrap css which is not imported as module
+            {
+                test: /\.css$/i,
+                include: /node_modules/,
+                use: ['style-loader',
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            modules: false
+                        }
+                    }]
             },
         ],
     },

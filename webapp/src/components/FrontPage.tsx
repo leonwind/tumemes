@@ -4,7 +4,6 @@ import {MemeInfo} from "./Meme";
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import {Link} from "react-router-dom";
-import "../styles/Frontpage.css"
 
 interface State {
     memes: Meme[],
