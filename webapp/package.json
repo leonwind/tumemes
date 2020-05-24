@@ -19,12 +19,12 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.1",
-    "redux": "^4.0.5",
     "typescript": "~3.7.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "webpack-dev-server --mode development --open --hot",
+    "build": "npm run clean && webpack --mode production",
+    "clean": "rm -rf dist",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -44,6 +44,12 @@
     ]
   },
   "devDependencies": {
-    "redux-devtools": "^3.5.0"
+    "css-loader": "^3.5.3",
+    "html-webpack-plugin": "^4.3.0",
+    "redux-devtools": "^3.5.0",
+    "style-loader": "^1.2.1",
+    "ts-loader": "^7.0.4",
+    "webpack-cli": "^3.3.11",
+    "webpack-dev-server": "^3.11.0"
   }
 }

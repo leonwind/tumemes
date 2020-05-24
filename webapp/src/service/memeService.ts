@@ -1,7 +1,8 @@
 import {Meme, NewMeme} from "../types";
 
 export class MemeService {
-    private static readonly API_ENDPOINT = "http://localhost:8080/";
+    private static readonly API_ENDPOINT: string = "http://localhost:8080/";
+    private static readonly JSON_HEADER: Headers = new Headers({"Content-Type": "Application/json"});
 
     static async getMemes(): Promise<Meme[]> {
         const response = await this.sendRequest("memes", {method: "GET"});
@@ -13,7 +14,7 @@ export class MemeService {
         const mockUser: string = "mock user";
         const image: any = newMeme.image;
 
-        const meme: string = JSON.stringify({title: currTitle, author: mockUser})
+        const meme: string = JSON.stringify({"title": currTitle, "author": mockUser})
 
         let data: FormData = new FormData();
         data.append("file", image);
@@ -26,15 +27,16 @@ export class MemeService {
     }
 
     static async voteMeme(memeID: string, vote: number) {
-        const data: string = JSON.stringify({memeID: memeID, vote: vote})
-        console.log(data);
-        await this.sendRequest("vote", {method: "POST", body: data, headers: {
-                'Content-Type': 'application/json'
-            }});
+        await this.sendRequest("vote", {
+            method: "POST",
+            headers: this.JSON_HEADER,
+            body: JSON.stringify({"memeID": memeID, "vote": vote})
+        });
     }
 
     private static async sendRequest(url: string, options: any) {
         const response = await fetch(this.API_ENDPOINT + url, options);
+
         if (!response.ok) {
             throw new Error(response.statusText);
         }
