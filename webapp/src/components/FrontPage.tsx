@@ -3,7 +3,6 @@ import React, {Component} from 'react'
 import {MemeInfo} from "./Meme";
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
-import {Link} from "react-router-dom";
 import {NavigationBar} from "./NavigationBar";
 
 interface State {

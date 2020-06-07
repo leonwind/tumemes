@@ -11,6 +11,7 @@ public class Configuration extends io.dropwizard.Configuration
 
   @Valid @NotNull private DataSourceFactory memes = new DataSourceFactory();
   @Valid @NotNull private DataSourceFactory memeVotes = new DataSourceFactory();
+  @Valid @NotNull private DataSourceFactory users = new DataSourceFactory();
 
   @Valid @NotNull @JsonProperty
   private final AssetsConfiguration assets = AssetsConfiguration.builder().build();
@@ -33,6 +34,16 @@ public class Configuration extends io.dropwizard.Configuration
   @JsonProperty("memeVotes")
   public DataSourceFactory getMemeVotesDataSourceFactory() {
     return memeVotes;
+  }
+
+  @JsonProperty("users")
+  public void setUsersDataSourceFactory(DataSourceFactory factory) {
+    users = factory;
+  }
+
+  @JsonProperty("users")
+  public DataSourceFactory getUsersDataSourceFactory() {
+    return users;
   }
 
   @Override

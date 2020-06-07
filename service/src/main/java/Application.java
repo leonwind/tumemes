@@ -1,4 +1,5 @@
 import accessors.MemeDAO;
+import accessors.UsersDAO;
 import accessors.VoteDAO;
 import io.dropwizard.bundles.assets.ConfiguredAssetsBundle;
 import io.dropwizard.forms.MultiPartBundle;
@@ -45,6 +46,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
             "postgres");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
+    final UsersDAO usersDAO = jdbi.onDemand(UsersDAO.class);
 
     final PingResource pingResource = new PingResource();
     final MemeResource memeResource = new MemeResource(memeDAO);

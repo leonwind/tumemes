@@ -40,6 +40,27 @@ memeVotes:
   # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
   minIdleTime: 1 minute
 
+users:
+  driverClass: org.postgresql.Driver
+  user: tumemes # TODO
+  password: ""
+  url: jdbc:postgresql://localhost:5432/tumemes
+  properties:
+    charSet: UTF-8
+  maxWaitForConnection: 1s
+  validationQuery: "/* MyService Health Check */ SELECT 1"
+  validationQueryTimeout: 3s
+  # the minimum number of connections to keep open
+  minSize: 2
+  # the maximum number of connections to keep open
+  maxSize: 32
+  # whether or not idle connections should be validated
+  checkConnectionWhileIdle: false
+  # the amount of time to sleep between runs of the idle connection validation, abandoned cleaner and idle pool resizing
+  evictionInterval: 10s
+  # the minimum amount of time an connection must sit idle in the pool before it is eligible for eviction
+  minIdleTime: 1 minute
+
 assets:
   overrides:
     /images: images/

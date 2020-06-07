@@ -7,8 +7,8 @@ export const NavigationBar = () => {
         return (
             <div className={styles.navigationBar}>
                 <nav className={"navbar"}>
-                    <span className="navbar-brand">TUMemes</span>
-                    <ul className="nav navbar-nav navbar-right">
+                    <span className={"navbar-brand"}>TUMemes</span>
+                    <ul className={"nav navbar-nav navbar-right"}>
                         <Link className={styles.uploadLink} to={"/upload"}>Upload</Link>
                     </ul>
                 </nav>
