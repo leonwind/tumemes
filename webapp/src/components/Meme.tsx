@@ -30,9 +30,11 @@ export class MemeInfo extends Component<Props, State> {
 
     private upvote() {
         let vote: number = 1;
+
         if (this.state.currVote === 1) {
            vote = 0;
         }
+
         MemeService.voteMeme(this.props.meme.memeID, vote)
             .then(() => {
                 this.props.meme.voteCount += vote;
@@ -46,6 +48,7 @@ export class MemeInfo extends Component<Props, State> {
         if (this.state.currVote === -1) {
            vote = 0;
         }
+
         MemeService.voteMeme(this.props.meme.memeID, vote)
             .then(() => {
                 this.props.meme.voteCount += vote;

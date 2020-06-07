@@ -4,6 +4,7 @@ import {MemeInfo} from "./Meme";
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import {Link} from "react-router-dom";
+import {NavigationBar} from "./NavigationBar";
 
 interface State {
     memes: Meme[],
@@ -27,7 +28,7 @@ export class FrontPage extends Component<{}, State> {
         const allMemes = this.state.memes.map((meme: Meme) => <MemeInfo key={meme.memeID} meme={meme}/>);
         return (
             <div>
-                <Link to={"/upload"}>Upload</Link>
+                <NavigationBar />
                 {allMemes}
             </div>
         );

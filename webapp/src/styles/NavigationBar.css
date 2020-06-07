@@ -1,0 +1,12 @@
+.navigationBar {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: rgb(0, 101, 189);
+    color: rgb(255, 255, 255);
+}
+
+.uploadLink {
+    color: rgb(255, 255, 255);
+}
