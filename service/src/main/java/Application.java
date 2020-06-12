@@ -1,17 +1,25 @@
 import accessors.MemeDAO;
-import accessors.UsersDAO;
+import accessors.UserDAO;
 import accessors.VoteDAO;
+import auth.HTTPBasicAuth;
+import auth.UnauthorizedResourceHandler;
+import auth.UserAuthorizer;
+import core.User;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthFilter;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.UnauthorizedHandler;
+import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.bundles.assets.ConfiguredAssetsBundle;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.eclipse.jetty.servlets.CrossOriginFilter;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
-import resources.MemeResource;
-import resources.PingResource;
-import resources.UploadResource;
-import resources.VoteResource;
+import resources.*;
 
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
@@ -46,14 +54,31 @@ public class Application extends io.dropwizard.Application<Configuration> {
             "postgres");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
-    final UsersDAO usersDAO = jdbi.onDemand(UsersDAO.class);
+    final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+
+    UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
+    AuthFilter<BasicCredentials, User> basicAuthFilter =
+        new BasicCredentialAuthFilter.Builder<User>()
+        .setAuthenticator(new HTTPBasicAuth(userDAO))
+        .setAuthorizer(new UserAuthorizer())
+        .setRealm("secret realm")
+        .setUnauthorizedHandler(unauthorizedHandler)
+        .setPrefix("Basic")
+        .buildAuthFilter();
+
+    environment.jersey().register(new AuthDynamicFeature(basicAuthFilter));
+    environment.jersey().register(RolesAllowedDynamicFeature.class);
+    environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+    environment.jersey().register(unauthorizedHandler);
 
     final PingResource pingResource = new PingResource();
+    final RegisterResource registerResource = new RegisterResource(userDAO);
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
 
     environment.jersey().register(pingResource);
+    environment.jersey().register(registerResource);
     environment.jersey().register(memeResource);
     environment.jersey().register(uploadResource);
     environment.jersey().register(voteResource);
