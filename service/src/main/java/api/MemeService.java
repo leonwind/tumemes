@@ -1,6 +1,8 @@
 package api;
 
 import core.Meme;
+import core.User;
+import io.dropwizard.auth.Auth;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,7 +14,7 @@ public interface MemeService {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    List<Meme> getMemes(@QueryParam("sortBy") String sortBy);
+    List<Meme> getMemes(@Auth User user, @QueryParam("sortBy") String sortBy);
 
     @GET
     @Path("/{memeID}")

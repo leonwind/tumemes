@@ -1,6 +1,6 @@
 package api;
 
-import core.User;
+import core.NewUser;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -13,5 +13,5 @@ public interface RegisterService {
 
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  Response registerUser(User newUser);
+  Response registerUser(NewUser newUser);
 }

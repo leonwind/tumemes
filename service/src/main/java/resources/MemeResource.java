@@ -3,6 +3,8 @@ package resources;
 import accessors.MemeDAO;
 import api.MemeService;
 import core.Meme;
+import core.User;
+import io.dropwizard.auth.Auth;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +20,8 @@ public class MemeResource implements MemeService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public List<Meme> getMemes(@QueryParam("sortBy") String sortBy) {
+  public List<Meme> getMemes(@Auth User user,
+                             @QueryParam("sortBy") String sortBy) {
     if (sortBy == null) {
       return memeDAO.getAllMemesByVotes();
     }

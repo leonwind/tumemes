@@ -2,7 +2,7 @@ package resources;
 
 import accessors.UserDAO;
 import api.RegisterService;
-import core.User;
+import core.NewUser;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -26,7 +26,7 @@ public class RegisterResource implements RegisterService {
   @Override
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response registerUser(User newUser) {
+  public Response registerUser(NewUser newUser) {
     if (userDAO.doesUsernameExist(newUser.getName())) {
       return Response.status(400).entity("Username does already exists").build();
     }

@@ -1,22 +1,19 @@
 package core;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import java.security.Principal;
-import java.util.Objects;
 
 public class User implements Principal {
 
   private final String name;
   private final String email;
-  private final String password;
+  private final String hash;
+  private final String salt;
 
-  public User(@JsonProperty("username") String name,
-              @JsonProperty("email") String email,
-              @JsonProperty("password") String password) {
+  public User(String name, String email, String hash, String salt) {
     this.name = name;
     this.email = email;
-    this.password = password;
+    this.hash = hash;
+    this.salt = salt;
   }
 
   @Override
@@ -28,21 +25,11 @@ public class User implements Principal {
     return email;
   }
 
-  public String getPassword() {
-    return password;
+  public String getHash() {
+    return hash;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(name, email, password);
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "name='" + name + '\'' +
-        ", email='" + email + '\'' +
-        ", password='" + password + '\'' +
-        '}';
+  public String getSalt() {
+    return salt;
   }
 }

@@ -4,6 +4,7 @@ import accessors.VoteDAO;
 import auth.HTTPBasicAuth;
 import auth.UnauthorizedResourceHandler;
 import auth.UserAuthorizer;
+import core.NewUser;
 import core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
