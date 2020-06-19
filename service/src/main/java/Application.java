@@ -4,7 +4,6 @@ import accessors.VoteDAO;
 import auth.HTTPBasicAuth;
 import auth.UnauthorizedResourceHandler;
 import auth.UserAuthorizer;
-import core.NewUser;
 import core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
@@ -51,8 +50,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final JdbiFactory factory = new JdbiFactory();
 
     final Jdbi jdbi =
-        factory.build(environment, configuration.getMemesDataSourceFactory(),
-            "postgres");
+        factory.build(environment, configuration.getMemesDataSourceFactory(), "postgres");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
@@ -60,12 +58,12 @@ public class Application extends io.dropwizard.Application<Configuration> {
     UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
     AuthFilter<BasicCredentials, User> basicAuthFilter =
         new BasicCredentialAuthFilter.Builder<User>()
-        .setAuthenticator(new HTTPBasicAuth(userDAO))
-        .setAuthorizer(new UserAuthorizer())
-        .setRealm("secret realm")
-        .setUnauthorizedHandler(unauthorizedHandler)
-        .setPrefix("Basic")
-        .buildAuthFilter();
+            .setAuthenticator(new HTTPBasicAuth(userDAO))
+            .setAuthorizer(new UserAuthorizer())
+            .setRealm("secret realm")
+            .setUnauthorizedHandler(unauthorizedHandler)
+            .setPrefix("Basic")
+            .buildAuthFilter();
 
     environment.jersey().register(new AuthDynamicFeature(basicAuthFilter));
     environment.jersey().register(RolesAllowedDynamicFeature.class);

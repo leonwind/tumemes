@@ -46,7 +46,8 @@ public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
       }
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
-      return Optional.empty();
+      e.printStackTrace();
+      throw new AuthenticationException("Error occurred while hashing your password.");
     }
     return Optional.empty();
   }

@@ -35,7 +35,7 @@ public class MemeResource implements MemeService {
   @GET
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
-  public Meme getMemeByID(@PathParam("memeID") String memeID) {
+  public Meme getMemeByID(@Auth User user, @PathParam("memeID") String memeID) {
     return memeDAO.getMemeByID(memeID);
   }
 

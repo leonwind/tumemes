@@ -1,6 +1,5 @@
 package auth;
 
-
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -24,15 +23,16 @@ public class Hashing {
     return salt;
   }
 
-  public static byte[] generateHash(String password, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
-    KeySpec spec = new PBEKeySpec(password.toCharArray(), salt,
-        NUM_ITERATIONS, KEY_LENGTH);
+  public static byte[] generateHash(String password, byte[] salt)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
+    KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, NUM_ITERATIONS, KEY_LENGTH);
 
     SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512");
     return f.generateSecret(spec).getEncoded();
   }
 
-  public static byte[] generateHash(String password, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException{
+  public static byte[] generateHash(String password, String salt)
+      throws NoSuchAlgorithmException, InvalidKeySpecException {
     return generateHash(password, convertStringToByteArray(salt));
   }
 }

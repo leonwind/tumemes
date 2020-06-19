@@ -19,5 +19,5 @@ public interface MemeService {
     @GET
     @Path("/{memeID}")
     @Produces(MediaType.APPLICATION_JSON)
-    Meme getMemeByID(@PathParam("memeID") String memeID);
+    Meme getMemeByID(@Auth User user, @PathParam("memeID") String memeID);
 }

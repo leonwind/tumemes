@@ -4,7 +4,9 @@ import accessors.MemeDAO;
 import accessors.VoteDAO;
 import api.VoteService;
 import core.NewVote;
+import core.User;
 import core.Vote;
+import io.dropwizard.auth.Auth;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,17 +26,16 @@ public class VoteResource implements VoteService {
   @POST
   @Path("/vote/")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response voteMeme(NewVote newVote) {
+  public Response voteMeme(@Auth User user, NewVote newVote) {
     if (newVote == null) {
       return Response.status(400).entity("Vote object is null").build();
     }
-
-    String username = "mock user";
 
     if (!memeDAO.memeIDExists(newVote.getMemeID().toString())) {
       return Response.status(400).entity("Meme does not exist").build();
     }
 
+    String username = user.getName();
     Vote existingVote = voteDAO.getVote(newVote.getMemeID().toString(), username);
 
     if (existingVote == null) {

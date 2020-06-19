@@ -5,8 +5,10 @@ import accessors.MemeImageDAO;
 import api.UploadService;
 import core.Meme;
 import core.NewMeme;
+import core.User;
 import exceptions.FileExceedsLimitExceptions;
 import exceptions.FileNotSupportedException;
+import io.dropwizard.auth.Auth;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -29,6 +31,7 @@ public class UploadResource implements UploadService {
   @POST
   @Consumes({MediaType.APPLICATION_JSON, MediaType.MULTIPART_FORM_DATA})
   public Response uploadMeme(
+      @Auth User user,
       @FormDataParam("file") InputStream inputStream,
       @FormDataParam("file") FormDataContentDisposition fileDetail,
       @FormDataParam("meme") FormDataBodyPart newMemeJSON) {
