@@ -32,6 +32,11 @@ public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
       user = userDAO.getUserByUsername(credentials.getUsername());
     }
 
+    // if user does not exist return unauthorized
+    if (user == null) {
+      return Optional.empty();
+    }
+
     try {
       byte[] hash = Hashing.generateHash(credentials.getPassword(), user.getSalt());
       String hashedPassword = Base64.getEncoder().encodeToString(hash);

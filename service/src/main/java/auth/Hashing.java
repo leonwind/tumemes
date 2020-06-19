@@ -1,10 +1,12 @@
 package auth;
 
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
+import java.util.Base64;
 import java.util.Random;
 
 public class Hashing {
@@ -13,7 +15,7 @@ public class Hashing {
   private static final int KEY_LENGTH = 128;
 
   private static byte[] convertStringToByteArray(String s) {
-    return s.getBytes();
+    return Base64.getDecoder().decode(s);
   }
 
   public static byte[] generateSalt() {
