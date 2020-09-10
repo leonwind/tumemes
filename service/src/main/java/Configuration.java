@@ -9,41 +9,24 @@ import javax.validation.constraints.NotNull;
 public class Configuration extends io.dropwizard.Configuration
     implements AssetsBundleConfiguration {
 
-  @Valid @NotNull private DataSourceFactory memes = new DataSourceFactory();
-  @Valid @NotNull private DataSourceFactory memeVotes = new DataSourceFactory();
-  @Valid @NotNull private DataSourceFactory users = new DataSourceFactory();
+  @Valid @NotNull private String jwtSecret;
+  @Valid @NotNull private DataSourceFactory database = new DataSourceFactory();
 
   @Valid @NotNull @JsonProperty
   private final AssetsConfiguration assets = AssetsConfiguration.builder().build();
 
-  @JsonProperty("memes")
-  public void setMemesDataSourceFactory(DataSourceFactory factory) {
-    memes = factory;
+  public String getJwtSecret() {
+    return jwtSecret;
+  }
+
+  @JsonProperty("database")
+  public void setDatabase(DataSourceFactory factory) {
+    database = factory;
   }
 
   @JsonProperty("memes")
-  public DataSourceFactory getMemesDataSourceFactory() {
-    return memes;
-  }
-
-  @JsonProperty("memeVotes")
-  public void setMemeVotesDataSourceFactory(DataSourceFactory factory) {
-    memeVotes = factory;
-  }
-
-  @JsonProperty("memeVotes")
-  public DataSourceFactory getMemeVotesDataSourceFactory() {
-    return memeVotes;
-  }
-
-  @JsonProperty("users")
-  public void setUsersDataSourceFactory(DataSourceFactory factory) {
-    users = factory;
-  }
-
-  @JsonProperty("users")
-  public DataSourceFactory getUsersDataSourceFactory() {
-    return users;
+  public DataSourceFactory getDatabase() {
+    return database;
   }
 
   @Override

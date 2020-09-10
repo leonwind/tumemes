@@ -46,11 +46,11 @@ public class Application extends io.dropwizard.Application<Configuration> {
   public void run(Configuration configuration, Environment environment) {
     configureCORS(environment);
 
-    // setup databases
+    // setup database
     final JdbiFactory factory = new JdbiFactory();
 
     final Jdbi jdbi =
-        factory.build(environment, configuration.getMemesDataSourceFactory(), "postgres");
+        factory.build(environment, configuration.getDatabase(), "postgres");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
@@ -71,13 +71,14 @@ public class Application extends io.dropwizard.Application<Configuration> {
     environment.jersey().register(unauthorizedHandler);
 
     final PingResource pingResource = new PingResource();
-    final RegisterResource registerResource = new RegisterResource(userDAO);
+    final TokenResource tokenResource = new TokenResource(userDAO,
+        configuration.getJwtSecret());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
 
     environment.jersey().register(pingResource);
-    environment.jersey().register(registerResource);
+    environment.jersey().register(tokenResource);
     environment.jersey().register(memeResource);
     environment.jersey().register(uploadResource);
     environment.jersey().register(voteResource);
