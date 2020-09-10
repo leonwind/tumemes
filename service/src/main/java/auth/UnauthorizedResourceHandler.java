@@ -13,8 +13,7 @@ public class UnauthorizedResourceHandler implements UnauthorizedHandler {
 
   @Override
   public Response buildResponse(String prefix, String realm) {
-    Response.Status unauthorized = Response.Status.UNAUTHORIZED;
-    return Response.status(unauthorized).build();
+    return Response.status(Response.Status.UNAUTHORIZED).build();
   }
 
 }

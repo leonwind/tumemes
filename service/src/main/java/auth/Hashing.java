@@ -9,7 +9,7 @@ import java.util.Base64;
 import java.util.Random;
 
 public class Hashing {
-  private static final int NUM_ITERATIONS = 65536; // 63336 = 2^16
+  private static final int NUM_ITERATIONS = 65536; // 65336 = 2^16
   private static final int SALT_LENGTH = 16;
   private static final int KEY_LENGTH = 128;
 

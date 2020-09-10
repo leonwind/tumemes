@@ -2,6 +2,7 @@ import accessors.MemeDAO;
 import accessors.UserDAO;
 import accessors.VoteDAO;
 import auth.HTTPBasicAuth;
+import auth.JWTCredentials;
 import auth.UnauthorizedResourceHandler;
 import auth.UserAuthorizer;
 import core.User;
@@ -11,6 +12,7 @@ import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.auth.basic.BasicCredentials;
+import io.dropwizard.auth.chained.ChainedAuthFilter;
 import io.dropwizard.bundles.assets.ConfiguredAssetsBundle;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
@@ -49,8 +51,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
     // setup database
     final JdbiFactory factory = new JdbiFactory();
 
-    final Jdbi jdbi =
-        factory.build(environment, configuration.getDatabase(), "postgres");
+    final Jdbi jdbi = factory.build(environment, configuration.getDatabase(), "postgres");
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
@@ -71,14 +72,13 @@ public class Application extends io.dropwizard.Application<Configuration> {
     environment.jersey().register(unauthorizedHandler);
 
     final PingResource pingResource = new PingResource();
-    final TokenResource tokenResource = new TokenResource(userDAO,
-        configuration.getJwtSecret());
+    final RegisterResource registerResource = new RegisterResource(userDAO, configuration.getJwtSecret());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
 
     environment.jersey().register(pingResource);
-    environment.jersey().register(tokenResource);
+    environment.jersey().register(registerResource);
     environment.jersey().register(memeResource);
     environment.jersey().register(uploadResource);
     environment.jersey().register(voteResource);

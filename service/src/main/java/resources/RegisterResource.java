@@ -1,30 +1,28 @@
 package resources;
 
 import accessors.UserDAO;
-import api.TokenService;
+import api.RegisterService;
 import auth.Hashing;
-import auth.JWTCredentials;
 import core.NewUser;
-import core.User;
-import io.dropwizard.auth.AuthenticationException;
-import io.jsonwebtoken.*;
+import enums.AllowedEmailDomains;
+import io.jsonwebtoken.JwtBuilder;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
-import javax.annotation.security.PermitAll;
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
-import java.util.Optional;
 
-public class TokenResource implements TokenService {
+public class RegisterResource implements RegisterService {
 
   private final UserDAO userDAO;
   private final String secretKey;
@@ -32,13 +30,15 @@ public class TokenResource implements TokenService {
   // time in milli seconds
   private final long TTL_MILLIS = 604800000;
 
-  public TokenResource(UserDAO userDAO, String secretKey) {
+  public RegisterResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;
     this.secretKey = secretKey;
   }
 
-  private boolean isEmail(String username) {
-    return username.indexOf('@') != -1;
+  private boolean isEmailDomainSupported(String email) {
+    String domain = email.substring(email.indexOf('@') + 1);
+    return Arrays.stream(AllowedEmailDomains.values())
+        .anyMatch(allowedDomain -> allowedDomain.toString().equals(domain));
   }
 
   private boolean isSecure(String password) {
@@ -89,38 +89,17 @@ public class TokenResource implements TokenService {
     return builder.compact();
   }
 
-  private Optional<User> verifyToken(JWTCredentials credentials) throws AuthenticationException {
-    try {
-      Claims claims =
-          Jwts.parser()
-              .setSigningKey(DatatypeConverter.parseBase64Binary(this.secretKey))
-              .parseClaimsJws(credentials.getJwtToken())
-              .getBody();
-
-      User user;
-      if (isEmail(claims.getSubject())) {
-        user = userDAO.getUserByEmail(claims.getSubject());
-      } else {
-        user = userDAO.getUserByUsername(claims.getSubject());
-      }
-      return Optional.ofNullable(user);
-    } catch (ExpiredJwtException
-        | UnsupportedJwtException
-        | MalformedJwtException
-        | SignatureException
-        | IllegalArgumentException e) {
-      return Optional.empty();
-    }
-  }
-
   @POST
-  @Path("/register")
-  @PermitAll
   @Consumes(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
     if (userDAO.doesUsernameExist(newUser.getName())) {
       return Response.status(400).entity("Username does already exists").build();
     }
+
+    if (!isEmailDomainSupported(newUser.getEmail())) {
+      return Response.status(400).entity("Email is not from TUM.").build();
+    }
+
     if (userDAO.doesEmailExists(newUser.getEmail())) {
       return Response.status(400).entity("Email does already exists").build();
     }
@@ -145,17 +124,12 @@ public class TokenResource implements TokenService {
           enc.encodeToString(hash),
           enc.encodeToString(salt));
 
+      String token = createToken(newUser.getEmail());
+      return Response.ok(token).build();
+
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();
       return Response.status(400).entity("Error occurred while hashing your password.").build();
     }
-    return Response.ok("Added new user").build();
-  }
-
-  @POST
-  @PermitAll
-  @Consumes(MediaType.APPLICATION_JSON)
-  public Response createToken(NewUser newUser) {
-    return Response.status(Response.Status.UNAUTHORIZED).build();
   }
 }

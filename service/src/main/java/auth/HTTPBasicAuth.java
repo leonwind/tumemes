@@ -12,7 +12,6 @@ import java.util.Base64;
 import java.util.Optional;
 
 public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
-
   private final UserDAO userDAO;
 
   public HTTPBasicAuth(UserDAO userDAO) {

@@ -9,16 +9,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-public interface TokenService {
+@Path("/register")
+public interface RegisterService {
 
   @POST
-  @Path("/register")
-  @PermitAll
   @Consumes(MediaType.APPLICATION_JSON)
   Response registerUser(NewUser newuser);
-
-  @POST
-  @PermitAll
-  @Consumes(MediaType.APPLICATION_JSON)
-  Response createToken(NewUser newUser);
 }
