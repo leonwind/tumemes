@@ -35,13 +35,13 @@ public class RegisterResource implements RegisterService {
     this.secretKey = secretKey;
   }
 
-  private boolean isEmailDomainSupported(String email) {
+  private static boolean isEmailDomainSupported(String email) {
     String domain = email.substring(email.indexOf('@') + 1);
     return Arrays.stream(AllowedEmailDomains.values())
         .anyMatch(allowedDomain -> allowedDomain.toString().equals(domain));
   }
 
-  private boolean isSecure(String password) {
+  private static boolean isSecure(String password) {
     if (password.length() < 8) {
       return false;
     }

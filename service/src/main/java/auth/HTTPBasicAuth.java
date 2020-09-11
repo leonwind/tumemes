@@ -18,7 +18,7 @@ public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
     this.userDAO = userDAO;
   }
 
-  private boolean isEmail(String username) {
+  private static boolean isEmail(String username) {
     return username.indexOf('@') != -1;
   }
 

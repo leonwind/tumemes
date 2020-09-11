@@ -18,10 +18,6 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, User> {
     this.secretKey = secretKey;
   }
 
-  private boolean isEmail(String username) {
-    return username.indexOf('@') != -1;
-  }
-
   @Override
   public Optional<User> authenticate(JWTCredentials credentials) throws AuthenticationException {
     try {
@@ -30,13 +26,7 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, User> {
               .setSigningKey(DatatypeConverter.parseBase64Binary(this.secretKey))
               .parseClaimsJws(credentials.getJwtToken())
               .getBody();
-
-      User user;
-      if (isEmail(claims.getSubject())) {
-        user = userDAO.getUserByEmail(claims.getSubject());
-      } else {
-        user = userDAO.getUserByUsername(claims.getSubject());
-      }
+      User user = userDAO.getUserByEmail(claims.getSubject());
       return Optional.ofNullable(user);
     } catch (ExpiredJwtException
         | UnsupportedJwtException

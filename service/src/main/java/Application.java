@@ -1,18 +1,12 @@
 import accessors.MemeDAO;
 import accessors.UserDAO;
 import accessors.VoteDAO;
-import auth.HTTPBasicAuth;
-import auth.JWTCredentials;
-import auth.UnauthorizedResourceHandler;
-import auth.UserAuthorizer;
+import auth.*;
 import core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.UnauthorizedHandler;
-import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
-import io.dropwizard.auth.basic.BasicCredentials;
-import io.dropwizard.auth.chained.ChainedAuthFilter;
 import io.dropwizard.bundles.assets.ConfiguredAssetsBundle;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
@@ -57,22 +51,31 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
 
     UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
-    AuthFilter<BasicCredentials, User> basicAuthFilter =
-        new BasicCredentialAuthFilter.Builder<User>()
-            .setAuthenticator(new HTTPBasicAuth(userDAO))
+    /*AuthFilter<BasicCredentials, User> basicAuthFilter =
+    new BasicCredentialAuthFilter.Builder<User>()
+        .setAuthenticator(new HTTPBasicAuth(userDAO))
+        .setAuthorizer(new UserAuthorizer())
+        .setRealm("secret realm")
+        .setUnauthorizedHandler(unauthorizedHandler)
+        .setPrefix("Basic")
+        .buildAuthFilter();*/
+
+    AuthFilter<JWTCredentials, User> JWTAuthFilter =
+        new JWTAuthFilter.Builder<User>()
+            .setAuthenticator(new JWTAuthenticator(userDAO, configuration.getJwtSecret()))
+            .setPrefix("Bearer")
             .setAuthorizer(new UserAuthorizer())
-            .setRealm("secret realm")
-            .setUnauthorizedHandler(unauthorizedHandler)
-            .setPrefix("Basic")
+            .setUnauthorizedHandler(new UnauthorizedResourceHandler())
             .buildAuthFilter();
 
-    environment.jersey().register(new AuthDynamicFeature(basicAuthFilter));
+    environment.jersey().register(new AuthDynamicFeature(JWTAuthFilter));
     environment.jersey().register(RolesAllowedDynamicFeature.class);
     environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
     environment.jersey().register(unauthorizedHandler);
 
     final PingResource pingResource = new PingResource();
-    final RegisterResource registerResource = new RegisterResource(userDAO, configuration.getJwtSecret());
+    final RegisterResource registerResource =
+        new RegisterResource(userDAO, configuration.getJwtSecret());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
