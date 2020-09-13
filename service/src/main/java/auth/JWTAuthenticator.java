@@ -27,7 +27,7 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, User> {
               .parseClaimsJws(credentials.getJwtToken())
               .getBody();
       User user = userDAO.getUserByEmail(claims.getSubject());
-      return Optional.ofNullable(user);
+      return Optional.of(user);
     } catch (ExpiredJwtException
         | UnsupportedJwtException
         | MalformedJwtException

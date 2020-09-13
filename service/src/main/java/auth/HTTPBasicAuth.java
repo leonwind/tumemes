@@ -24,14 +24,8 @@ public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
 
   @Override
   public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
-    User user;
-    if (isEmail(credentials.getUsername())) {
-      user = userDAO.getUserByEmail(credentials.getUsername());
-    } else {
-      user = userDAO.getUserByUsername(credentials.getUsername());
-    }
+    User user = userDAO.getUserByEmail(credentials.getUsername());
 
-    // if user does not exist return unauthorized
     if (user == null) {
       return Optional.empty();
     }

@@ -13,6 +13,7 @@ module.exports = {
     output: {
         path: PATHS.dist,
         filename: '[name].[hash].js',
+        publicPath: '/'
     },
     resolve: {
         alias: {'@src': PATHS.src},
@@ -58,5 +59,6 @@ module.exports = {
     ],
     devServer: {
         port: 3000,
+        historyApiFallback: true
     },
 };

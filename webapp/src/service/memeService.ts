@@ -2,19 +2,21 @@ import {Meme, NewMeme} from "../types";
 
 export class MemeService {
     private static readonly API_ENDPOINT: string = "http://localhost:8080/";
-    private static readonly JSON_HEADER: Headers = new Headers({"Content-Type": "Application/json"});
+    private static readonly JSON_HEADER: Headers = new Headers({
+        "Content-Type": "Application/json"});
 
     static async getMemes(): Promise<Meme[]> {
         const response = await this.sendRequest("memes", {method: "GET"});
         return await response.json();
     }
 
-    static async uploadMeme(newMeme: NewMeme) {
+    static async uploadMeme(newMeme: NewMeme): Promise<void> {
         const currTitle: string = newMeme.title;
         const mockUser: string = "mock user";
         const image: any = newMeme.image;
 
-        const meme: string = JSON.stringify({"title": currTitle, "author": mockUser})
+        const meme: string = JSON.stringify({
+            "title": currTitle, "author": mockUser})
 
         let data: FormData = new FormData();
         data.append("file", image);
@@ -34,8 +36,8 @@ export class MemeService {
         });
     }
 
-    private static async sendRequest(url: string, options: any) {
-        const response = await fetch(this.API_ENDPOINT + url, options);
+    private static async sendRequest(path: string, options: any): Promise<Response> {
+        const response = await fetch(this.API_ENDPOINT + path, options);
 
         if (!response.ok) {
             throw new Error(response.statusText);

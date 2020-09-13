@@ -26,9 +26,6 @@ public class RegisterResource implements RegisterService {
 
   private final UserDAO userDAO;
   private final String secretKey;
-  // one week until token gets expired
-  // time in milli seconds
-  private final long TTL_MILLIS = 604800000;
 
   public RegisterResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;
@@ -74,7 +71,11 @@ public class RegisterResource implements RegisterService {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     long currMillis = System.currentTimeMillis();
     Date currDate = new Date(currMillis);
-    Date expirationDate = new Date(currMillis + TTL_MILLIS);
+
+    // one week until token gets expired
+    // time in milli seconds
+    final long ttl_millis = 604800000;
+    Date expirationDate = new Date(currMillis + ttl_millis);
 
     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secretKey);
 

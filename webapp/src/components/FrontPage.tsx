@@ -9,7 +9,6 @@ interface State {
     memes: Meme[],
 }
 
-
 export class FrontPage extends Component<{}, State> {
 
     constructor(props: any) {
