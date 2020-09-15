@@ -27,8 +27,9 @@ export class Upload extends Component<{}, State> {
     }
 
     private handleSubmit() {
-        MemeService.uploadMeme({title: this.state.title, image: this.state.image})
-            .then(() => {});
+        MemeService.uploadMeme({
+            title: this.state.title, image: this.state.image
+        }).then(() => {});
     }
 
     render() {

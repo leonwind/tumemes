@@ -93,19 +93,26 @@ public class RegisterResource implements RegisterService {
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
+    System.out.println("REGISTER NEW USER");
+    System.out.println(newUser);
+
     if (userDAO.doesUsernameExist(newUser.getName())) {
+      System.out.println("Username exits");
       return Response.status(400).entity("Username does already exists").build();
     }
 
     if (!isEmailDomainSupported(newUser.getEmail())) {
+      System.out.println("Email not TUM");
       return Response.status(400).entity("Email is not from TUM.").build();
     }
 
     if (userDAO.doesEmailExists(newUser.getEmail())) {
+      System.out.println("Email exists");
       return Response.status(400).entity("Email does already exists").build();
     }
 
     if (!isSecure(newUser.getPassword())) {
+      System.out.println("Password weak");
       return Response.status(400)
           .entity(
               "Password should be at least 8 characters and contains one digit, "
@@ -126,6 +133,7 @@ public class RegisterResource implements RegisterService {
           enc.encodeToString(salt));
 
       String token = createToken(newUser.getEmail());
+      System.out.print("All good. Build token");
       return Response.ok(token).build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
