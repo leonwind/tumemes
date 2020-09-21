@@ -94,7 +94,6 @@ export class Registration extends Component<{}, State> {
     }
 
     private enableButton() {
-        console.log(this.state);
         /*if (!Registration.isSecure(this.state.password) ||
             this.state.password !== this.state.repeatedPassword) {
 
@@ -119,11 +118,16 @@ export class Registration extends Component<{}, State> {
         console.log(this.state.username);
         console.log(this.state.email);
         console.log(this.state.password);
+
         AuthorizationService.registerUser({
             username: this.state.username,
             email: this.state.email,
             password: this.state.password
-        }).then((ans: Response) => {console.log(ans)});
+        })
+            .then((ans: Response) => ans.text())
+            .then((data: string) => {
+                console.log(data);
+            });
     }
 
     render() {

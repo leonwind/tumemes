@@ -14,20 +14,17 @@ export class AuthorizationService {
         return await this.sendRequest("register", {
             method: "POST",
             headers: this.JSON_HEADER,
-            body: data,
-            crossDomain: true
+            body: data
         });
     }
 
     private static async sendRequest(path: string, options: any): Promise<Response> {
-        console.log(options);
         const response = await fetch(this.API_ENDPOINT + path, options);
-        console.log("RESPONSE")
-        console.log(response.status);
-        console.log(response.text());
+
         if (!response.ok) {
             throw new Error(response.statusText);
         }
+
         return response;
     }
 }

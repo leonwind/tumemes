@@ -38,7 +38,6 @@ export class MemeService {
 
     private static async sendRequest(path: string, options: any): Promise<Response> {
         const response = await fetch(this.API_ENDPOINT + path, options);
-
         if (!response.ok) {
             throw new Error(response.statusText);
         }

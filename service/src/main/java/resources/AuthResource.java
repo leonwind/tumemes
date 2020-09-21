@@ -1,7 +1,7 @@
 package resources;
 
 import accessors.UserDAO;
-import api.RegisterService;
+import api.AuthSerivce;
 import auth.Hashing;
 import core.NewUser;
 import enums.AllowedEmailDomains;
@@ -10,8 +10,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.bind.DatatypeConverter;
@@ -22,12 +21,12 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 
-public class RegisterResource implements RegisterService {
+public class AuthResource implements AuthSerivce {
 
   private final UserDAO userDAO;
   private final String secretKey;
 
-  public RegisterResource(UserDAO userDAO, String secretKey) {
+  public AuthResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;
     this.secretKey = secretKey;
   }
@@ -134,11 +133,20 @@ public class RegisterResource implements RegisterService {
 
       String token = createToken(newUser.getEmail());
       System.out.print("All good. Build token");
-      return Response.ok(token).build();
+      return Response.ok().build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();
       return Response.status(400).entity("Error occurred while hashing your password.").build();
     }
+  }
+
+  @GET
+  @Produces(MediaType.TEXT_PLAIN)
+  public String generateToken() {
+    System.out.println("GENERATE TOKEN");
+    String token = createToken("leon@tum.de");
+    System.out.println(token);
+    return token;
   }
 }

@@ -18,10 +18,6 @@ public class HTTPBasicAuth implements Authenticator<BasicCredentials, User> {
     this.userDAO = userDAO;
   }
 
-  private static boolean isEmail(String username) {
-    return username.indexOf('@') != -1;
-  }
-
   @Override
   public Optional<User> authenticate(BasicCredentials credentials) throws AuthenticationException {
     User user = userDAO.getUserByEmail(credentials.getUsername());
