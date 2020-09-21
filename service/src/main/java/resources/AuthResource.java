@@ -1,10 +1,13 @@
 package resources;
 
 import accessors.UserDAO;
-import api.AuthSerivce;
+import api.AuthService;
 import auth.Hashing;
 import core.NewUser;
+import core.User;
 import enums.AllowedEmailDomains;
+import io.dropwizard.auth.Auth;
+import io.dropwizard.auth.basic.BasicCredentials;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,10 +24,17 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
 
-public class AuthResource implements AuthSerivce {
+public class AuthResource implements AuthService {
 
   private final UserDAO userDAO;
   private final String secretKey;
+
+  // one week until refresh token gets expired
+  // time in milli seconds
+  final long TTL_REFRESH_TOKEN = 604800000;
+  // one hour until normal token gets expired
+  // time in milli seconds
+  final long TTL_TOKEN = 3600000;
 
   public AuthResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;
@@ -66,15 +76,12 @@ public class AuthResource implements AuthSerivce {
     return containsDigit && containsLowerCase && containsUpperCase;
   }
 
-  private String createToken(String subject) {
+  private String createToken(String subject, long timeToLive) {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     long currMillis = System.currentTimeMillis();
     Date currDate = new Date(currMillis);
 
-    // one week until token gets expired
-    // time in milli seconds
-    final long ttl_millis = 604800000;
-    Date expirationDate = new Date(currMillis + ttl_millis);
+    Date expirationDate = new Date(currMillis + timeToLive);
 
     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secretKey);
 
@@ -89,6 +96,8 @@ public class AuthResource implements AuthSerivce {
     return builder.compact();
   }
 
+  @Override
+  @Path("/register")
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
@@ -131,8 +140,6 @@ public class AuthResource implements AuthSerivce {
           enc.encodeToString(hash),
           enc.encodeToString(salt));
 
-      String token = createToken(newUser.getEmail());
-      System.out.print("All good. Build token");
       return Response.ok().build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
@@ -141,12 +148,44 @@ public class AuthResource implements AuthSerivce {
     }
   }
 
+  @Override
+  @Path("/login")
   @GET
   @Produces(MediaType.TEXT_PLAIN)
-  public String generateToken() {
-    System.out.println("GENERATE TOKEN");
-    String token = createToken("leon@tum.de");
-    System.out.println(token);
-    return token;
+  /*
+   * Return token with short expiration date
+   */
+  public Response loginUser(BasicCredentials credentials) {
+    User user = userDAO.getUserByEmail(credentials.getUsername()) ;
+
+    if (user == null) {
+      return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    try {
+      byte[] hash = Hashing.generateHash(credentials.getPassword(),
+          user.getSalt());
+      String hashedPassword = Base64.getEncoder().encodeToString(hash) ;
+
+      if (hashedPassword.equals(user.getHash())) {
+        String token = createToken(user.getEmail(), this.TTL_TOKEN);
+        return Response.ok(token).build();
+      }
+      return Response.status(Response.Status.UNAUTHORIZED).build();
+
+    } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+      e.printStackTrace();
+      return Response.status(400).entity("Error occurred on the server").build();
+    }
   }
+
+  @Override
+  @Path("/refresh_token")
+  @GET
+  @Produces(MediaType.TEXT_PLAIN)
+  public Response generateRefreshToken(@Auth User user) {
+    String refreshToken = createToken(user.getEmail(), this.TTL_REFRESH_TOKEN);
+    return Response.ok(refreshToken).build();
+  }
+
 }

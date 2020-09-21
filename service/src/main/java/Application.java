@@ -52,16 +52,6 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
     UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
 
-    // http basic auth
-    /*final AuthFilter<BasicCredentials, User> basicAuthFilter =
-    new BasicCredentialAuthFilter.Builder<User>()
-        .setAuthenticator(new HTTPBasicAuth(userDAO))
-        .setPrefix("Basic")
-        .setAuthorizer(new UserAuthorizer())
-        .setUnauthorizedHandler(unauthorizedHandler)
-        .setRealm("secret realm")
-        .buildAuthFilter();*/
-
     final AuthFilter<JWTCredentials, User> JWTAuthFilter =
         new JWTAuthFilter.Builder<User>()
             .setAuthenticator(new JWTAuthenticator(userDAO, configuration.getJwtSecret()))

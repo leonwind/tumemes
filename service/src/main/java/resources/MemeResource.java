@@ -18,6 +18,7 @@ public class MemeResource implements MemeService {
     this.memeDAO = memeDAO;
   }
 
+  @Override
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public List<Meme> getMemes(@Auth User user,
@@ -32,6 +33,7 @@ public class MemeResource implements MemeService {
     return memeDAO.getAllMemesByVotes();
   }
 
+  @Override
   @GET
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
