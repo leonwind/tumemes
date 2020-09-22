@@ -9,7 +9,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-
+@Path("/")
 public interface AuthService {
 
   @Path("/register")
@@ -17,11 +17,11 @@ public interface AuthService {
   @Consumes(MediaType.APPLICATION_JSON)
   Response registerUser(NewUser newuser);
 
-  /*
   @Path("/login")
-  @GET
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  Response loginUser();*/
+  Response loginUser(LoginUser loginUser);
 
   @Path("/refresh_token")
   @GET

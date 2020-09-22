@@ -157,20 +157,20 @@ public class AuthResource implements AuthService {
     }
   }
 
-  /*
-   * Return token with short expiration date
   @Override
   @Path("/login")
-  @GET
-  public Response loginUser() {
-    System.out.println("LOGIN");
-    return Response.ok().build();
-    /*
+  @POST
+  @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response loginUser(LoginUser loginUser) {
+    String username = loginUser.getUsername();
+    String password = loginUser.getPassword();
+
     User user;
-    if (isEmail(loginUser.getUsername())) {
-      user = userDAO.getUserByEmail(loginUser.getUsername());
+    if (isEmail(username)) {
+      user = userDAO.getUserByEmail(username);
     } else {
-      user = userDAO.getUserByUsername(loginUser.getUsername());
+      user = userDAO.getUserByUsername(username);
     }
 
     if (user == null) {
@@ -178,7 +178,7 @@ public class AuthResource implements AuthService {
     }
 
     try {
-      byte[] hash = Hashing.generateHash(loginUser.getPassword(), user.getSalt());
+      byte[] hash = Hashing.generateHash(password, user.getSalt());
       String hashedPassword = Base64.getEncoder().encodeToString(hash);
 
       if (hashedPassword.equals(user.getHash())) {
@@ -191,7 +191,7 @@ public class AuthResource implements AuthService {
       e.printStackTrace();
       return Response.status(400).entity("Error occurred on the server").build();
     }
-     */
+  }
 
   @Override
   @Path("/refresh_token")
