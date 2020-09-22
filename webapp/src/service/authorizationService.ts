@@ -18,6 +18,10 @@ export class AuthorizationService {
         });
     }
 
+    static async loginUser(newUser: NewUser): Promise<Response> {
+        const data: string = ""
+    }
+
     private static async sendRequest(path: string, options: any): Promise<Response> {
         const response = await fetch(this.API_ENDPOINT + path, options);
 

@@ -1,9 +1,9 @@
 package api;
 
+import core.LoginUser;
 import core.NewUser;
 import core.User;
 import io.dropwizard.auth.Auth;
-import io.dropwizard.auth.basic.BasicCredentials;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -17,10 +17,11 @@ public interface AuthService {
   @Consumes(MediaType.APPLICATION_JSON)
   Response registerUser(NewUser newuser);
 
+  /*
   @Path("/login")
   @GET
-  @Produces(MediaType.TEXT_PLAIN)
-  Response loginUser(BasicCredentials credentials);
+  @Produces(MediaType.APPLICATION_JSON)
+  Response loginUser();*/
 
   @Path("/refresh_token")
   @GET
