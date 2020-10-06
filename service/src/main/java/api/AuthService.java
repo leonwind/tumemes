@@ -15,6 +15,7 @@ public interface AuthService {
   @Path("/register")
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.TEXT_PLAIN)
   Response registerUser(NewUser newuser);
 
   @Path("/login")

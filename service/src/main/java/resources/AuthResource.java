@@ -109,6 +109,7 @@ public class AuthResource implements AuthService {
   @Path("/register")
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
+  @Produces(MediaType.TEXT_PLAIN)
   public Response registerUser(NewUser newUser) {
     System.out.println("REGISTER NEW USER");
     System.out.println(newUser);
@@ -149,7 +150,9 @@ public class AuthResource implements AuthService {
           enc.encodeToString(hash),
           enc.encodeToString(salt));
 
-      return Response.ok().build();
+      System.out.println("SUCCESS. RETURN TOKEN");
+      String token = createAccessToken(newUser.getEmail());
+      return Response.ok().entity(token).build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();

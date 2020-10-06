@@ -19,14 +19,14 @@ public class Meme {
 
   /** Convert new uploaded NewMeme object into Meme object */
   public static Meme fromNewMeme(NewMeme newMeme) {
-    return new Meme(newMeme.getTitle(), newMeme.getAuthor());
+    return new Meme(newMeme);
   }
 
   /** Create Meme object from new posted meme */
-  public Meme(String title, String author) {
+  public Meme(NewMeme newMeme) {
     this.memeID = UUID.randomUUID();
-    this.title = title;
-    this.author = author;
+    this.title = newMeme.getTitle();
+    this.author = newMeme.getAuthor();
     voteCount = 0;
     created = new Date();
     imagePath = MemeImageDAO.getMemeImagePath(memeID);

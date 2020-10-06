@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from "react";
 import {AuthorizationService} from "../service/authorizationService";
+import {NewUser} from "../types";
 
 interface State {
     username: string,
@@ -119,15 +120,29 @@ export class Registration extends Component<{}, State> {
         console.log(this.state.email);
         console.log(this.state.password);
 
-        AuthorizationService.registerUser({
+        const newUser: NewUser = {
             username: this.state.username,
             email: this.state.email,
             password: this.state.password
-        })
-            .then((ans: Response) => ans.text())
+        }
+
+        /*
+        AuthorizationService.registerUser(newUser)
+            .then((ans: Response) => {
+                console.log("REGISTERED");
+                console.log(ans.status);
+                if (ans.ok) {
+                    console.log("ANSWER IS OK");
+                    console.log(ans.text());
+                }
+            });*/
+
+        AuthorizationService.registerUser(newUser)
+            .then((ans: Response) =>  ans.text())
             .then((data: string) => {
                 console.log(data);
-            });
+            })
+
     }
 
     render() {
