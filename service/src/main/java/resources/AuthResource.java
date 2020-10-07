@@ -7,6 +7,7 @@ import core.LoginUser;
 import core.NewUser;
 import core.User;
 import enums.AllowedEmailDomains;
+import exceptions.DomainNotSupportedException;
 import io.dropwizard.auth.Auth;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -48,6 +49,10 @@ public class AuthResource implements AuthService {
         .anyMatch(allowedDomain -> allowedDomain.toString().equals(domain));
   }
 
+  private static boolean isEmail(String email) {
+    return email.indexOf('@') != -1;
+  }
+
   private static boolean isSecure(String password) {
     if (password.length() < 8) {
       return false;
@@ -77,8 +82,27 @@ public class AuthResource implements AuthService {
     return containsDigit && containsLowerCase && containsUpperCase;
   }
 
-  private static boolean isEmail(String email) {
-    return email.indexOf('@') != -1;
+  private void isValidUser(NewUser newUser) throws Exception {
+    if (userDAO.doesUsernameExist(newUser.getName())) {
+      System.out.println("Username exits");
+      throw new Exception("Username does already exists");
+    }
+
+    if (!isEmailDomainSupported(newUser.getEmail())) {
+      System.out.println("Email not TUM");
+      throw new DomainNotSupportedException();
+    }
+
+    if (userDAO.doesEmailExists(newUser.getEmail())) {
+      System.out.println("Email exists");
+      throw new Exception("Email does already exists");
+    }
+
+    if (!isSecure(newUser.getPassword())) {
+      System.out.println("Password weak");
+      throw new Exception("Password should be at least 8 characters and " +
+          "contains one digit, one lowercase and one uppercase character.");
+    }
   }
 
   private String createAccessToken(String subject) {
@@ -114,28 +138,10 @@ public class AuthResource implements AuthService {
     System.out.println("REGISTER NEW USER");
     System.out.println(newUser);
 
-    if (userDAO.doesUsernameExist(newUser.getName())) {
-      System.out.println("Username exits");
-      return Response.status(400).entity("Username does already exists").build();
-    }
-
-    if (!isEmailDomainSupported(newUser.getEmail())) {
-      System.out.println("Email not TUM");
-      return Response.status(400).entity("Email is not from TUM.").build();
-    }
-
-    if (userDAO.doesEmailExists(newUser.getEmail())) {
-      System.out.println("Email exists");
-      return Response.status(400).entity("Email does already exists").build();
-    }
-
-    if (!isSecure(newUser.getPassword())) {
-      System.out.println("Password weak");
-      return Response.status(400)
-          .entity(
-              "Password should be at least 8 characters and contains one digit, "
-                  + "one lowercase and one uppercase character.")
-          .build();
+    try {
+      isValidUser(newUser);
+    } catch (Exception e) {
+      return Response.status(400).entity(e.getMessage()).build();
     }
 
     byte[] salt = Hashing.generateSalt();
