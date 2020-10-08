@@ -11,7 +11,6 @@ import java.util.List;
 @Path("/memes")
 public interface MemeService {
 
-
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     List<Meme> getMemes(@Auth User user, @QueryParam("sortBy") String sortBy);

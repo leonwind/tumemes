@@ -9,17 +9,17 @@ public class NewComment {
   private final UUID parentID;
   private final UUID memeID;
   private final String author;
-  private final String text;
+  private final String content;
 
   public NewComment(
       @JsonProperty("parentID") UUID parentID,
       @JsonProperty("memeID") UUID memeID,
       @JsonProperty("author") String author,
-      @JsonProperty("text") String text) {
+      @JsonProperty("content") String content) {
     this.parentID = parentID;
     this.memeID = memeID;
     this.author = author;
-    this.text = text;
+    this.content = content;
   }
 
   public UUID getParentID() {
@@ -34,7 +34,7 @@ public class NewComment {
     return author;
   }
 
-  public String getText() {
-    return text;
+  public String getContent() {
+    return content;
   }
 }

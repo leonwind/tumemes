@@ -8,7 +8,7 @@ public class Comment {
   private final UUID commentID;
   private final UUID parentID;
   private final UUID memeID;
-  private final String text;
+  private final String content;
   private final String author;
   private final Date created;
 
@@ -23,18 +23,31 @@ public class Comment {
     this.parentID = newComment.getParentID();
     this.memeID = newComment.getMemeID();
     this.author = newComment.getAuthor();
-    this.text = newComment.getText();
+    this.content = newComment.getContent();
     created = new Date();
   }
 
   /** Create Comment object for existing Comment in the database */
   public Comment(
-      UUID commentID, UUID parentID, UUID memeID, Date created, String text, String author) {
+      UUID commentID, UUID parentID, UUID memeID, String content, String author,
+      Date created) {
     this.commentID = commentID;
     this.parentID = parentID;
     this.memeID = memeID;
     this.created = created;
-    this.text = text;
+    this.content = content;
     this.author = author;
+  }
+
+  @Override
+  public String toString() {
+    return "Comment{" +
+        "commentID=" + commentID +
+        ", parentID=" + parentID +
+        ", memeID=" + memeID +
+        ", content='" + content + '\'' +
+        ", author='" + author + '\'' +
+        ", created=" + created +
+        '}';
   }
 }

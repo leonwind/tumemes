@@ -1,3 +1,4 @@
+import accessors.CommentDAO;
 import accessors.MemeDAO;
 import accessors.UserDAO;
 import accessors.VoteDAO;
@@ -49,6 +50,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+    final CommentDAO commentDAO = jdbi.onDemand(CommentDAO.class);
 
     UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
 
@@ -70,12 +72,14 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
+    final CommentResource commentResource = new CommentResource(commentDAO);
 
     environment.jersey().register(pingResource);
     environment.jersey().register(authResource);
     environment.jersey().register(memeResource);
     environment.jersey().register(uploadResource);
     environment.jersey().register(voteResource);
+    environment.jersey().register(commentResource);
   }
 
   private void configureCORS(Environment environment) {

@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 @Path("/comments")
-public interface CommentsService {
+public interface CommentService {
 
   @POST
   @Path("/post")

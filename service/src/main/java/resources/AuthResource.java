@@ -82,7 +82,8 @@ public class AuthResource implements AuthService {
     return containsDigit && containsLowerCase && containsUpperCase;
   }
 
-  private void isValidUser(NewUser newUser) throws Exception {
+  /** Check if the new user satisfies all the given constraints */
+  private void verifyUserCredentials(NewUser newUser) throws Exception {
     if (userDAO.doesUsernameExist(newUser.getName())) {
       System.out.println("Username exits");
       throw new Exception("Username does already exists");
@@ -100,8 +101,9 @@ public class AuthResource implements AuthService {
 
     if (!isSecure(newUser.getPassword())) {
       System.out.println("Password weak");
-      throw new Exception("Password should be at least 8 characters and " +
-          "contains one digit, one lowercase and one uppercase character.");
+      throw new Exception(
+          "Password should be at least 8 characters and "
+              + "contains one digit, one lowercase and one uppercase character.");
     }
   }
 
@@ -139,7 +141,7 @@ public class AuthResource implements AuthService {
     System.out.println(newUser);
 
     try {
-      isValidUser(newUser);
+      verifyUserCredentials(newUser);
     } catch (Exception e) {
       return Response.status(400).entity(e.getMessage()).build();
     }

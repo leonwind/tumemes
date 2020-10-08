@@ -21,6 +21,22 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: comments; Type: TABLE; Schema: public; Owner: tumemes
+--
+
+CREATE TABLE public.comments (
+    commentid text NOT NULL,
+    parentid text,
+    memeid text NOT NULL,
+    content text,
+    author text,
+    created timestamp without time zone
+);
+
+
+ALTER TABLE public.comments OWNER TO tumemes;
+
+--
 -- Name: memes; Type: TABLE; Schema: public; Owner: tumemes
 --
 
