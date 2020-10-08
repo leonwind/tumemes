@@ -72,7 +72,7 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
-    final CommentResource commentResource = new CommentResource(commentDAO);
+    final CommentResource commentResource = new CommentResource(commentDAO, memeDAO);
 
     environment.jersey().register(pingResource);
     environment.jersey().register(authResource);

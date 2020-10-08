@@ -13,16 +13,16 @@ public class Comment {
   private final Date created;
 
   /** Convert new uploaded NewComment object into Comment object */
-  public static Comment fromNewComment(NewComment newComment) {
-    return new Comment(newComment);
+  public static Comment fromNewComment(NewComment newComment, String author) {
+    return new Comment(newComment, author);
   }
 
   /** Create Comment object from new posted comment */
-  public Comment(NewComment newComment) {
+  public Comment(NewComment newComment, String author) {
     this.commentID = UUID.randomUUID();
     this.parentID = newComment.getParentID();
     this.memeID = newComment.getMemeID();
-    this.author = newComment.getAuthor();
+    this.author = author;
     this.content = newComment.getContent();
     created = new Date();
   }
@@ -37,6 +37,30 @@ public class Comment {
     this.created = created;
     this.content = content;
     this.author = author;
+  }
+
+  public UUID getCommentID() {
+    return commentID;
+  }
+
+  public UUID getParentID() {
+    return parentID;
+  }
+
+  public UUID getMemeID() {
+    return memeID;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public String getAuthor() {
+    return author;
+  }
+
+  public Date getCreated() {
+    return created;
   }
 
   @Override
