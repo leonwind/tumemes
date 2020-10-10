@@ -7,8 +7,14 @@ interface State {
     username: string,
     email: string,
     password: string,
-    repeatedPassword: string
-    disabled: boolean,
+    repeatedPassword: string,
+    errors: {
+        username: string,
+        email: string,
+        password: string,
+        repeatedPassword: string,
+        unexpected: string
+    }
 }
 
 const allowedDomains = new Set([
@@ -22,7 +28,11 @@ export class Registration extends Component<{}, State> {
         this.state = {
             username: "", email: "",
             password: "", repeatedPassword: "",
-            disabled: true
+            errors: {
+                username: "", email: "",
+                password: "", repeatedPassword: "",
+                unexpected: ""
+            }
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -34,22 +44,18 @@ export class Registration extends Component<{}, State> {
 
     private handleUsernameChange(event: any) {
         this.setState({username: event.target.value});
-        this.enableButton();
     }
 
     private handleEmailChange(event: any) {
         this.setState({email: event.target.value});
-        this.enableButton();
     }
 
     private handlePasswordChange(event: any) {
         this.setState({password: event.target.value});
-        this.enableButton();
     }
 
     private handleRepeatedPasswordChange(event: any) {
         this.setState({repeatedPassword: event.target.value});
-        this.enableButton();
     }
 
     private static isDigit(char: string): boolean {
@@ -94,28 +100,42 @@ export class Registration extends Component<{}, State> {
         return email.substr(email.indexOf('@') + 1);
     }
 
-    private enableButton() {
-        /*if (!Registration.isSecure(this.state.password) ||
-            this.state.password !== this.state.repeatedPassword) {
+    private areCredentialsValid(): boolean {
+        let newErrors = {username: "", email: "",
+            password: "", repeatedPassword: "",
+            unexpected: ""};
 
-            console.log("Password is weak");
-            this.setState({disabled: true});
-            return;
+        let isValid: boolean = true;
+
+        if (!Registration.isSecure(this.state.password)) {
+            console.log("Password weak");
+            newErrors.password = "Password weak";
+            isValid = false;
         }
 
-        let domain: string = Registration.getDomain(this.state.email);
+        if (this.state.password !== this.state.repeatedPassword) {
+            console.log("Password and repeated password do not match");
+            newErrors.repeatedPassword = "Password and repeated password do not match";
+            isValid = false;
+        }
+
+        const domain: string = Registration.getDomain(this.state.email);
         if (!allowedDomains.has(domain)) {
-
             console.log("Domain wrong");
-            this.setState({disabled: true});
-            return;
-        }*/
+            newErrors.email = "Only @tum.de and @mytum.de emails are supported";
+            isValid = false;
+        }
 
-        this.setState({disabled: false});
+        this.setState({errors: newErrors});
+        return isValid;
     }
 
     private handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        if (!this.areCredentialsValid()) {
+            return;
+        }
 
         console.log("REGISTER USER:");
         console.log(this.state.username);
@@ -128,21 +148,32 @@ export class Registration extends Component<{}, State> {
             password: this.state.password
         }
 
-        /*
         AuthorizationService.registerUser(newUser)
             .then((ans: Response) => {
-                console.log("REGISTERED");
-                console.log(ans.status);
-                if (ans.ok) {
-                    console.log("ANSWER IS OK");
-                    console.log(ans.text());
-                }
-            });*/
+                const dataPromise: Promise<string> = ans.text();
+                if (!ans.ok) {
+                    dataPromise.then((data: string) => {
+                        let newErrors = {username: "", email: "",
+                            password: "", repeatedPassword: "",
+                            unexpected: ""};
 
-        AuthorizationService.registerUser(newUser)
-            .then((ans: Response) =>  ans.text())
-            .then((data: string) => {
-                console.log(data);
+                        if (data === "Username exists") {
+                            newErrors.username = data;
+                        }
+                        else if (data === "Email exists") {
+                                newErrors.email = data;
+                        }
+                        else {
+                            newErrors.unexpected = data;
+                        }
+                        this.setState({errors: newErrors});
+                    });
+                } else {
+                    dataPromise.then((data: string) => {
+                        window.localStorage.setItem("access_token", data);
+                        console.log(window.localStorage.getItem("access_token"));
+                    })
+                }
             })
     }
 
@@ -150,39 +181,42 @@ export class Registration extends Component<{}, State> {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <label htmlFor="username">Username</label>
-                        <input type="username" className="form-control" id="username"
-                               value={this.state.username} onChange={this.handleUsernameChange}
-                               aria-describedby="usernameHelp"
-                               placeholder="Enter username"/>
-                    </div>
+                    <label htmlFor="username">Username</label>
+                    <input type="username" className="form-control" id="username"
+                           value={this.state.username} onChange={this.handleUsernameChange}
+                           placeholder="Enter username" required/>
+                    <span style={{color: "red"}}>
+                        {this.state.errors["username"]}
+                    </span>
 
-                    <div className="form-group">
-                        <label htmlFor="email">Email address</label>
-                        <input type="email" className="form-control" id="email"
-                               value={this.state.email} onChange={this.handleEmailChange}
-                               aria-describedby="emailHelp"
-                               placeholder="Enter email"/>
-                    </div>
+                    <label htmlFor="email">Email address</label>
+                    <input type="email" className="form-control" id="email"
+                           value={this.state.email} onChange={this.handleEmailChange}
+                           placeholder="Enter email" required/>
+                    <span style={{color: "red"}}>
+                        {this.state.errors["email"]}
+                    </span>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Password</label>
-                        <input type="password" className="form-control" id="password"
-                               value={this.state.password} onChange={this.handlePasswordChange}
-                               placeholder="Password"/>
-                    </div>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" className="form-control" id="password"
+                           value={this.state.password} onChange={this.handlePasswordChange}
+                           placeholder="Password" required/>
+                    <span style={{color: "red"}}>
+                        {this.state.errors["password"]}
+                    </span>
 
-                    <div className="form-group">
-                        <label htmlFor="password">Repeat Password</label>
-                        <input type="password" className="form-control" id="repeated_password"
-                               value={this.state.repeatedPassword}
-                               onChange={this.handleRepeatedPasswordChange}
-                               placeholder="Repeat Password"/>
-                    </div>
 
-                    <button type="submit" className="btn btn-primary"
-                            disabled={this.state.disabled}>Submit
+                    <label htmlFor="password">Repeat Password</label>
+                    <input type="password" className="form-control" id="repeated_password"
+                           value={this.state.repeatedPassword}
+                           onChange={this.handleRepeatedPasswordChange}
+                           placeholder="Repeat Password" required/>
+                    <span style={{color: "red"}}>
+                        {this.state.errors["repeatedPassword"]}
+                    </span>
+
+                    <button type="submit" className="btn btn-primary">
+                        Submit
                     </button>
                 </form>
             </div>

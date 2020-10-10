@@ -12,6 +12,8 @@ import io.dropwizard.auth.Auth;
 import org.glassfish.jersey.media.multipart.FormDataBodyPart;
 import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -21,6 +23,7 @@ import java.io.InputStream;
 
 public class UploadResource implements UploadService {
 
+  private static final Logger log = LoggerFactory.getLogger(UploadResource.class);
   private final MemeDAO memeDAO;
 
   public UploadResource(MemeDAO memeDAO) {
@@ -35,6 +38,8 @@ public class UploadResource implements UploadService {
       @FormDataParam("file") InputStream inputStream,
       @FormDataParam("file") FormDataContentDisposition fileDetail,
       @FormDataParam("meme") FormDataBodyPart newMemeJSON) {
+
+    log.info("Upload new meme");
 
     // Some clients are unable to set individual content-type for each type
     // correct. Thus we need to set the content-type for newMeme to json by hand

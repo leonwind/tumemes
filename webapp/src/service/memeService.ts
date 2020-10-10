@@ -1,12 +1,17 @@
 import {Meme, NewMeme} from "../types";
+import {Requests} from "./requests";
 
 export class MemeService {
-    private static readonly API_ENDPOINT: string = "http://localhost:8080/";
     private static readonly JSON_HEADER: Headers = new Headers({
         "Content-Type": "Application/json"});
+    private static readonly AUTH_HEADER: Headers = new Headers({
+        "Authorization" : "Bearer $" + window.localStorage.getItem("access_token")});
 
     static async getMemes(): Promise<Meme[]> {
-        const response = await this.sendRequest("memes", {method: "GET"});
+        const response = await Requests.sendRequest("memes", {
+            method: "GET",
+            headers: this.AUTH_HEADER
+        });
         return await response.json();
     }
 
@@ -22,25 +27,17 @@ export class MemeService {
         data.append("file", image);
         data.append("meme", meme);
 
-        await this.sendRequest("upload", {
+        await Requests.sendRequest("upload", {
             method: "POST",
             body: data
         });
     }
 
     static async voteMeme(memeID: string, vote: number) {
-        await this.sendRequest("vote", {
+        await Requests.sendRequest("vote", {
             method: "POST",
             headers: this.JSON_HEADER,
             body: JSON.stringify({"memeID": memeID, "vote": vote})
         });
-    }
-
-    private static async sendRequest(path: string, options: any): Promise<Response> {
-        const response = await fetch(this.API_ENDPOINT + path, options);
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-        return response;
     }
 }

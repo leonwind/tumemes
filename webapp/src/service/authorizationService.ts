@@ -1,9 +1,10 @@
 import {NewUser} from "../types";
+import {Requests} from "./requests";
 
 export class AuthorizationService {
-    private static readonly API_ENDPOINT: string = "/api/";
     private static readonly JSON_HEADER: Headers = new Headers({
-        "Content-Type": "Application/json"});
+        "Content-Type": "Application/json"
+    });
 
     static async registerUser(newUser: NewUser): Promise<Response> {
         const data: string = JSON.stringify({
@@ -11,36 +12,10 @@ export class AuthorizationService {
             "email": newUser.email, "password": newUser.password
         });
 
-        return await this.sendRequest("register", {
+        return await Requests.sendRequest("register", {
             method: "POST",
             headers: this.JSON_HEADER,
             body: data
-        });
-    }
-
-    static async loginUser(newUser: NewUser): Promise<Response> {
-        const data: string = JSON.stringify({
-            "username": newUser.username,
-            "password": newUser.password
-        });
-
-        return await this.sendRequest("login", {
-            method: "POST",
-            headers: this.JSON_HEADER,
-            body: data
-        });
-    }
-
-    private static async sendRequest(path: string, options: any): Promise<Response> {
-        console.log(options);
-        console.log("SEND REQUEST");
-        const response = await fetch(this.API_ENDPOINT + path, options);
-        console.log("AFTER CALL");
-
-        if (!response.ok) {
-            throw new Error(response.statusText);
-        }
-
-        return response;
+        }, false);
     }
 }

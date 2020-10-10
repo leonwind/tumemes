@@ -13,14 +13,9 @@ import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
-import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
 import resources.*;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.FilterRegistration;
-import java.util.EnumSet;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 
@@ -41,10 +36,9 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
   @Override
   public void run(Configuration configuration, Environment environment) {
-    // setup database
     final JdbiFactory factory = new JdbiFactory();
-
     final Jdbi jdbi = factory.build(environment, configuration.getDatabase(), "postgres");
+
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
     final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);

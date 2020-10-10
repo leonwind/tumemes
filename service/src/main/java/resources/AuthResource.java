@@ -36,11 +36,9 @@ public class AuthResource implements AuthService {
   private final String secretKey;
 
   // one week until refresh token gets expired
-  // time in milli seconds
   final Duration TTL_REFRESH_TOKEN = Duration.ofDays(7);
 
   // one hour until normal token gets expired
-  // time in milli seconds
   final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
 
   public AuthResource(UserDAO userDAO, String secretKey) {
@@ -90,18 +88,22 @@ public class AuthResource implements AuthService {
   /** Check if the new user satisfies all the given constraints */
   private void verifyUserCredentials(NewUser newUser) throws Exception {
     if (userDAO.doesUsernameExist(newUser.getName())) {
-      throw new Exception("Username does already exists");
+      log.info("Username exists");
+      throw new Exception("Username exists");
     }
 
     if (!isEmailDomainSupported(newUser.getEmail())) {
+      log.info("Email not from TUM");
       throw new DomainNotSupportedException();
     }
 
     if (userDAO.doesEmailExists(newUser.getEmail())) {
-      throw new Exception("Email does already exists");
+      log.info("Email exists");
+      throw new Exception("Email exists");
     }
 
     if (!isSecure(newUser.getPassword())) {
+      log.info("Password weak");
       throw new Exception(
           "Password should be at least 8 characters and "
               + "contains one digit, one lowercase and one uppercase character.");
@@ -138,8 +140,7 @@ public class AuthResource implements AuthService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
-    System.out.println("REGISTER NEW USER");
-    System.out.println(newUser);
+   log.info("Register new user");
 
     try {
       verifyUserCredentials(newUser);
@@ -159,7 +160,7 @@ public class AuthResource implements AuthService {
           enc.encodeToString(hash),
           enc.encodeToString(salt));
 
-      System.out.println("SUCCESS. RETURN TOKEN");
+      log.info("Successfully added new user");
       String token = createAccessToken(newUser.getEmail());
       return Response.ok().entity(token).build();
 
