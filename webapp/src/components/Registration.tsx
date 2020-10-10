@@ -1,5 +1,5 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {Component} from "react";
+import React, {Component, FormEvent} from "react";
 import {AuthorizationService} from "../service/authorizationService";
 import {NewUser} from "../types";
 
@@ -114,7 +114,9 @@ export class Registration extends Component<{}, State> {
         this.setState({disabled: false});
     }
 
-    private handleSubmit() {
+    private handleSubmit(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
         console.log("REGISTER USER:");
         console.log(this.state.username);
         console.log(this.state.email);
@@ -142,13 +144,12 @@ export class Registration extends Component<{}, State> {
             .then((data: string) => {
                 console.log(data);
             })
-
     }
 
     render() {
         return (
             <div>
-                <form>
+                <form onSubmit={this.handleSubmit}>
                     <div className="form-group">
                         <label htmlFor="username">Username</label>
                         <input type="username" className="form-control" id="username"
@@ -181,8 +182,7 @@ export class Registration extends Component<{}, State> {
                     </div>
 
                     <button type="submit" className="btn btn-primary"
-                            disabled={this.state.disabled}
-                            onClick={this.handleSubmit}>Submit
+                            disabled={this.state.disabled}>Submit
                     </button>
                 </form>
             </div>

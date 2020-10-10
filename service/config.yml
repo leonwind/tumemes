@@ -1,5 +1,8 @@
 jwtSecret: "secret"
 
+server:
+  rootPath: '/api/*'
+
 database:
   driverClass: org.postgresql.Driver
   user: tumemes # TODO

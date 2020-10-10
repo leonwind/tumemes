@@ -1,7 +1,7 @@
 import {NewUser} from "../types";
 
 export class AuthorizationService {
-    private static readonly API_ENDPOINT: string = "http://localhost:8080/";
+    private static readonly API_ENDPOINT: string = "/api/";
     private static readonly JSON_HEADER: Headers = new Headers({
         "Content-Type": "Application/json"});
 
@@ -37,9 +37,9 @@ export class AuthorizationService {
         const response = await fetch(this.API_ENDPOINT + path, options);
         console.log("AFTER CALL");
 
-        /*if (!response.ok) {
+        if (!response.ok) {
             throw new Error(response.statusText);
-        }*/
+        }
 
         return response;
     }

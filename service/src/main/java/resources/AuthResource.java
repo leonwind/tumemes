@@ -12,6 +12,8 @@ import io.dropwizard.auth.Auth;
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.*;
@@ -21,6 +23,7 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
@@ -28,15 +31,17 @@ import java.util.UUID;
 
 public class AuthResource implements AuthService {
 
+  private static final Logger log = LoggerFactory.getLogger(AuthResource.class);
   private final UserDAO userDAO;
   private final String secretKey;
 
   // one week until refresh token gets expired
   // time in milli seconds
-  final long TTL_REFRESH_TOKEN = 604800000;
+  final Duration TTL_REFRESH_TOKEN = Duration.ofDays(7);
+
   // one hour until normal token gets expired
   // time in milli seconds
-  final long TTL_ACCESS_TOKEN = 3600000;
+  final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
 
   public AuthResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;
@@ -85,22 +90,18 @@ public class AuthResource implements AuthService {
   /** Check if the new user satisfies all the given constraints */
   private void verifyUserCredentials(NewUser newUser) throws Exception {
     if (userDAO.doesUsernameExist(newUser.getName())) {
-      System.out.println("Username exits");
       throw new Exception("Username does already exists");
     }
 
     if (!isEmailDomainSupported(newUser.getEmail())) {
-      System.out.println("Email not TUM");
       throw new DomainNotSupportedException();
     }
 
     if (userDAO.doesEmailExists(newUser.getEmail())) {
-      System.out.println("Email exists");
       throw new Exception("Email does already exists");
     }
 
     if (!isSecure(newUser.getPassword())) {
-      System.out.println("Password weak");
       throw new Exception(
           "Password should be at least 8 characters and "
               + "contains one digit, one lowercase and one uppercase character.");
@@ -112,7 +113,7 @@ public class AuthResource implements AuthService {
     long currMillis = System.currentTimeMillis();
     Date currDate = new Date(currMillis);
 
-    Date expirationDate = new Date(currMillis + this.TTL_ACCESS_TOKEN);
+    Date expirationDate = new Date(currMillis + this.TTL_ACCESS_TOKEN.toMillis());
 
     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secretKey);
 
@@ -135,7 +136,7 @@ public class AuthResource implements AuthService {
   @Path("/register")
   @POST
   @Consumes(MediaType.APPLICATION_JSON)
-  @Produces(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
     System.out.println("REGISTER NEW USER");
     System.out.println(newUser);
