@@ -3,16 +3,21 @@ import {Requests} from "./requests";
 
 export class MemeService {
     private static readonly JSON_HEADER: Headers = new Headers({
-        "Content-Type": "Application/json"});
+        "Content-Type": "Application/json"
+    });
     private static readonly AUTH_HEADER: Headers = new Headers({
-        "Authorization" : "Bearer $" + window.localStorage.getItem("access_token")});
+        "Authorization" : "Bearer $" + window.localStorage.getItem("access_token")
+    });
+    private static readonly JSON_AUTH_HEADER: Headers = new Headers({
+        "Content-Type": "Application/json",
+        "Authorization" : "Bearer $" + window.localStorage.getItem("access_token")
+    });
 
-    static async getMemes(): Promise<Meme[]> {
-        const response = await Requests.sendRequest("memes", {
+    static async getMemes(): Promise<Response> {
+        return await Requests.sendRequest("memes", {
             method: "GET",
             headers: this.AUTH_HEADER
-        });
-        return await response.json();
+        }, false);
     }
 
     static async uploadMeme(newMeme: NewMeme): Promise<void> {
@@ -29,6 +34,7 @@ export class MemeService {
 
         await Requests.sendRequest("upload", {
             method: "POST",
+            headers: this.AUTH_HEADER,
             body: data
         });
     }
@@ -36,7 +42,7 @@ export class MemeService {
     static async voteMeme(memeID: string, vote: number) {
         await Requests.sendRequest("vote", {
             method: "POST",
-            headers: this.JSON_HEADER,
+            headers: this.JSON_AUTH_HEADER,
             body: JSON.stringify({"memeID": memeID, "vote": vote})
         });
     }

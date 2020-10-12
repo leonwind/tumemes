@@ -48,9 +48,9 @@ export class LoginPage extends Component<{}, State> {
                 if (ans.ok) {
                     dataPromise.then((data: string) => {
                         window.localStorage.setItem("access_token", data);
+                        this.setState({redirect: true});
+                        return;
                     })
-                    this.setState({redirect: true});
-                    return;
                 }
 
                 if (ans.status === 401) {
@@ -59,7 +59,8 @@ export class LoginPage extends Component<{}, State> {
                 }
 
                 this.setState({error: "An error occurred on the server. " +
-                        "Please try again later"});
+                        "Please try again later."});
+                throw new Error(ans.statusText);
             })
     }
 
@@ -73,7 +74,7 @@ export class LoginPage extends Component<{}, State> {
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
-                    <label htmlFor="username">Username</label>
+                    <label htmlFor="username">Username or email address</label>
                     <input type="username" className="form-control" id="username"
                            value={this.state.username} onChange={this.handleUsernameChange}
                            placeholder="Enter username" required/>
@@ -84,7 +85,7 @@ export class LoginPage extends Component<{}, State> {
                            placeholder="Password" required/>
 
                     <button type="submit" className="btn btn-primary">
-                        Submit
+                       Sign in
                     </button>
 
                     <span style={{color: "red"}}>

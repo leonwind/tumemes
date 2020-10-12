@@ -10,7 +10,7 @@ export const NavigationBar = () => {
 
     const logOut = ()  => {
         window.localStorage.clear();
-        window.location.reload();
+        history.push("/login");
     }
 
     const upload = () => {

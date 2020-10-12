@@ -147,11 +147,6 @@ export class Registration extends Component<{}, State> {
             return;
         }
 
-        console.log("REGISTER USER:");
-        console.log(this.state.username);
-        console.log(this.state.email);
-        console.log(this.state.password);
-
         const newUser: NewUser = {
             username: this.state.username,
             email: this.state.email,
@@ -164,9 +159,9 @@ export class Registration extends Component<{}, State> {
                 if (ans.ok) {
                     dataPromise.then((data: string) => {
                         window.localStorage.setItem("access_token", data);
+                        this.setState({redirect: true});
+                        return;
                     })
-                    this.setState({redirect: true});
-                    return;
                 }
 
                 dataPromise.then((data: string) => {
@@ -185,7 +180,9 @@ export class Registration extends Component<{}, State> {
                             newErrors.email = data;
                     }
                     else {
-                        newErrors.unexpected = data;
+                        newErrors.unexpected = "An error occurred on the server." +
+                            "Please try again later.";
+                        throw new Error(ans.statusText);
                     }
                     this.setState({errors: newErrors});
                 });
@@ -237,7 +234,7 @@ export class Registration extends Component<{}, State> {
                     </span>
 
                     <button type="submit" className="btn btn-primary">
-                        Submit
+                       Create account
                     </button>
 
                     <span style={{color: "red"}}>
