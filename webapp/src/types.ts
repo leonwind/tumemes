@@ -1,12 +1,12 @@
 export interface User {
     username: string,
-    email: string,
+    password: string
 }
 
 export interface NewUser {
     username: string,
     email: string,
-    password: string,
+    password: string
 }
 
 export interface Meme {
@@ -15,10 +15,10 @@ export interface Meme {
     author: string,
     voteCount: number,
     created: Date,
-    imagePath: string,
+    imagePath: string
 }
 
 export interface NewMeme {
     title: string,
-    image: null,
+    image: null
 }

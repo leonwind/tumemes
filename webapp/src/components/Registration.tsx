@@ -1,7 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css';
-import React, {Component, FormEvent} from "react";
+import React, {ChangeEvent, Component, FormEvent} from "react";
 import {AuthorizationService} from "../service/authorizationService";
 import {NewUser} from "../types";
+import {Redirect} from "react-router-dom";
 
 interface State {
     username: string,
@@ -14,12 +15,14 @@ interface State {
         password: string,
         repeatedPassword: string,
         unexpected: string
-    }
+    },
+    redirect: boolean
 }
 
 const allowedDomains = new Set([
     "tum.de",
-    "mytum.de"]);
+    "mytum.de"
+]);
 
 export class Registration extends Component<{}, State> {
 
@@ -29,10 +32,13 @@ export class Registration extends Component<{}, State> {
             username: "", email: "",
             password: "", repeatedPassword: "",
             errors: {
-                username: "", email: "",
-                password: "", repeatedPassword: "",
+                username: "",
+                email: "",
+                password: "",
+                repeatedPassword: "",
                 unexpected: ""
-            }
+            },
+            redirect: false
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -42,19 +48,19 @@ export class Registration extends Component<{}, State> {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    private handleUsernameChange(event: any) {
+    private handleUsernameChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({username: event.target.value});
     }
 
-    private handleEmailChange(event: any) {
+    private handleEmailChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({email: event.target.value});
     }
 
-    private handlePasswordChange(event: any) {
+    private handlePasswordChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({password: event.target.value});
     }
 
-    private handleRepeatedPasswordChange(event: any) {
+    private handleRepeatedPasswordChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({repeatedPassword: event.target.value});
     }
 
@@ -101,9 +107,13 @@ export class Registration extends Component<{}, State> {
     }
 
     private areCredentialsValid(): boolean {
-        let newErrors = {username: "", email: "",
-            password: "", repeatedPassword: "",
-            unexpected: ""};
+        let newErrors = {
+            username: "",
+            email: "",
+            password: "",
+            repeatedPassword: "",
+            unexpected: ""
+        };
 
         let isValid: boolean = true;
 
@@ -151,33 +161,44 @@ export class Registration extends Component<{}, State> {
         AuthorizationService.registerUser(newUser)
             .then((ans: Response) => {
                 const dataPromise: Promise<string> = ans.text();
-                if (!ans.ok) {
-                    dataPromise.then((data: string) => {
-                        let newErrors = {username: "", email: "",
-                            password: "", repeatedPassword: "",
-                            unexpected: ""};
-
-                        if (data === "Username exists") {
-                            newErrors.username = data;
-                        }
-                        else if (data === "Email exists") {
-                                newErrors.email = data;
-                        }
-                        else {
-                            newErrors.unexpected = data;
-                        }
-                        this.setState({errors: newErrors});
-                    });
-                } else {
+                if (ans.ok) {
                     dataPromise.then((data: string) => {
                         window.localStorage.setItem("access_token", data);
-                        console.log(window.localStorage.getItem("access_token"));
                     })
+                    this.setState({redirect: true});
+                    return;
                 }
+
+                dataPromise.then((data: string) => {
+                    let newErrors = {
+                        username: "",
+                        email: "",
+                        password: "",
+                        repeatedPassword: "",
+                        unexpected: ""
+                    };
+
+                    if (data === "Username exists") {
+                        newErrors.username = data;
+                    }
+                    else if (data === "Email exists") {
+                            newErrors.email = data;
+                    }
+                    else {
+                        newErrors.unexpected = data;
+                    }
+                    this.setState({errors: newErrors});
+                });
             })
     }
 
     render() {
+        // redirect to homepage if registration was successful
+        if (this.state.redirect) {
+            console.log("REDIRECT");
+            return (<Redirect to={"/"}/>);
+        }
+
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
@@ -218,8 +239,13 @@ export class Registration extends Component<{}, State> {
                     <button type="submit" className="btn btn-primary">
                         Submit
                     </button>
+
+                    <span style={{color: "red"}}>
+                        {this.state.errors["unexpected"]}
+                    </span>
                 </form>
             </div>
         );
     }
 }
+

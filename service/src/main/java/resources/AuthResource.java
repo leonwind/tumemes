@@ -36,10 +36,10 @@ public class AuthResource implements AuthService {
   private final String secretKey;
 
   // one week until refresh token gets expired
-  final Duration TTL_REFRESH_TOKEN = Duration.ofDays(7);
+  private final Duration TTL_REFRESH_TOKEN = Duration.ofDays(7);
 
   // one hour until normal token gets expired
-  final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
+  private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
 
   public AuthResource(UserDAO userDAO, String secretKey) {
     this.userDAO = userDAO;

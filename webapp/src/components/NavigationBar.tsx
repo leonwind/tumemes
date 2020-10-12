@@ -1,17 +1,35 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React from 'react'
 import styles from "../styles/NavigationBar.css"
-import {Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import {useHistory} from 'react-router-dom';
+
 
 export const NavigationBar = () => {
-        return (
-            <div className={styles.navigationBar}>
-                <nav className={"navbar"}>
-                    <span className={"navbar-brand"}>TUMemes</span>
-                    <ul className={"nav navbar-nav navbar-right"}>
-                        <Link className={styles.uploadLink} to={"/upload"}>Upload</Link>
-                    </ul>
-                </nav>
-            </div>
-        );
+    const history = useHistory();
+
+    const logOut = ()  => {
+        window.localStorage.clear();
+        window.location.reload();
+    }
+
+    const upload = () => {
+        history.push("/upload");
+    }
+
+    return (
+        <div className={styles.navigationBar}>
+            <nav className={"navbar"}>
+                <span className={"navbar-brand"}>TUMemes</span>
+
+                <Button variant={"primary"} className={styles.logOutButton} onClick={logOut}>
+                   Log out
+                </Button>
+
+                <Button variant={"primary"} className={styles.logOutButton} onClick={upload}>
+                    Upload
+                </Button>
+            </nav>
+        </div>
+    );
 }
