@@ -1,0 +1,31 @@
+.loginCard {
+    padding-top: 5%;
+    width: 40%;
+    margin: auto;
+}
+
+.loginCardHeader {
+    color: rgb(0, 101, 189);
+    text-align: center;
+    font-weight: bold;
+}
+
+.loginCardFormText {
+    font-weight: bold;
+}
+
+.loginSubmitButton {
+    width: 70%;
+    text-align: center;
+    margin-left: 15%;
+    color: white;
+}
+
+.loginErrorMessage {
+    color: red;
+    text-align: center;
+}
+
+.createAccountLink {
+    text-align: center;
+}

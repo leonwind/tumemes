@@ -3,6 +3,9 @@ import React, {ChangeEvent, Component, FormEvent} from "react";
 import {AuthorizationService} from "../service/authorizationService";
 import {NewUser} from "../types";
 import {Redirect} from "react-router-dom";
+import styles from "../styles/Registration.css"
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
 
 interface State {
     username: string,
@@ -119,13 +122,13 @@ export class Registration extends Component<{}, State> {
 
         if (!Registration.isSecure(this.state.password)) {
             console.log("Password weak");
-            newErrors.password = "Password weak";
+            newErrors.password = "Password is too weak";
             isValid = false;
         }
 
         if (this.state.password !== this.state.repeatedPassword) {
             console.log("Password and repeated password do not match");
-            newErrors.repeatedPassword = "Password and repeated password do not match";
+            newErrors.repeatedPassword = "Passwords do not match";
             isValid = false;
         }
 
@@ -174,10 +177,10 @@ export class Registration extends Component<{}, State> {
                     };
 
                     if (data === "Username exists") {
-                        newErrors.username = data;
+                        newErrors.username = "Username already exists.";
                     }
                     else if (data === "Email exists") {
-                            newErrors.email = data;
+                            newErrors.email = "Email already exists.";
                     }
                     else {
                         newErrors.unexpected = "An error occurred on the server." +
@@ -197,50 +200,90 @@ export class Registration extends Component<{}, State> {
         }
 
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label htmlFor="username">Username</label>
-                    <input type="username" className="form-control" id="username"
-                           value={this.state.username} onChange={this.handleUsernameChange}
-                           placeholder="Enter username" required/>
-                    <span style={{color: "red"}}>
-                        {this.state.errors["username"]}
-                    </span>
+            <div className={styles.registrationCard}>
+                <Card>
+                    <Card.Header as={"h5"} className={styles.registrationCardHeader}>
+                        Create your TUMemes account
+                    </Card.Header>
 
-                    <label htmlFor="email">Email address</label>
-                    <input type="email" className="form-control" id="email"
-                           value={this.state.email} onChange={this.handleEmailChange}
-                           placeholder="Enter email" required/>
-                    <span style={{color: "red"}}>
-                        {this.state.errors["email"]}
-                    </span>
+                    <Card.Body className={styles.registrationCardFormText}>
+                        <form onSubmit={this.handleSubmit}>
 
-                    <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" id="password"
-                           value={this.state.password} onChange={this.handlePasswordChange}
-                           placeholder="Password" required/>
-                    <span style={{color: "red"}}>
-                        {this.state.errors["password"]}
-                    </span>
+                            <Card.Text>
+                                <label htmlFor="username">
+                                    Username
+                                </label>
+                                <input type="username" className="form-control" id="username"
+                                       value={this.state.username}
+                                       onChange={this.handleUsernameChange}
+                                       placeholder="" required/>
+                                <span style={{color: "red"}}>
+                                    {this.state.errors["username"]}
+                                </span>
+                            </Card.Text>
 
+                            <Card.Text>
+                                <label htmlFor="email">
+                                    Email address
+                                </label>
+                                <input type="email" className="form-control" id="email"
+                                       value={this.state.email}
+                                       onChange={this.handleEmailChange}
+                                       placeholder="" required/>
+                                <span style={{color: "red"}}>
+                                    {this.state.errors["email"]}
+                                </span>
+                            </Card.Text>
 
-                    <label htmlFor="password">Repeat Password</label>
-                    <input type="password" className="form-control" id="repeated_password"
-                           value={this.state.repeatedPassword}
-                           onChange={this.handleRepeatedPasswordChange}
-                           placeholder="Repeat Password" required/>
-                    <span style={{color: "red"}}>
-                        {this.state.errors["repeatedPassword"]}
-                    </span>
+                            <Card.Text>
+                                <label htmlFor="password">
+                                    Password
+                                </label>
+                                <input type="password" className="form-control" id="password"
+                                       value={this.state.password}
+                                       onChange={this.handlePasswordChange}
+                                       placeholder="" required/>
+                                <span style={{color: "red"}}>
+                                    {this.state.errors["password"]}
+                                </span>
+                            </Card.Text>
+                            <Card.Text className={"text-muted"}>
+                                <small>
+                                Password needs to be at least 8 characters
+                                and contains one digit, one lowercase
+                                and one uppercase character.
+                                </small>
+                            </Card.Text>
 
-                    <button type="submit" className="btn btn-primary">
-                       Create account
-                    </button>
+                            <Card.Text>
+                                <label htmlFor="password">
+                                    Repeat Password
+                                </label>
+                                <input type="password" className="form-control" id="repeated_password"
+                                       value={this.state.repeatedPassword}
+                                       onChange={this.handleRepeatedPasswordChange}
+                                       placeholder="" required/>
+                                <span style={{color: "red"}}>
+                                    {this.state.errors["repeatedPassword"]}
+                                </span>
+                            </Card.Text>
+
+                            <Button type="submit" variant="success"
+                                    className={styles.registrationSubmitButton}>
+                               Create account
+                            </Button>
+
+                        </form>
+                    </Card.Body>
 
                     <span style={{color: "red"}}>
                         {this.state.errors["unexpected"]}
                     </span>
-                </form>
+
+                    <Card.Footer className={styles.registrationLogInLink}>
+                        Have an account? <a href={"/login"}>Sign in.</a>
+                    </Card.Footer>
+                </Card>
             </div>
         );
     }

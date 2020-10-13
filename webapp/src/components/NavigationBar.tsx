@@ -22,11 +22,11 @@ export const NavigationBar = () => {
             <nav className={"navbar"}>
                 <span className={"navbar-brand"}>TUMemes</span>
 
-                <Button variant={"primary"} className={styles.logOutButton} onClick={logOut}>
+                <Button variant={"primary"} className={styles.navBarButton} onClick={logOut}>
                    Log out
                 </Button>
 
-                <Button variant={"primary"} className={styles.logOutButton} onClick={upload}>
+                <Button variant={"primary"} className={styles.navBarButton} onClick={upload}>
                     Upload
                 </Button>
             </nav>

@@ -2,6 +2,9 @@ import React, {ChangeEvent, Component, FormEvent} from "react";
 import {User} from "../types";
 import {AuthorizationService} from "../service/authorizationService";
 import {Redirect} from "react-router-dom";
+import Button from "react-bootstrap/Button";
+import styles from "../styles/Login.css"
+import Card from "react-bootstrap/Card";
 
 interface State {
     username: string,
@@ -54,7 +57,8 @@ export class LoginPage extends Component<{}, State> {
                 }
 
                 if (ans.status === 401) {
-                    this.setState({error: "Username or password wrong"});
+                    this.setState({error: "Incorrect username or password."});
+                    this.setState({password: ""});
                     return;
                 }
 
@@ -72,26 +76,50 @@ export class LoginPage extends Component<{}, State> {
         }
 
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <label htmlFor="username">Username or email address</label>
-                    <input type="username" className="form-control" id="username"
-                           value={this.state.username} onChange={this.handleUsernameChange}
-                           placeholder="Enter username" required/>
+            <div className={styles.loginCard}>
+                <Card>
+                    <form onSubmit={this.handleSubmit}>
+                        <Card.Header as={"h5"} className={styles.loginCardHeader}>
+                            Sign in to TUMemes
+                        </Card.Header>
 
-                    <label htmlFor="password">Password</label>
-                    <input type="password" className="form-control" id="password"
-                           value={this.state.password} onChange={this.handlePasswordChange}
-                           placeholder="Password" required/>
+                        <Card.Body className={styles.loginCardFormText}>
+                            <Card.Text>
+                                <label htmlFor="username">
+                                    Username or email address
+                                </label>
+                                <input type="username" className="form-control" id="username"
+                                       value={this.state.username}
+                                       onChange={this.handleUsernameChange}
+                                       placeholder="" required/>
+                            </Card.Text>
 
-                    <button type="submit" className="btn btn-primary">
-                       Sign in
-                    </button>
+                            <Card.Text>
+                                <label htmlFor="password">
+                                    Password
+                                </label>
+                                <input type="password" className="form-control" id="password"
+                                       value={this.state.password}
+                                       onChange={this.handlePasswordChange}
+                                       placeholder="" required/>
+                            </Card.Text>
 
-                    <span style={{color: "red"}}>
-                        {this.state.error}
-                    </span>
-                </form>
+                            <Card.Text className={styles.loginErrorMessage}>
+                                {this.state.error}
+                            </Card.Text>
+
+                            <Button type="submit" variant={"success"}
+                                    className={styles.loginSubmitButton}>
+                                Sign in
+                            </Button>
+                        </Card.Body>
+
+                    </form>
+
+                    <Card.Footer className={styles.createAccountLink}>
+                        New here? <a href={"/register"}>Create an account.</a>
+                    </Card.Footer>
+                </Card>
             </div>
         );
     }
