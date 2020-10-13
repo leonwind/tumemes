@@ -51,7 +51,7 @@ export class FrontPage extends Component<{}, State> {
         const allMemes = this.state.memes.map((meme: Meme) => <MemeInfo key={meme.memeID} meme={meme}/>);
         return (
             <div>
-                <NavigationBar />
+                <NavigationBar/>
                 {allMemes}
             </div>
         );

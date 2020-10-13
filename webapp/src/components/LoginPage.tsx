@@ -108,12 +108,10 @@ export class LoginPage extends Component<{}, State> {
                                 {this.state.error}
                             </Card.Text>
 
-                            <Button type="submit" variant={"success"}
-                                    className={styles.loginSubmitButton}>
+                            <Button type="submit" className={styles.loginSubmitButton}>
                                 Sign in
                             </Button>
                         </Card.Body>
-
                     </form>
 
                     <Card.Footer className={styles.createAccountLink}>

@@ -14,7 +14,7 @@ export interface Meme {
     title: string,
     author: string,
     voteCount: number,
-    created: Date,
+    created: number,
     imagePath: string
 }
 

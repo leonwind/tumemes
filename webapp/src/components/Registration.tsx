@@ -268,8 +268,7 @@ export class Registration extends Component<{}, State> {
                                 </span>
                             </Card.Text>
 
-                            <Button type="submit" variant="success"
-                                    className={styles.registrationSubmitButton}>
+                            <Button type="submit" className={styles.registrationSubmitButton}>
                                Create account
                             </Button>
 

@@ -3,6 +3,8 @@ import React, {Component} from 'react'
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import styles from "../styles/Meme.css"
+import Card from "react-bootstrap/Card";
+import {Button} from "react-bootstrap";
 
 interface Props {
     meme: Meme,
@@ -19,20 +21,71 @@ interface State {
 }
 
 export class MemeInfo extends Component<Props, State> {
+    private readonly serverUrl: string = "http://localhost:8080/"
+    private readonly timeDiff: string;
 
     constructor(props: Props) {
         super(props);
         this.state = {currVote: 0};
 
+        this.timeDiff = this.calculateHumanReadableTimeDiff()
+
         this.upvote = this.upvote.bind(this);
         this.downvote = this.downvote.bind(this);
+    }
+
+    /**
+     * Convert the time difference of the day posted and the current date
+     * to a human readable format
+     */
+    private calculateHumanReadableTimeDiff(): string {
+        const seconds: number = Math.floor((
+            new Date().getTime() - this.props.meme.created) / 1000);
+
+        // 31536000 = one year in seconds
+        let interval: number = Math.floor(seconds / 31536000);
+        if (interval > 1) {
+            return interval + " years";
+        }
+
+        // 2592000 = one month in seconds
+        interval = Math.floor(seconds / 2592000);
+        if (interval > 1) {
+            return interval + " months";
+        }
+
+        // 604800 = one week in seconds
+        interval = Math.floor(seconds / 604800);
+        if (interval > 1) {
+            return interval + " weeks";
+        }
+
+        // 86400 = one day in seconds
+        interval = Math.floor(seconds / 86400);
+        if (interval > 1) {
+            return interval + " days";
+        }
+
+        // 3600 = one hour in seconds
+        interval = Math.floor(seconds / 3600);
+        if (interval > 1) {
+            return interval + " hours";
+        }
+
+        // 60 = one minute in seconds
+        interval = Math.floor(seconds / 60);
+        if (interval > 1) {
+            return interval + " minutes";
+        }
+
+        return Math.floor(seconds) + " seconds";
     }
 
     private upvote() {
         let vote: number = 1;
 
         if (this.state.currVote === 1) {
-           vote = 0;
+            vote = 0;
         }
 
         MemeService.voteMeme(this.props.meme.memeID, vote)
@@ -46,7 +99,7 @@ export class MemeInfo extends Component<Props, State> {
         let vote: number = -1;
 
         if (this.state.currVote === -1) {
-           vote = 0;
+            vote = 0;
         }
 
         MemeService.voteMeme(this.props.meme.memeID, vote)
@@ -59,17 +112,38 @@ export class MemeInfo extends Component<Props, State> {
     render() {
         return (
             <div className={styles.memeCard}>
-                <div className={"card"}>
-                    <h5 className={"card-title"}>{this.props.meme.title}</h5>
-                    <h6 className={"card-subtitle mb-2 text-muted"}>Posted by {this.props.meme.author}</h6>
-                    <img className="card-img-bottom" src={"http://localhost:8080/" + this.props.meme.imagePath}
-                         alt={"Excellent meme"}/>
-                    <div className="card-body">
-                        {this.props.meme.voteCount} points
-                        <button onClick={this.upvote}>Upvote</button>
-                        <button onClick={this.downvote}>Downvote</button>
-                    </div>
-                </div>
+                <Card className={"mt-4"}>
+
+                    <Card.Header>
+                        <Card.Title className={styles.memeTitle}>
+                            {this.props.meme.title}
+                        </Card.Title>
+
+                        <Card.Subtitle className={"text-muted"}>
+                            Posted by {this.props.meme.author} {" "}
+                            {this.timeDiff} ago
+                        </Card.Subtitle>
+                    </Card.Header>
+
+                    <Card.Body>
+                        <Card.Img variant={"bottom"}
+                                  src={this.serverUrl + this.props.meme.imagePath}
+                                  alt={"Excellent meme"}>
+                        </Card.Img>
+
+                        <Card.Text>
+                            {this.props.meme.voteCount} points
+                        </Card.Text>
+
+                        <Button onClick={this.upvote}>
+                            Upvote
+                        </Button>
+
+                        <Button onClick={this.downvote}>
+                            Downvote
+                        </Button>
+                    </Card.Body>
+                </Card>
             </div>
         );
     }
