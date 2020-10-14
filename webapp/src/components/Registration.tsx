@@ -120,6 +120,19 @@ export class Registration extends Component<{}, State> {
 
         let isValid: boolean = true;
 
+        if (this.state.username.includes('@')) {
+            console.log("Username contains @");
+            newErrors.username = "@ is not allowed in the username.";
+            isValid = false;
+        }
+
+        const domain: string = Registration.getDomain(this.state.email);
+        if (!allowedDomains.has(domain)) {
+            console.log("Domain wrong");
+            newErrors.email = "Only @tum.de and @mytum.de emails are supported.";
+            isValid = false;
+        }
+
         if (!Registration.isSecure(this.state.password)) {
             console.log("Password weak");
             newErrors.password = "Password is too weak";
@@ -128,14 +141,7 @@ export class Registration extends Component<{}, State> {
 
         if (this.state.password !== this.state.repeatedPassword) {
             console.log("Password and repeated password do not match");
-            newErrors.repeatedPassword = "Passwords do not match";
-            isValid = false;
-        }
-
-        const domain: string = Registration.getDomain(this.state.email);
-        if (!allowedDomains.has(domain)) {
-            console.log("Domain wrong");
-            newErrors.email = "Only @tum.de and @mytum.de emails are supported";
+            newErrors.repeatedPassword = "Passwords do not match.";
             isValid = false;
         }
 
@@ -195,7 +201,6 @@ export class Registration extends Component<{}, State> {
     render() {
         // redirect to homepage if registration was successful
         if (this.state.redirect) {
-            console.log("REDIRECT");
             return (<Redirect to={"/"}/>);
         }
 
@@ -287,4 +292,3 @@ export class Registration extends Component<{}, State> {
         );
     }
 }
-

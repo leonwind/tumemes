@@ -53,7 +53,7 @@ public class UploadResource implements UploadService {
       return Response.status(400).entity("Uploaded object is null").build();
     }
 
-    Meme meme = Meme.fromNewMeme(newMeme);
+    Meme meme = Meme.fromNewMeme(newMeme, user.getName());
     System.out.println(meme);
 
     try {

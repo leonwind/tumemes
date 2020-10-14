@@ -87,6 +87,11 @@ public class AuthResource implements AuthService {
 
   /** Check if the new user satisfies all the given constraints */
   private void verifyUserCredentials(NewUser newUser) throws Exception {
+    if (newUser.getName().indexOf('@') != -1) {
+      log.info("@ is not allowed in the username");
+      throw new Exception("@ is not allowed in the username");
+    }
+
     if (userDAO.doesUsernameExist(newUser.getName())) {
       log.info("Username exists");
       throw new Exception("Username exists");

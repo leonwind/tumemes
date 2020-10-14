@@ -18,15 +18,15 @@ public class Meme {
   private final String imagePath;
 
   /** Convert new uploaded NewMeme object into Meme object */
-  public static Meme fromNewMeme(NewMeme newMeme) {
-    return new Meme(newMeme);
+  public static Meme fromNewMeme(NewMeme newMeme, String author) {
+    return new Meme(newMeme, author);
   }
 
   /** Create Meme object from new posted meme */
-  public Meme(NewMeme newMeme) {
+  public Meme(NewMeme newMeme, String author) {
     this.memeID = UUID.randomUUID();
     this.title = newMeme.getTitle();
-    this.author = newMeme.getAuthor();
+    this.author = author;
     voteCount = 0;
     created = new Date();
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
@@ -71,12 +71,7 @@ public class Meme {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Meme meme = (Meme) o;
-    return voteCount == meme.voteCount &&
-        Objects.equals(memeID, meme.memeID) &&
-        Objects.equals(title, meme.title) &&
-        Objects.equals(author, meme.author) &&
-        Objects.equals(created, meme.created) &&
-        Objects.equals(imagePath, meme.imagePath);
+    return Objects.equals(memeID, meme.memeID);
   }
 
   @Override

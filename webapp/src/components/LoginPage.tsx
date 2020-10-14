@@ -71,7 +71,6 @@ export class LoginPage extends Component<{}, State> {
     render() {
         // redirect to homepage if login was successful
         if (this.state.redirect) {
-            console.log("REDIRECT");
             return (<Redirect to={"/"}/>);
         }
 

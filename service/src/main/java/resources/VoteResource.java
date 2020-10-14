@@ -7,6 +7,8 @@ import core.NewVote;
 import core.User;
 import core.Vote;
 import io.dropwizard.auth.Auth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 public class VoteResource implements VoteService {
 
+  private static final Logger log = LoggerFactory.getLogger(VoteResource.class);
   private final MemeDAO memeDAO;
   private final VoteDAO voteDAO;
 
@@ -34,6 +37,8 @@ public class VoteResource implements VoteService {
     if (!memeDAO.memeIDExists(newVote.getMemeID().toString())) {
       return Response.status(400).entity("Meme does not exist").build();
     }
+
+    log.info("Vote meme");
 
     String username = user.getName();
     Vote existingVote = voteDAO.getVote(newVote.getMemeID().toString(), username);
