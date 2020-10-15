@@ -16,6 +16,13 @@ public class Meme {
   private final int voteCount;
   private final Date created;
   private final String imagePath;
+  /**
+   * Indicate the current users vote on this meme
+   * no vote = 0
+   * downvote = -1
+   * upvote = 1
+   */
+  private final int userVote;
 
   /** Convert new uploaded NewMeme object into Meme object */
   public static Meme fromNewMeme(NewMeme newMeme, String author) {
@@ -30,16 +37,18 @@ public class Meme {
     voteCount = 0;
     created = new Date();
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
+    userVote = 0;
   }
 
-  /** Create Meme object for existing Meme in the database */
-  public Meme(UUID memeID, String title, String author, int voteCount, Date created) {
+  public Meme(UUID memeID, String title, String author, int voteCount,
+              Date created, int userVote) {
     this.memeID = memeID;
     this.title = title;
     this.author = author;
     this.voteCount = voteCount;
     this.created = created;
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
+    this.userVote = userVote;
   }
 
   public UUID getMemeID() {
@@ -66,6 +75,10 @@ public class Meme {
     return imagePath;
   }
 
+  public int getUserVote() {
+    return userVote;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -76,7 +89,8 @@ public class Meme {
 
   @Override
   public int hashCode() {
-    return Objects.hash(memeID, title, author, voteCount, created, imagePath);
+    return Objects.hash(memeID, title, author, voteCount, created, imagePath,
+        userVote);
   }
 
   @Override
@@ -88,6 +102,7 @@ public class Meme {
         ", voteCount=" + voteCount +
         ", created=" + created +
         ", imagePath='" + imagePath + '\'' +
+        ", userVote=" + userVote +
         '}';
   }
 }

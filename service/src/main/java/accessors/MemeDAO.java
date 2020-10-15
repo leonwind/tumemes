@@ -26,26 +26,40 @@ public interface MemeDAO {
       @Bind("created") Date created);
 
   @SqlQuery(
-      "SELECT memes.memeID as memeID, memes.title as title, memes.author as author, "
-          + "COALESCE(sum(memevotes.vote), 0) as voteCount, memes.created as created "
-          + "FROM memes LEFT JOIN memeVotes ON memes.memeID = memeVotes.memeID "
-          + "GROUP BY memes.memeID ORDER BY voteCount DESC")
+      "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
+          + "author, memes.created as created, "
+          + "COALESCE(sum(memevotes.vote), 0) as voteCount, "
+          + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes.username = "
+          + ":username), 0) as userVote "
+          + "FROM memes "
+          + "LEFT JOIN memevotes ON memes.memeID = memevotes.memeID "
+          + "GROUP BY memes.memeID "
+          + "ORDER BY voteCount DESC")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByVotes();
+  List<Meme> getAllMemesByVotes(@Bind("username") String username);
 
   @SqlQuery(
-      "SELECT memes.memeID as memeID, memes.title as title, memes.author as author, "
-          + "COALESCE(sum(memevotes.vote), 0) as voteCount, memes.created as created "
-          + "FROM memes LEFT JOIN memeVotes ON memes.memeID = memeVotes.memeID "
-          + "GROUP BY memes.memeID ORDER BY created DESC")
+      "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
+          + "author, memes.created as created, "
+          + "COALESCE(sum(memevotes.vote), 0) as voteCount, "
+          + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes.username = "
+          + ":username), 0) as userVote "
+          + "FROM memes "
+          + "LEFT JOIN memevotes ON memes.memeID = memevotes.memeID "
+          + "GROUP BY memes.memeID "
+          + "ORDER BY created DESC")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByDate();
 
   @SqlQuery(
-      "SELECT memes.memeID as memeID, memes.title as title, memes"
-          + ".author as author, COALESCE(sum(memevotes.vote), 0) as "
-          + "voteCount, memes.created as created FROM memes LEFT JOIN "
-          + "memeVotes ON :currMemeID = memeVotes.memeID GROUP BY memes.memeID")
+      "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
+          + "author, memes.created as created, "
+          + "COALESCE(sum(memevotes.vote), 0) as voteCount, "
+          + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes.username = "
+          + ":username), 0) as userVote "
+          + "FROM memes "
+          + "LEFT JOIN memevotes ON :currMemeID = memevotes.memeID "
+          + "GROUP BY memes.memeID")
   @RegisterRowMapper(MemeMapper.class)
-  Meme getMemeByID(@Bind("currMemeID") String currMemeID);
+  Meme getMemeByID(@Bind("currMemeID") String currMemeID, @Bind("username") String username);
 }

@@ -17,6 +17,7 @@ public class MemeMapper implements RowMapper<Meme> {
         rs.getString("title"),
         rs.getString("author"),
         rs.getInt("voteCount"),
-        rs.getTimestamp("created"));
+        rs.getTimestamp("created"),
+        rs.getInt("userVote"));
   }
 }
