@@ -30,6 +30,8 @@ public class VoteResource implements VoteService {
   @Path("/vote/")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response voteMeme(@Auth User user, NewVote newVote) {
+    System.out.println("LOGGED IN IS");
+    System.out.println(user.getName());
     if (newVote == null) {
       return Response.status(400).entity("Vote object is null").build();
     }

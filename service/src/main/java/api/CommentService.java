@@ -16,15 +16,15 @@ public interface CommentService {
   @POST
   @Path("/post")
   @Consumes(MediaType.APPLICATION_JSON)
-  Response postComment(@Auth User user, NewComment newComment);
+  Response postComment(NewComment newComment);
 
   @GET
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
-  List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID);
+  List<Comment> getCommentsFromMeme(@PathParam("memeID") String memeID);
 
   @GET
   @Path("/replies/{commentID}")
   @Produces(MediaType.APPLICATION_JSON)
-  List<Comment> getReplies(@Auth User user, @PathParam("commentID") String commentID);
+  List<Comment> getReplies(@PathParam("commentID") String commentID);
 }

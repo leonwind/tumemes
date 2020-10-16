@@ -42,7 +42,7 @@ public class Meme {
   }
 
   public Meme(UUID memeID, String title, String author, int voteCount,
-              Date created, int userVote) {
+              Date created, int userVote, int numComments) {
     this.memeID = memeID;
     this.title = title;
     this.author = author;
@@ -50,7 +50,7 @@ public class Meme {
     this.created = created;
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
     this.userVote = userVote;
-    numComments = 0;
+    this.numComments = numComments;
   }
 
   public UUID getMemeID() {

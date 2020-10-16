@@ -14,7 +14,7 @@ export interface Meme {
     title: string,
     author: string,
     voteCount: number,
-    created: number,
+    created: number, // timestamp
     imagePath: string,
     userVote: number,
     numComments: number
@@ -23,4 +23,19 @@ export interface Meme {
 export interface NewMeme {
     title: string,
     image: null
+}
+
+export interface Comment {
+    commentID: string,
+    parentID: string,
+    memeID: string,
+    content: string,
+    author: string,
+    created: number // timestamp
+}
+
+export interface NewComment {
+    parentID: string,
+    memeID: string,
+    content: string
 }

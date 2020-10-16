@@ -35,9 +35,6 @@ public class AuthResource implements AuthService {
   private final UserDAO userDAO;
   private final String secretKey;
 
-  // one week until refresh token gets expired
-  private final Duration TTL_REFRESH_TOKEN = Duration.ofDays(7);
-
   // one hour until normal token gets expired
   private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
 
@@ -135,10 +132,6 @@ public class AuthResource implements AuthService {
     return builder.compact();
   }
 
-  private String createRefreshToken() {
-    return UUID.randomUUID().toString().replace("-", "");
-  }
-
   @Override
   @Path("/register")
   @POST
@@ -212,11 +205,11 @@ public class AuthResource implements AuthService {
   }
 
   @Override
-  @Path("/refresh_token")
+  @Path("/access_token")
   @GET
-  @Produces(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
   public Response generateRefreshToken(@Auth User user) {
-    String refreshToken = createRefreshToken();
-    return Response.ok(refreshToken).build();
+    String token = createAccessToken(user.getEmail());
+    return Response.ok(token).build();
   }
 }

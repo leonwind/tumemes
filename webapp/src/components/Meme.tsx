@@ -23,7 +23,7 @@ interface State {
     currVote: number,
 }
 
-export class MemeInfo extends Component<Props, State> {
+export class MemeCard extends Component<Props, State> {
     private readonly serverUrl: string = "http://localhost:8080/"
     private readonly timeDiff: string;
 
@@ -120,6 +120,10 @@ export class MemeInfo extends Component<Props, State> {
             });
     }
 
+    private goToComments() {
+
+    }
+
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
         let upvoteButton: JSX.Element;
         let downvoteButton: JSX.Element;
@@ -163,8 +167,6 @@ export class MemeInfo extends Component<Props, State> {
     }
 
     render() {
-        console.log(this.state.currVote);
-
         const buttons: { upvote: JSX.Element, downvote: JSX.Element } = this.createVoteButtons();
 
         const upvoteButton: JSX.Element = buttons.upvote;
@@ -180,7 +182,7 @@ export class MemeInfo extends Component<Props, State> {
                         </Card.Title>
 
                         <Card.Subtitle className={"text-muted"}>
-                            Posted by {this.props.meme.author} {" "}
+                            Posted by {this.props.meme.author} {" · "}
                             {this.timeDiff} ago
                         </Card.Subtitle>
                     </Card.Header>
@@ -191,16 +193,17 @@ export class MemeInfo extends Component<Props, State> {
                                   alt={"Excellent meme"}>
                         </Card.Img>
 
-                        <Card.Text>
-                            {this.props.meme.voteCount} points · {this.props.meme.numComments} comments
+                        <Card.Text className={"text-muted"}>
+                            {this.props.meme.voteCount} points {" · "}
+                            {this.props.meme.numComments} comments
                         </Card.Text>
 
-                        <ButtonGroup role={"group"}>
+                        <ButtonGroup>
                             {upvoteButton}
 
                             {downvoteButton}
 
-                            <Button variant={"outline-secondary"}>
+                            <Button variant={"outline-secondary"} onClick={this.goToComments}>
                                <ModeCommentRoundedIcon/>
                             </Button>
                         </ButtonGroup>

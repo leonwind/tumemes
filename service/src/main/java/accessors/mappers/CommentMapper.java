@@ -12,11 +12,18 @@ public class CommentMapper implements RowMapper<Comment> {
 
   @Override
   public Comment map(ResultSet rs, StatementContext ctx) throws SQLException {
+    UUID parentID;
+    if (rs.getString("parentID") == null) {
+      parentID = null;
+    } else {
+      parentID = UUID.fromString(rs.getString("parentID"));
+    }
+
     return new Comment(
         UUID.fromString(rs.getString("commentID")),
-        UUID.fromString(rs.getString("parentID")),
+        parentID,
         UUID.fromString(rs.getString("memeID")),
-        rs.getString("text"),
+        rs.getString("content"),
         rs.getString("author"),
         rs.getTimestamp("created"));
   }

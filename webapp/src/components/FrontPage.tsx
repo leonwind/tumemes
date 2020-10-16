@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from 'react'
-import {MemeInfo} from "./Meme";
+import {MemeCard} from "./Meme";
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import {NavigationBar} from "./NavigationBar";
@@ -48,7 +48,7 @@ export class FrontPage extends Component<{}, State> {
             return (<Redirect to={"/login"}/>);
         }
 
-        const allMemes = this.state.memes.map((meme: Meme) => <MemeInfo key={meme.memeID} meme={meme}/>);
+        const allMemes = this.state.memes.map((meme: Meme) => <MemeCard key={meme.memeID} meme={meme}/>);
         return (
             <div>
                 <NavigationBar/>

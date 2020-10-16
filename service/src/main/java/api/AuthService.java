@@ -24,8 +24,8 @@ public interface AuthService {
   @Produces(MediaType.APPLICATION_JSON)
   Response loginUser(LoginUser loginUser);
 
-  @Path("/refresh_token")
+  @Path("/access_token")
   @GET
-  @Produces(MediaType.TEXT_PLAIN)
+  @Produces(MediaType.APPLICATION_JSON)
   Response generateRefreshToken(@Auth User user);
 }

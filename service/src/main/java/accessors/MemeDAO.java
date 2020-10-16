@@ -29,10 +29,13 @@ public interface MemeDAO {
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
           + "author, memes.created as created, "
           + "COALESCE(sum(memevotes.vote), 0) as voteCount, "
-          + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes.username = "
-          + ":username), 0) as userVote "
+          + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes"
+          + ".username = :username), 0) as userVote, "
+          + "COUNT(DISTINCT comments) FILTER (WHERE comments.parentID IS NULL) "
+          + "as numComments "
           + "FROM memes "
           + "LEFT JOIN memevotes ON memes.memeID = memevotes.memeID "
+          + "LEFT JOIN comments on memes.memeID = comments.memeID "
           + "GROUP BY memes.memeID "
           + "ORDER BY voteCount DESC")
   @RegisterRowMapper(MemeMapper.class)
@@ -43,9 +46,11 @@ public interface MemeDAO {
           + "author, memes.created as created, "
           + "COALESCE(sum(memevotes.vote), 0) as voteCount, "
           + "COALESCE(sum(memevotes.vote) FILTER (WHERE memevotes.username = "
-          + ":username), 0) as userVote "
+          + ":username), 0) as userVote,"
+          + "COUNT(comments) as numComments "
           + "FROM memes "
           + "LEFT JOIN memevotes ON memes.memeID = memevotes.memeID "
+          + "LEFT JOIN comments ON memes.memeID = comments.memeID "
           + "GROUP BY memes.memeID "
           + "ORDER BY created DESC")
   @RegisterRowMapper(MemeMapper.class)
