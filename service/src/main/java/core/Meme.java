@@ -16,13 +16,13 @@ public class Meme {
   private final int voteCount;
   private final Date created;
   private final String imagePath;
-  /**
-   * Indicate the current users vote on this meme
+  /** Indicate the current users vote on this meme.
    * no vote = 0
    * downvote = -1
    * upvote = 1
    */
   private final int userVote;
+  private final int numComments;
 
   /** Convert new uploaded NewMeme object into Meme object */
   public static Meme fromNewMeme(NewMeme newMeme, String author) {
@@ -38,6 +38,7 @@ public class Meme {
     created = new Date();
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
     userVote = 0;
+    numComments = 0;
   }
 
   public Meme(UUID memeID, String title, String author, int voteCount,
@@ -49,6 +50,7 @@ public class Meme {
     this.created = created;
     imagePath = MemeImageDAO.getMemeImagePath(memeID);
     this.userVote = userVote;
+    numComments = 0;
   }
 
   public UUID getMemeID() {
@@ -79,6 +81,10 @@ public class Meme {
     return userVote;
   }
 
+  public int getNumComments() {
+    return numComments;
+  }
+
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -89,8 +95,8 @@ public class Meme {
 
   @Override
   public int hashCode() {
-    return Objects.hash(memeID, title, author, voteCount, created, imagePath,
-        userVote);
+    return Objects.hash(memeID, title, author, voteCount, created,
+        imagePath, userVote);
   }
 
   @Override

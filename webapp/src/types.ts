@@ -15,7 +15,9 @@ export interface Meme {
     author: string,
     voteCount: number,
     created: number,
-    imagePath: string
+    imagePath: string,
+    userVote: number,
+    numComments: number
 }
 
 export interface NewMeme {

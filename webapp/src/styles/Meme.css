@@ -6,3 +6,13 @@
 .memeTitle {
    font-weight: bold;
 }
+
+.upvoteButton {
+    transform: rotate(270deg);
+    text-align: center;
+}
+
+.downvoteButton {
+    transform: rotate(90deg);
+    text-align: center;
+}
