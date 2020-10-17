@@ -24,7 +24,6 @@ export class FrontPage extends Component<{}, State> {
     componentDidMount() {
         MemeService.getMemes()
             .then((ans: Response) => {
-                console.log(ans.status);
                 if (ans.ok) {
                     const memesPromise: Promise<Meme[]> = ans.json();
                     memesPromise.then((memes: Meme[]) => {
@@ -40,7 +39,7 @@ export class FrontPage extends Component<{}, State> {
                 }
 
                 throw new Error(ans.statusText);
-            })
+            });
     }
 
     render() {
@@ -48,7 +47,8 @@ export class FrontPage extends Component<{}, State> {
             return (<Redirect to={"/login"}/>);
         }
 
-        const allMemes = this.state.memes.map((meme: Meme) => <MemeCard key={meme.memeID} meme={meme}/>);
+        const allMemes: JSX.Element[] = this.state.memes.map((meme: Meme) =>
+            <MemeCard key={meme.memeID} meme={meme} showCommentsButton={true}/>);
         return (
             <div>
                 <NavigationBar/>

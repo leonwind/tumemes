@@ -8,9 +8,7 @@ import core.NewComment;
 import core.User;
 import io.dropwizard.auth.Auth;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -60,12 +58,21 @@ public class CommentResource implements CommentService {
   }
 
   @Override
-  public List<Comment> getCommentsFromMeme(@Auth User user, String memeID) {
+  @GET
+  @Path("/{memeID}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID) {
+    System.out.println("GET COMMENT BY ID");
+    System.out.println(memeID);
     return commentDAO.getCommentsFromMeme(memeID);
   }
 
   @Override
-  public List<Comment> getReplies(@Auth User user, String commentID) {
+  @GET
+  @Path("/replies/{commentID}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<Comment> getReplies(@Auth User user,
+                                  @PathParam("commentID") String commentID) {
     return commentDAO.getAllReplies(commentID);
   }
 }

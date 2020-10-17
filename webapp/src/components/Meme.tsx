@@ -8,9 +8,11 @@ import {Button} from "react-bootstrap";
 import ForwardIcon from "@material-ui/icons/Forward"
 import ModeCommentRoundedIcon from "@material-ui/icons/ModeCommentRounded"
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import {Redirect} from "react-router";
 
 interface Props {
     meme: Meme,
+    showCommentsButton: boolean
 }
 
 interface State {
@@ -21,6 +23,7 @@ interface State {
      * -1 => downvoted
      */
     currVote: number,
+    redirect: boolean
 }
 
 export class MemeCard extends Component<Props, State> {
@@ -29,12 +32,16 @@ export class MemeCard extends Component<Props, State> {
 
     constructor(props: Props) {
         super(props);
-        this.state = {currVote: this.props.meme.userVote};
+        this.state = {
+            currVote: this.props.meme.userVote,
+            redirect: false
+        };
 
         this.timeDiff = this.calculateHumanReadableTimeDiff()
 
         this.upvote = this.upvote.bind(this);
         this.downvote = this.downvote.bind(this);
+        this.goToComments = this.goToComments.bind(this);
     }
 
     /**
@@ -121,7 +128,7 @@ export class MemeCard extends Component<Props, State> {
     }
 
     private goToComments() {
-
+        this.setState({redirect: true});
     }
 
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
@@ -167,6 +174,10 @@ export class MemeCard extends Component<Props, State> {
     }
 
     render() {
+        if (this.state.redirect) {
+            return (<Redirect to={"/meme/" + this.props.meme.memeID}/>);
+        }
+
         const buttons: { upvote: JSX.Element, downvote: JSX.Element } = this.createVoteButtons();
 
         const upvoteButton: JSX.Element = buttons.upvote;
@@ -203,9 +214,10 @@ export class MemeCard extends Component<Props, State> {
 
                             {downvoteButton}
 
+                            {this.props.showCommentsButton &&
                             <Button variant={"outline-secondary"} onClick={this.goToComments}>
-                               <ModeCommentRoundedIcon/>
-                            </Button>
+                                <ModeCommentRoundedIcon/>
+                            </Button>}
                         </ButtonGroup>
                     </Card.Body>
                 </Card>

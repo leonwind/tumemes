@@ -17,6 +17,13 @@ export class MemeService {
         }, false);
     }
 
+    static async getMemeByID(memeID: string): Promise<Response> {
+        return await Requests.sendRequest("memes/" + memeID, {
+            method: "GET",
+            headers: this.AUTH_HEADER
+        }, false);
+    }
+
     static async uploadMeme(newMeme: NewMeme): Promise<void> {
         const currTitle: string = newMeme.title;
         const image: any = newMeme.image;
