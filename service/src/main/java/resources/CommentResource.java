@@ -29,25 +29,17 @@ public class CommentResource implements CommentService {
   @POST
   @Path("/post")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response postComment(NewComment newComment) {
-    System.out.println("POST COMMENT");
+  public Response postComment(@Auth User user, NewComment newComment) {
     if (newComment == null) {
       return Response.status(400).entity("Comment object is null").build();
     }
-
-    System.out.println("COMMENT NOT NULL");
-    System.out.println(newComment);
 
     if (!memeDAO.memeIDExists(newComment.getMemeID().toString())) {
       return Response.status(400).entity("Meme does not exist").build();
     }
 
-    //String username = user.getName();
-    String username = "mock user";
+    String username = user.getName();
     Comment comment = Comment.fromNewComment(newComment, username);
-
-    System.out.println("COMMENT:");
-    System.out.println(comment);
 
     String parentID;
     if (comment.getParentID() == null) {
@@ -68,14 +60,12 @@ public class CommentResource implements CommentService {
   }
 
   @Override
-  public List<Comment> getCommentsFromMeme(String memeID) {
-    System.out.println("RETRIEVE COMMENTS FOR MEME");
-    System.out.println(memeID);
+  public List<Comment> getCommentsFromMeme(@Auth User user, String memeID) {
     return commentDAO.getCommentsFromMeme(memeID);
   }
 
   @Override
-  public List<Comment> getReplies(String commentID) {
+  public List<Comment> getReplies(@Auth User user, String commentID) {
     return commentDAO.getAllReplies(commentID);
   }
 }
