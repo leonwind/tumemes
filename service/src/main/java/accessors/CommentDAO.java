@@ -38,7 +38,7 @@ public interface CommentDAO {
   @RegisterRowMapper(CommentMapper.class)
   List<Comment> getCommentsFromMeme(@Bind("currMemeID") String currMemeID);
 
-  @SqlQuery("SELECT * FROM comments WHERE parentID = :parentCommentID")
+  @SqlQuery("SELECT * FROM comments WHERE parentID = :parentCommentID ORDER BY created DESC")
   @RegisterRowMapper(ReplyMapper.class)
   List<Comment> getAllReplies(@Bind("parentCommentID") String parentCommentID);
 }

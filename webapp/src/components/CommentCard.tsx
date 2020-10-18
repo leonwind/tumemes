@@ -1,5 +1,5 @@
-import React, {Component} from "react";
-import {Comment} from "../types"
+import React, {ChangeEvent, Component, FormEvent} from "react";
+import {Comment, NewComment} from "../types"
 import {Card} from "react-bootstrap";
 import styles from "../styles/Comment.css"
 import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
@@ -14,7 +14,8 @@ interface Props {
 
 interface State {
     replies: Comment[],
-    renderReplies: boolean
+    renderReplies: boolean,
+    newReplyContent: string
 }
 
 export class CommentCard extends Component<Props, State> {
@@ -26,12 +27,15 @@ export class CommentCard extends Component<Props, State> {
 
         this.state = {
             replies: [],
-            renderReplies: false
+            renderReplies: false,
+            newReplyContent: ""
         }
 
         this.timeDiff = HumanReadableTimeDiff.calculateTimeDiff(this.props.comment.created);
 
         this.loadReplies = this.loadReplies.bind(this);
+        this.handleNewReplyChange = this.handleNewReplyChange.bind(this);
+        this.postReply = this.postReply.bind(this);
     }
 
     private loadReplies() {
@@ -47,6 +51,24 @@ export class CommentCard extends Component<Props, State> {
                 }
             });
         console.log(this.state.replies);
+    }
+
+    private handleNewReplyChange(event: ChangeEvent<HTMLInputElement>) {
+        this.setState({newReplyContent: event.target.value});
+    }
+
+    private postReply(event: FormEvent<HTMLFormElement>) {
+        event.preventDefault();
+
+        const newComment: NewComment = {
+            parentID: this.props.comment.commentID,
+            memeID: this.props.comment.memeID,
+            content: this.state.newReplyContent
+        };
+
+        CommentService.postComment(newComment).then(() => {});
+        this.setState({newReplyContent: ""});
+        this.loadReplies();
     }
 
     render() {
@@ -73,6 +95,17 @@ export class CommentCard extends Component<Props, State> {
                             Load {this.props.comment.numReplies}
                             {this.props.comment.numReplies === 1 ? " reply" : " replies"}
                         </button>}
+
+                        <form onSubmit={this.postReply}>
+                            <input type={"textarea"}
+                                   className={styles.writeCommentField}
+                                   value={this.state.newReplyContent}
+                                   onChange={this.handleNewReplyChange}
+                                   placeholder={"Add a reply..."}/>
+                            <Button type={"submit"}>
+                                Post
+                            </Button>
+                            </form>
                     </Card>
                 </div>
                 {replyElements}
