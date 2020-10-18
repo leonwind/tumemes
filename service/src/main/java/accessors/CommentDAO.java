@@ -1,6 +1,7 @@
 package accessors;
 
 import accessors.mappers.CommentMapper;
+import accessors.mappers.ReplyMapper;
 import core.Comment;
 import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
 import org.jdbi.v3.sqlobject.customizer.Bind;
@@ -32,11 +33,11 @@ public interface CommentDAO {
           + "FROM comments c1 "
           + "WHERE c1.parentID = c.commentID "
           + ") c1 "
-          + "WHERE c.memeID = :currMemeID")
+          + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL")
   @RegisterRowMapper(CommentMapper.class)
   List<Comment> getCommentsFromMeme(@Bind("currMemeID") String currMemeID);
 
   @SqlQuery("SELECT * FROM comments WHERE parentID = :parentCommentID")
-  @RegisterRowMapper(CommentMapper.class)
+  @RegisterRowMapper(ReplyMapper.class)
   List<Comment> getAllReplies(@Bind("parentCommentID") String parentCommentID);
 }

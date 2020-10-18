@@ -31,7 +31,8 @@ export interface Comment {
     memeID: string,
     content: string,
     author: string,
-    created: number // timestamp
+    created: number, // timestamp
+    numReplies: number
 }
 
 export interface NewComment {

@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from 'react'
-import {MemeCard} from "./Meme";
+import {MemeCard} from "./MemeCard";
 import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import {NavigationBar} from "./NavigationBar";

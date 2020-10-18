@@ -8,17 +8,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class CommentMapper implements RowMapper<Comment> {
+public class ReplyMapper implements RowMapper<Comment> {
 
   @Override
   public Comment map(ResultSet rs, StatementContext ctx) throws SQLException {
     return new Comment(
         UUID.fromString(rs.getString("commentID")),
-        null,
+        UUID.fromString(rs.getString("parentID")),
         UUID.fromString(rs.getString("memeID")),
         rs.getString("content"),
         rs.getString("author"),
         rs.getTimestamp("created"),
-        rs.getInt("numReplies"));
+        0);
   }
 }

@@ -3,10 +3,10 @@ import {Comment, Meme} from "../types";
 import {RouteComponentProps} from "react-router";
 import {MemeService} from "../service/memeService";
 import {PageNotFound} from "./PageNotFound";
-import {MemeCard} from "./Meme";
+import {MemeCard} from "./MemeCard";
 import {NavigationBar} from "./NavigationBar";
 import {CommentService} from "../service/commentService";
-import {CommentCard} from "./Comment";
+import {CommentCard} from "./CommentCard";
 
 interface Props {
     memeID: string
@@ -72,8 +72,6 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
     }
 
     render() {
-        console.log(this.memeID);
-
         if (this.state.meme === null) {
             return (<PageNotFound/>);
         }
