@@ -62,8 +62,6 @@ public class CommentResource implements CommentService {
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID) {
-    System.out.println("GET COMMENT BY ID");
-    System.out.println(memeID);
     return commentDAO.getCommentsFromMeme(memeID);
   }
 

@@ -11,6 +11,7 @@ public class Comment {
   private final String content;
   private final String author;
   private final Date created;
+  private final int numReplies;
 
   /** Convert new uploaded NewComment object into Comment object */
   public static Comment fromNewComment(NewComment newComment, String author) {
@@ -25,18 +26,20 @@ public class Comment {
     this.author = author;
     this.content = newComment.getContent();
     created = new Date();
+    this.numReplies = 0;
   }
 
   /** Create Comment object for existing Comment in the database */
   public Comment(
       UUID commentID, UUID parentID, UUID memeID, String content, String author,
-      Date created) {
+      Date created, int numReplies) {
     this.commentID = commentID;
     this.parentID = parentID;
     this.memeID = memeID;
     this.created = created;
     this.content = content;
     this.author = author;
+    this.numReplies = numReplies;
   }
 
   public UUID getCommentID() {
@@ -61,6 +64,10 @@ public class Comment {
 
   public Date getCreated() {
     return created;
+  }
+
+  public int getNumReplies() {
+    return numReplies;
   }
 
   @Override

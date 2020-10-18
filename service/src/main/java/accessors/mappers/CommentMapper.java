@@ -25,6 +25,7 @@ public class CommentMapper implements RowMapper<Comment> {
         UUID.fromString(rs.getString("memeID")),
         rs.getString("content"),
         rs.getString("author"),
-        rs.getTimestamp("created"));
+        rs.getTimestamp("created"),
+        rs.getInt("numReplies"));
   }
 }

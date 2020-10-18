@@ -26,8 +26,7 @@ public interface MemeDAO {
       @Bind("created") Date created);
 
   /**
-   * Sorry for this shit indentation.
-   * The Google Java Formatter does not allow //formatter:off,
+   * Sorry for this shit indentation. The Google Java Formatter does not allow //formatter:off,
    * making it impossible to proper indent the query
    */
   @SqlQuery(
@@ -100,7 +99,8 @@ public interface MemeDAO {
           + "FROM comments "
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
-          + ") c on c.memeID = :currMemeID")
+          + ") c on c.memeID = :currMemeID "
+          + "WHERE memes.memeID = :currMemeID ")
   @RegisterRowMapper(MemeMapper.class)
   Meme getMemeByID(@Bind("currMemeID") String currMemeID, @Bind("username") String username);
 }

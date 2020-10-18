@@ -9,9 +9,11 @@ import ForwardIcon from "@material-ui/icons/Forward"
 import ModeCommentRoundedIcon from "@material-ui/icons/ModeCommentRounded"
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {Redirect} from "react-router";
+import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 
 interface Props {
     meme: Meme,
+    // dont render comments button for the MemeCommentsPage
     showCommentsButton: boolean
 }
 
@@ -37,58 +39,11 @@ export class MemeCard extends Component<Props, State> {
             redirect: false
         };
 
-        this.timeDiff = this.calculateHumanReadableTimeDiff()
+        this.timeDiff = HumanReadableTimeDiff.calculateTimeDiff(this.props.meme.created);
 
         this.upvote = this.upvote.bind(this);
         this.downvote = this.downvote.bind(this);
         this.goToComments = this.goToComments.bind(this);
-    }
-
-    /**
-     * Convert the time difference of the day posted and the current date
-     * to a human readable format
-     */
-    private calculateHumanReadableTimeDiff(): string {
-        const seconds: number = Math.floor((
-            new Date().getTime() - this.props.meme.created) / 1000);
-
-        // 31536000 = one year in seconds
-        let interval: number = Math.floor(seconds / 31536000);
-        if (interval > 1) {
-            return interval + " years";
-        }
-
-        // 2592000 = one month in seconds
-        interval = Math.floor(seconds / 2592000);
-        if (interval > 1) {
-            return interval + " months";
-        }
-
-        // 604800 = one week in seconds
-        interval = Math.floor(seconds / 604800);
-        if (interval > 1) {
-            return interval + " weeks";
-        }
-
-        // 86400 = one day in seconds
-        interval = Math.floor(seconds / 86400);
-        if (interval > 1) {
-            return interval + " days";
-        }
-
-        // 3600 = one hour in seconds
-        interval = Math.floor(seconds / 3600);
-        if (interval > 1) {
-            return interval + " hours";
-        }
-
-        // 60 = one minute in seconds
-        interval = Math.floor(seconds / 60);
-        if (interval > 1) {
-            return interval + " minutes";
-        }
-
-        return Math.floor(seconds) + " seconds";
     }
 
     private upvote() {
@@ -214,6 +169,7 @@ export class MemeCard extends Component<Props, State> {
 
                             {downvoteButton}
 
+                            {/* dont render comments button for the MemeCommentsPage */}
                             {this.props.showCommentsButton &&
                             <Button variant={"outline-secondary"} onClick={this.goToComments}>
                                 <ModeCommentRoundedIcon/>

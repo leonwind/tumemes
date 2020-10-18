@@ -24,7 +24,15 @@ public interface CommentDAO {
       @Bind("author") String author,
       @Bind("created") Date created);
 
-  @SqlQuery("SELECT * FROM comments WHERE memeID = :currMemeID AND parentID IS NULL")
+  @SqlQuery(
+      "SELECT c.*, COALESCE(c1.numReplies, 0) as numReplies "
+          + "FROM comments c "
+          + "CROSS JOIN LATERAL ( "
+          + "SELECT COUNT(*) numReplies "
+          + "FROM comments c1 "
+          + "WHERE c1.parentID = c.commentID "
+          + ") c1 "
+          + "WHERE c.memeID = :currMemeID")
   @RegisterRowMapper(CommentMapper.class)
   List<Comment> getCommentsFromMeme(@Bind("currMemeID") String currMemeID);
 
