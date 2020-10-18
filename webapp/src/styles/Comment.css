@@ -3,6 +3,14 @@
     margin: auto;
 }
 
+.writeCommentField {
+    width: 100%;
+}
+
+.postCommentButton {
+
+}
+
 .loadRepliesButton {
     background: none;
     border: none;

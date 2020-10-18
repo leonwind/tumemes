@@ -33,7 +33,8 @@ public interface CommentDAO {
           + "FROM comments c1 "
           + "WHERE c1.parentID = c.commentID "
           + ") c1 "
-          + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL")
+          + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL "
+          + "ORDER BY created DESC")
   @RegisterRowMapper(CommentMapper.class)
   List<Comment> getCommentsFromMeme(@Bind("currMemeID") String currMemeID);
 

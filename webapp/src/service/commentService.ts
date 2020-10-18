@@ -1,7 +1,22 @@
 import {Requests} from "./requests";
-import {AUTH_HEADER} from "./headers";
+import {AUTH_HEADER, JSON_AUTH_HEADER} from "./headers";
+import {NewComment} from "../types";
 
 export class CommentService {
+
+   static async postComment(newComment: NewComment) {
+        const data: string = JSON.stringify({
+            "parentID": newComment.parentID,
+            "memeID": newComment.memeID,
+            "content": newComment.content
+        });
+
+        await Requests.sendRequest("comments/post", {
+            method: "POST",
+            headers: JSON_AUTH_HEADER,
+            body: data
+       });
+   }
 
     static async getCommentsFromMeme(memeID: string): Promise<Response> {
         return await Requests.sendRequest("comments/" + memeID, {
