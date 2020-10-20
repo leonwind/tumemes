@@ -2,7 +2,7 @@ package core;
 
 import java.util.UUID;
 
-public class Vote {
+public class MemeVote {
 
     private final UUID memeID;
     /**
@@ -13,7 +13,7 @@ public class Vote {
     private final int vote;
     private final String username;
 
-    public Vote(UUID memeID, int vote, String username) {
+    public MemeVote(UUID memeID, int vote, String username) {
         this.memeID = memeID;
         this.vote = vote;
         this.username = username;

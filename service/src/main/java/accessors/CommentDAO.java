@@ -13,6 +13,9 @@ import java.util.List;
 
 public interface CommentDAO {
 
+  @SqlQuery("SELECT EXISTS (SELECT 1 FROM comments WHERE commentID = :currCommentID)")
+  boolean commentIDExists(@Bind("currCommentID") String currCommentID);
+
   @SqlUpdate(
       "INSERT INTO comments (commentID, parentID, memeID, content, "
           + "author, created) VALUES (:commentID, :parentID, :memeID, :content, "

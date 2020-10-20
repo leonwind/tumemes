@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.UUID;
 
-public class NewVote {
+public class NewMemeVote {
 
   private final UUID memeID;
   /**
@@ -14,8 +14,8 @@ public class NewVote {
    */
   private final int vote;
 
-  public NewVote(@JsonProperty("memeID") UUID memeID,
-                 @JsonProperty("vote") int vote) {
+  public NewMemeVote(@JsonProperty("memeID") UUID memeID,
+                     @JsonProperty("vote") int vote) {
     this.memeID = memeID;
     this.vote = vote;
   }

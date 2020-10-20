@@ -1,19 +1,24 @@
 package api;
 
-import core.NewVote;
+import core.NewCommentVote;
+import core.NewMemeVote;
 import core.User;
-import core.Vote;
 import io.dropwizard.auth.Auth;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-@Path("/")
+@Path("/vote")
 public interface VoteService {
 
     @POST
-    @Path("/vote")
+    @Path("/meme")
     @Consumes(MediaType.APPLICATION_JSON)
-    Response voteMeme(@Auth User user, NewVote newVote);
+    Response voteMeme(@Auth User user, NewMemeVote newMemeVote);
+
+    @POST
+    @Path("/comment")
+    @Consumes(MediaType.APPLICATION_JSON)
+    Response voteComment(@Auth User user, NewCommentVote newCommentVote);
 }

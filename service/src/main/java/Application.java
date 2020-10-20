@@ -1,7 +1,4 @@
-import accessors.CommentDAO;
-import accessors.MemeDAO;
-import accessors.UserDAO;
-import accessors.VoteDAO;
+import accessors.*;
 import auth.*;
 import core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -40,9 +37,10 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final Jdbi jdbi = factory.build(environment, configuration.getDatabase(), "postgres");
 
     final MemeDAO memeDAO = jdbi.onDemand(MemeDAO.class);
-    final VoteDAO voteDAO = jdbi.onDemand(VoteDAO.class);
     final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
     final CommentDAO commentDAO = jdbi.onDemand(CommentDAO.class);
+    final MemeVoteDAO memeVoteDAO = jdbi.onDemand(MemeVoteDAO.class);
+    final CommentVoteDAO commentVoteDAO = jdbi.onDemand(CommentVoteDAO.class);
 
     UnauthorizedHandler unauthorizedHandler = new UnauthorizedResourceHandler();
 
@@ -63,7 +61,8 @@ public class Application extends io.dropwizard.Application<Configuration> {
     final AuthResource authResource = new AuthResource(userDAO, configuration.getJwtSecret());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
-    final VoteResource voteResource = new VoteResource(memeDAO, voteDAO);
+    final VoteResource voteResource =
+        new VoteResource(memeDAO, memeVoteDAO, commentDAO, commentVoteDAO);
     final CommentResource commentResource = new CommentResource(commentDAO, memeDAO);
 
     environment.jersey().register(pingResource);
