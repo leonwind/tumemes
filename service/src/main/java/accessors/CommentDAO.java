@@ -46,7 +46,7 @@ public interface CommentDAO {
           + "GROUP BY commentID "
           + ") v on v.commentID = c.commentID "
           + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL "
-          + "ORDER BY voteCount, created DESC")
+          + "ORDER BY voteCount DESC, created DESC")
   @RegisterRowMapper(CommentMapper.class)
   List<Comment> getCommentsFromMemeByVotes(
       @Bind("currMemeID") String currMemeID, @Bind("currUsername") String currUsername);
@@ -88,7 +88,7 @@ public interface CommentDAO {
           + "GROUP BY commentID "
           + ") v on v.commentID = c.commentID "
           + "WHERE parentID = :parentCommentID "
-          + "ORDER BY voteCount, created DESC")
+          + "ORDER BY voteCount DESC, created DESC")
   @RegisterRowMapper(ReplyMapper.class)
   List<Comment> getAllRepliesByVotes(
       @Bind("parentCommentID") String parentCommentID,

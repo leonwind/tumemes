@@ -71,7 +71,6 @@ public class CommentResource implements CommentService {
   @Produces(MediaType.APPLICATION_JSON)
   public List<Comment> getReplies(@Auth User user,
                                   @PathParam("commentID") String commentID) {
-    System.out.println("GET REPLIES");
     return commentDAO.getAllRepliesByDate(commentID, user.getName());
   }
 }

@@ -32,7 +32,9 @@ export interface Comment {
     content: string,
     author: string,
     created: number, // timestamp
-    numReplies: number
+    numReplies: number,
+    voteCount: number,
+    userVote: number
 }
 
 export interface NewComment {

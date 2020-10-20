@@ -1,5 +1,6 @@
 package accessors;
 
+import accessors.mappers.CommentVoteMapper;
 import accessors.mappers.MemeVoteMapper;
 import core.CommentVote;
 import org.jdbi.v3.sqlobject.config.RegisterRowMapper;
@@ -21,15 +22,16 @@ public interface CommentVoteDAO {
       "SELECT * FROM commentvotes WHERE "
           + "commentID = :currCommentID AND "
           + "username = :currUsername")
-  @RegisterRowMapper(MemeVoteMapper.class)
+  @RegisterRowMapper(CommentVoteMapper.class)
   CommentVote getVote(
-      @Bind("currMemeID") String currCommentID, @Bind("currUsername") String currUsername);
+      @Bind("currCommentID") String currCommentID,
+      @Bind("currUsername") String currUsername);
 
   @SqlUpdate(
       "UPDATE commentvotes SET vote = :currVote WHERE commentID = "
           + ":currCommentID AND username = :currUsername")
   void updateVote(
-      @Bind("currMemeID") String currCommentID,
+      @Bind("currCommentID") String currCommentID,
       @Bind("currUsername") String currUsername,
       @Bind("currVote") int currVote);
 }

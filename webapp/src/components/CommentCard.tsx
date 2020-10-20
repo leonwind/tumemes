@@ -6,6 +6,9 @@ import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {CommentService} from "../service/commentService";
 import {ReplyCard} from "./ReplyCard"
 import Button from "react-bootstrap/Button";
+import {KeyboardArrowDown, KeyboardArrowUp} from "@material-ui/icons";
+import {VoteService} from "../service/voteService";
+import {VoteButtons} from "./VoteButtons";
 
 
 interface Props {
@@ -13,6 +16,7 @@ interface Props {
 }
 
 interface State {
+    currVote: number,
     replies: Comment[],
     renderReplies: boolean,
     newReplyContent: string
@@ -26,15 +30,18 @@ export class CommentCard extends Component<Props, State> {
         super(props);
 
         this.state = {
+            currVote: this.props.comment.userVote,
             replies: [],
             renderReplies: false,
             newReplyContent: ""
-        }
+        };
 
         this.timeDiff = HumanReadableTimeDiff.calculateTimeDiff(this.props.comment.created);
 
         this.loadReplies = this.loadReplies.bind(this);
         this.handleNewReplyChange = this.handleNewReplyChange.bind(this);
+        this.upvote = this.upvote.bind(this);
+        this.downvote = this.downvote.bind(this);
         this.postReply = this.postReply.bind(this);
     }
 
@@ -70,12 +77,62 @@ export class CommentCard extends Component<Props, State> {
         });
     }
 
+    private upvote() {
+        let newVote: number = 1;
+
+        if (this.state.currVote === 1) {
+            newVote = 0;
+            this.props.comment.voteCount--;
+        } else if (this.state.currVote === 0) {
+            this.props.comment.voteCount++;
+        } else if (this.state.currVote === -1) {
+            this.props.comment.voteCount += 2;
+        }
+
+        VoteService.voteComment(this.props.comment.commentID, newVote).then(() => {
+            this.setState({currVote: newVote});
+        });
+    }
+
+    private downvote() {
+        let newVote: number = -1;
+
+        if (this.state.currVote === 1) {
+            this.props.comment.voteCount -= 2;
+        } else if (this.state.currVote === 0) {
+            this.props.comment.voteCount--;
+        } else if (this.state.currVote === -1) {
+            newVote = 0;
+            this.props.comment.voteCount++;
+        }
+
+        VoteService.voteComment(this.props.comment.commentID, newVote).then(() => {
+            this.setState({currVote: newVote});
+        });
+    }
+
+    private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
+        const upvoteButtonIcon: JSX.Element = <KeyboardArrowUp/>;
+        const downvoteButtonIcon: JSX.Element = <KeyboardArrowDown/>;
+
+        return VoteButtons.createVoteButtons(
+            this.state.currVote,
+            upvoteButtonIcon,
+            downvoteButtonIcon,
+            this.upvote,
+            this.downvote);
+    }
+
     render() {
+        const buttons: { upvote: JSX.Element, downvote: JSX.Element } = this.createVoteButtons();
+        const upvoteButton: JSX.Element = buttons.upvote;
+        const downvoteButton: JSX.Element = buttons.downvote;
+
         let replyElements: JSX.Element[] = [];
 
         if (this.state.renderReplies) {
             replyElements = this.state.replies.map((reply: Comment) =>
-            <ReplyCard key={reply.commentID} reply={reply}/>);
+                <ReplyCard key={reply.commentID} reply={reply}/>);
         }
 
         return (
@@ -104,7 +161,12 @@ export class CommentCard extends Component<Props, State> {
                             <Button type={"submit"}>
                                 Post
                             </Button>
-                            </form>
+                        </form>
+
+                        {upvoteButton}
+                        {this.props.comment.voteCount}
+                        {downvoteButton}
+
                     </Card>
                 </div>
                 {replyElements}

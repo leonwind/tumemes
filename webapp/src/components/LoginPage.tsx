@@ -51,6 +51,7 @@ export class LoginPage extends Component<{}, State> {
                 if (ans.ok) {
                     dataPromise.then((data: string) => {
                         window.localStorage.setItem("access_token", data);
+                        window.localStorage.setItem("username", this.state.username);
                         this.setState({redirect: true});
                         return;
                     })

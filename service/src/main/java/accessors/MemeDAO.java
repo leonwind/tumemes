@@ -50,7 +50,7 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "ORDER BY voteCount, created2 DESC")
+          + "ORDER BY voteCount DESC, created DESC")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByVotes(@Bind("currUsername") String username);
 

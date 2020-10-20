@@ -10,6 +10,7 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {Redirect} from "react-router";
 import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {VoteService} from "../service/voteService";
+import {VoteButtons} from "./VoteButtons";
 
 interface Props {
     meme: Meme,
@@ -58,10 +59,9 @@ export class MemeCard extends Component<Props, State> {
             this.props.meme.voteCount += 2;
         }
 
-        VoteService.voteMeme(this.props.meme.memeID, newVote)
-            .then(() => {
-                this.setState({currVote: newVote});
-            });
+        VoteService.voteMeme(this.props.meme.memeID, newVote).then(() => {
+            this.setState({currVote: newVote});
+        });
     }
 
     private downvote() {
@@ -76,10 +76,9 @@ export class MemeCard extends Component<Props, State> {
             this.props.meme.voteCount++;
         }
 
-        VoteService.voteMeme(this.props.meme.memeID, newVote)
-            .then(() => {
-                this.setState({currVote: newVote});
-            });
+        VoteService.voteMeme(this.props.meme.memeID, newVote).then(() => {
+            this.setState({currVote: newVote});
+        });
     }
 
     private goToComments() {
@@ -87,45 +86,15 @@ export class MemeCard extends Component<Props, State> {
     }
 
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
-        let upvoteButton: JSX.Element;
-        let downvoteButton: JSX.Element;
+        const upvoteButtonIcon: JSX.Element = <ForwardIcon className={styles.upvoteButton}/>;
+        const downvoteButtonIcon: JSX.Element = <ForwardIcon className={styles.downvoteButton}/>;
 
-        if (this.state.currVote === 1) {
-            upvoteButton =
-                <Button variant={"success"} onClick={this.upvote}>
-                    <ForwardIcon className={styles.upvoteButton}/>
-                </Button>;
-
-            downvoteButton =
-                <Button variant={"outline-secondary"} onClick={this.downvote}>
-                   <ForwardIcon className={styles.downvoteButton}/>
-                </Button>
-        } else if (this.state.currVote === -1) {
-            upvoteButton =
-                <Button variant={"outline-secondary"} onClick={this.upvote}>
-                    <ForwardIcon className={styles.upvoteButton}/>
-                </Button>;
-
-            downvoteButton =
-                <Button variant={"danger"} onClick={this.downvote}>
-                    <ForwardIcon className={styles.downvoteButton}/>
-                </Button>
-        } else {
-            upvoteButton =
-                <Button variant={"outline-secondary"} onClick={this.upvote}>
-                    <ForwardIcon className={styles.upvoteButton}/>
-                </Button>;
-
-            downvoteButton =
-                <Button variant={"outline-secondary"} onClick={this.downvote}>
-                    <ForwardIcon className={styles.downvoteButton}/>
-                </Button>
-        }
-
-        return {
-            upvote: upvoteButton,
-            downvote: downvoteButton
-        };
+        return VoteButtons.createVoteButtons(
+            this.state.currVote,
+            upvoteButtonIcon,
+            downvoteButtonIcon,
+            this.upvote,
+            this.downvote);
     }
 
     render() {
@@ -134,7 +103,6 @@ export class MemeCard extends Component<Props, State> {
         }
 
         const buttons: { upvote: JSX.Element, downvote: JSX.Element } = this.createVoteButtons();
-
         const upvoteButton: JSX.Element = buttons.upvote;
         const downvoteButton: JSX.Element = buttons.downvote;
 
