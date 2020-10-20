@@ -4,7 +4,10 @@
     top: 0;
     z-index: 1;
     background-color: rgb(0, 101, 189);
-    color: white;
+}
+
+.navBarBrand {
+    color: white !important;
 }
 
 .navBarButton {

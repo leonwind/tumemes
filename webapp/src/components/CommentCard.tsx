@@ -44,13 +44,11 @@ export class CommentCard extends Component<Props, State> {
                 if (ans.ok) {
                     const repliesPromise: Promise<Comment[]> = ans.json();
                     repliesPromise.then((replies: Comment[]) => {
-                        console.log(replies);
                         this.setState({replies});
                         this.setState({renderReplies: true});
                     })
                 }
             });
-        console.log(this.state.replies);
     }
 
     private handleNewReplyChange(event: ChangeEvent<HTMLInputElement>) {
@@ -66,9 +64,10 @@ export class CommentCard extends Component<Props, State> {
             content: this.state.newReplyContent
         };
 
-        CommentService.postComment(newComment).then(() => {});
-        this.setState({newReplyContent: ""});
-        this.loadReplies();
+        CommentService.postComment(newComment).then(() => {
+            this.setState({newReplyContent: ""});
+            this.loadReplies();
+        });
     }
 
     render() {

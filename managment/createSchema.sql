@@ -37,6 +37,19 @@ CREATE TABLE public.comments (
 ALTER TABLE public.comments OWNER TO tumemes;
 
 --
+-- Name: commentvotes; Type: TABLE; Schema: public; Owner: tumemes
+--
+
+CREATE TABLE public.commentvotes (
+    commentid text NOT NULL,
+    username text NOT NULL,
+    vote integer
+);
+
+
+ALTER TABLE public.commentvotes OWNER TO tumemes;
+
+--
 -- Name: memes; Type: TABLE; Schema: public; Owner: tumemes
 --
 

@@ -12,9 +12,9 @@
 }
 
 .loadRepliesButton {
-    background: none;
+    background: none !important;
     border: none;
-    padding: 0;
+    padding: 0 !important;
     font-family: arial, sans-serif;
     color: #069;
     cursor: pointer;

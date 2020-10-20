@@ -3,6 +3,7 @@ import React from 'react'
 import styles from "../styles/NavigationBar.css"
 import Button from "react-bootstrap/Button";
 import {useHistory} from 'react-router-dom';
+import Navbar from "react-bootstrap/Navbar";
 
 
 export const NavigationBar = () => {
@@ -19,8 +20,8 @@ export const NavigationBar = () => {
 
     return (
         <div className={styles.navigationBar}>
-            <nav className={"navbar"}>
-                <span className={"navbar-brand"}>TUMemes</span>
+            <Navbar className={"navbar"}>
+                <Navbar.Brand href={"/"} className={styles.navBarBrand}>TUMemes</Navbar.Brand>
 
                 <Button className={styles.navBarButton} onClick={logOut}>
                    Log out
@@ -29,7 +30,7 @@ export const NavigationBar = () => {
                 <Button className={styles.navBarButton} onClick={upload}>
                     Upload
                 </Button>
-            </nav>
+            </Navbar>
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Component, FormEvent} from "react";
 import {Comment, Meme, NewComment} from "../types";
-import {RouteComponentProps} from "react-router";
+import {Redirect, RouteComponentProps} from "react-router";
 import {MemeService} from "../service/memeService";
 import {PageNotFound} from "./PageNotFound";
 import {MemeCard} from "./MemeCard";
@@ -89,7 +89,6 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
 
     private postComment(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
-        console.log("POST COMMENT");
 
         const newComment: NewComment = {
            parentID: "",
@@ -97,12 +96,17 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
            content: this.state.newCommentContent
         };
 
-        CommentService.postComment(newComment).then(() => {});
-        this.setState({newCommentContent: ""});
-        this.loadComments();
+        CommentService.postComment(newComment).then(() => {
+            this.setState({newCommentContent: ""});
+            this.loadComments();
+        });
     }
 
     render() {
+        if (this.state.redirect) {
+            return (<Redirect to={"/login"}/>);
+        }
+
         if (this.state.meme === null) {
             return (<PageNotFound/>);
         }
