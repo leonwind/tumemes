@@ -19,6 +19,8 @@ public class CommentMapper implements RowMapper<Comment> {
         rs.getString("content"),
         rs.getString("author"),
         rs.getTimestamp("created"),
-        rs.getInt("numReplies"));
+        rs.getInt("numReplies"),
+        rs.getInt("voteCount"),
+        rs.getInt("userVote"));
   }
 }

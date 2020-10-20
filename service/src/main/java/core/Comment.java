@@ -12,6 +12,13 @@ public class Comment {
   private final String author;
   private final Date created;
   private final int numReplies;
+  private final int voteCount;
+  /** Indicate the current users vote on this comment
+   * no vote = 0
+   * downvote = -1
+   * upvote = 1
+   */
+  private final int userVote;
 
   /** Convert new uploaded NewComment object into Comment object */
   public static Comment fromNewComment(NewComment newComment, String author) {
@@ -26,13 +33,15 @@ public class Comment {
     this.author = author;
     this.content = newComment.getContent();
     created = new Date();
-    this.numReplies = 0;
+    numReplies = 0;
+    voteCount = 0;
+    userVote = 0;
   }
 
   /** Create Comment object for existing Comment in the database */
   public Comment(
       UUID commentID, UUID parentID, UUID memeID, String content, String author,
-      Date created, int numReplies) {
+      Date created, int numReplies, int voteCount, int userVote) {
     this.commentID = commentID;
     this.parentID = parentID;
     this.memeID = memeID;
@@ -40,6 +49,8 @@ public class Comment {
     this.content = content;
     this.author = author;
     this.numReplies = numReplies;
+    this.voteCount = voteCount;
+    this.userVote = userVote;
   }
 
   public UUID getCommentID() {
@@ -70,6 +81,14 @@ public class Comment {
     return numReplies;
   }
 
+  public int getVoteCount() {
+    return voteCount;
+  }
+
+  public int getUserVote() {
+    return userVote;
+  }
+
   @Override
   public String toString() {
     return "Comment{" +
@@ -79,6 +98,9 @@ public class Comment {
         ", content='" + content + '\'' +
         ", author='" + author + '\'' +
         ", created=" + created +
+        ", numReplies=" + numReplies +
+        ", voteCount=" + voteCount +
+        ", userVote=" + userVote +
         '}';
   }
 }

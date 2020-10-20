@@ -30,7 +30,7 @@ public class MemeResource implements MemeService {
     }
 
     if (sortBy.equals("created")) {
-      return memeDAO.getAllMemesByDate();
+      return memeDAO.getAllMemesByDate(username);
     }
 
     return memeDAO.getAllMemesByVotes(username);

@@ -62,7 +62,7 @@ public class CommentResource implements CommentService {
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
   public List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID) {
-    return commentDAO.getCommentsFromMeme(memeID);
+    return commentDAO.getCommentsFromMemeByDate(memeID, user.getName());
   }
 
   @Override
@@ -71,6 +71,7 @@ public class CommentResource implements CommentService {
   @Produces(MediaType.APPLICATION_JSON)
   public List<Comment> getReplies(@Auth User user,
                                   @PathParam("commentID") String commentID) {
-    return commentDAO.getAllReplies(commentID);
+    System.out.println("GET REPLIES");
+    return commentDAO.getAllRepliesByDate(commentID, user.getName());
   }
 }

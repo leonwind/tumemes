@@ -39,7 +39,7 @@ public interface MemeDAO {
           + "LEFT JOIN ( "
           + "SELECT memeID, "
           + "SUM(vote) as voteCount, "
-          + "SUM(vote) FILTER (WHERE username = :username) as userVote "
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
           + "FROM memevotes "
           + "GROUP BY memeID "
           + ") v on v.memeID = memes.memeID "
@@ -50,21 +50,21 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "ORDER BY voteCount DESC")
+          + "ORDER BY voteCount, created2 DESC")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByVotes(@Bind("username") String username);
+  List<Meme> getAllMemesByVotes(@Bind("currUsername") String username);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
           + "author, memes.created as created, "
-          + "COALESCE(v.voteCount, 0) as voteCount,"
-          + "COALESCE(v.userVote, 0) as userVote,"
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote, "
           + "COALESCE(c.numComments, 0) as numComments "
           + "FROM memes "
           + "LEFT JOIN ( "
           + "SELECT memeID, "
           + "SUM(vote) as voteCount, "
-          + "SUM(vote) FILTER (WHERE username = :username) as userVote "
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
           + "FROM memevotes "
           + "GROUP BY memeID "
           + ") v on v.memeID = memes.memeID "
@@ -77,7 +77,7 @@ public interface MemeDAO {
           + ") c on c.memeID = memes.memeID "
           + "ORDER BY created DESC")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByDate();
+  List<Meme> getAllMemesByDate(@Bind("currUsername") String username);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
@@ -89,7 +89,7 @@ public interface MemeDAO {
           + "LEFT JOIN ( "
           + "SELECT memeID, "
           + "SUM(vote) as voteCount, "
-          + "SUM(vote) FILTER (WHERE username = :username) as userVote "
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
           + "FROM memevotes "
           + "GROUP BY memeID "
           + ") v on v.memeID = :currMemeID "
@@ -102,5 +102,6 @@ public interface MemeDAO {
           + ") c on c.memeID = :currMemeID "
           + "WHERE memes.memeID = :currMemeID ")
   @RegisterRowMapper(MemeMapper.class)
-  Meme getMemeByID(@Bind("currMemeID") String currMemeID, @Bind("username") String username);
+  Meme getMemeByID(@Bind("currMemeID") String currMemeID,
+                   @Bind("currUsername") String username);
 }

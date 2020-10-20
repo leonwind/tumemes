@@ -19,6 +19,8 @@ public class ReplyMapper implements RowMapper<Comment> {
         rs.getString("content"),
         rs.getString("author"),
         rs.getTimestamp("created"),
-        0);
+        0, // num replies of a reply is always 0
+        rs.getInt("voteCount"),
+        rs.getInt("userVote"));
   }
 }

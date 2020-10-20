@@ -29,19 +29,87 @@ public interface CommentDAO {
       @Bind("created") Date created);
 
   @SqlQuery(
-      "SELECT c.*, COALESCE(c1.numReplies, 0) as numReplies "
+      "SELECT c.*, COALESCE(c1.numReplies, 0) as numReplies, "
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote "
           + "FROM comments c "
           + "CROSS JOIN LATERAL ( "
           + "SELECT COUNT(*) numReplies "
           + "FROM comments c1 "
           + "WHERE c1.parentID = c.commentID "
           + ") c1 "
+          + "LEFT JOIN ( "
+          + "SELECT commentID, "
+          + "SUM(vote) as voteCount, "
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
+          + "FROM commentvotes "
+          + "GROUP BY commentID "
+          + ") v on v.commentID = c.commentID "
+          + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL "
+          + "ORDER BY voteCount, created DESC")
+  @RegisterRowMapper(CommentMapper.class)
+  List<Comment> getCommentsFromMemeByVotes(
+      @Bind("currMemeID") String currMemeID, @Bind("currUsername") String currUsername);
+
+  @SqlQuery(
+      "SELECT c.*, COALESCE(c1.numReplies, 0) as numReplies, "
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote "
+          + "FROM comments c "
+          + "CROSS JOIN LATERAL ( "
+          + "SELECT COUNT(*) numReplies "
+          + "FROM comments c1 "
+          + "WHERE c1.parentID = c.commentID "
+          + ") c1 "
+          + "LEFT JOIN ( "
+          + "SELECT commentID, "
+          + "SUM(vote) as voteCount, "
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
+          + "FROM commentvotes "
+          + "GROUP BY commentID "
+          + ") v on v.commentID = c.commentID "
           + "WHERE c.memeID = :currMemeID AND c.parentID IS NULL "
           + "ORDER BY created DESC")
   @RegisterRowMapper(CommentMapper.class)
-  List<Comment> getCommentsFromMeme(@Bind("currMemeID") String currMemeID);
+  List<Comment> getCommentsFromMemeByDate(
+      @Bind("currMemeID") String currMemeID,
+      @Bind("currUsername") String currUsername);
 
-  @SqlQuery("SELECT * FROM comments WHERE parentID = :parentCommentID ORDER BY created DESC")
+  @SqlQuery(
+      "SELECT c.*, "
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote "
+          + "FROM comments c "
+          + "LEFT JOIN ( "
+          + "SELECT commentID, "
+          + "SUM(vote) as voteCount,"
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
+          + "FROM commentvotes "
+          + "GROUP BY commentID "
+          + ") v on v.commentID = c.commentID "
+          + "WHERE parentID = :parentCommentID "
+          + "ORDER BY voteCount, created DESC")
   @RegisterRowMapper(ReplyMapper.class)
-  List<Comment> getAllReplies(@Bind("parentCommentID") String parentCommentID);
+  List<Comment> getAllRepliesByVotes(
+      @Bind("parentCommentID") String parentCommentID,
+      @Bind("currUsername") String username);
+
+  @SqlQuery(
+      "SELECT c.*, "
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote "
+          + "FROM comments c "
+          + "LEFT JOIN ( "
+          + "SELECT commentID, "
+          + "SUM(vote) as voteCount,"
+          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
+          + "FROM commentvotes "
+          + "GROUP BY commentID "
+          + ") v on v.commentID = c.commentID "
+          + "WHERE parentID = :parentCommentID "
+          + "ORDER BY created DESC")
+  @RegisterRowMapper(ReplyMapper.class)
+  List<Comment> getAllRepliesByDate(
+      @Bind("parentCommentID") String parentCommentID,
+      @Bind("currUsername") String username);
 }

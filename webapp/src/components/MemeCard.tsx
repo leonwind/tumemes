@@ -1,7 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.css';
 import React, {Component} from 'react'
 import {Meme} from "../types";
-import {MemeService} from "../service/memeService";
 import styles from "../styles/Meme.css"
 import Card from "react-bootstrap/Card";
 import {Button} from "react-bootstrap";
@@ -10,6 +9,7 @@ import ModeCommentRoundedIcon from "@material-ui/icons/ModeCommentRounded"
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import {Redirect} from "react-router";
 import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
+import {VoteService} from "../service/voteService";
 
 interface Props {
     meme: Meme,
@@ -58,7 +58,7 @@ export class MemeCard extends Component<Props, State> {
             this.props.meme.voteCount += 2;
         }
 
-        MemeService.voteMeme(this.props.meme.memeID, newVote)
+        VoteService.voteMeme(this.props.meme.memeID, newVote)
             .then(() => {
                 this.setState({currVote: newVote});
             });
@@ -76,7 +76,7 @@ export class MemeCard extends Component<Props, State> {
             this.props.meme.voteCount++;
         }
 
-        MemeService.voteMeme(this.props.meme.memeID, newVote)
+        VoteService.voteMeme(this.props.meme.memeID, newVote)
             .then(() => {
                 this.setState({currVote: newVote});
             });

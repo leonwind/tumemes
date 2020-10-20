@@ -32,12 +32,4 @@ export class MemeService {
             body: data
         });
     }
-
-    static async voteMeme(memeID: string, vote: number): Promise<void> {
-        await Requests.sendRequest("vote", {
-            method: "POST",
-            headers: JSON_AUTH_HEADER,
-            body: JSON.stringify({"memeID": memeID, "vote": vote})
-        });
-    }
 }
