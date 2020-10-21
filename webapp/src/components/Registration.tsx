@@ -173,26 +173,33 @@ export class Registration extends Component<{}, State> {
                     })
                 }
 
-                dataPromise.then((data: string) => {
-                    let newErrors = {
-                        username: "",
-                        email: "",
-                        password: "",
-                        repeatedPassword: "",
-                        unexpected: ""
-                    };
+                let newErrors = {
+                    username: "",
+                    email: "",
+                    password: "",
+                    repeatedPassword: "",
+                    unexpected: ""
+                };
 
-                    if (data === "Username exists") {
-                        newErrors.username = "Username already exists.";
-                    } else if (data === "Email exists") {
-                        newErrors.email = "Email already exists.";
-                    } else {
-                        newErrors.unexpected = "An error occurred on the server." +
-                            "Please try again later.";
-                        throw new Error(ans.statusText);
-                    }
-                    this.setState({errors: newErrors});
-                });
+                if (ans.status === 401) {
+                    dataPromise.then((data: string) => {
+
+                        if (data === "Username exists") {
+                            newErrors.username = "Username already exists.";
+                        } else if (data === "Email exists") {
+                            newErrors.email = "Email already exists.";
+                        }
+
+                        this.setState({errors: newErrors});
+                        return;
+                    });
+                }
+
+                newErrors.unexpected =
+                    "An error occurred on the server. Please try again later.";
+                this.setState({errors: newErrors});
+                throw new Error(ans.statusText);
+
             });
     }
 
@@ -267,13 +274,13 @@ export class Registration extends Component<{}, State> {
                         </p>
                     </Form.Group>
 
-                    <Button type="submit" className={styles.registrationSubmitButton}>
-                        Create account
-                    </Button>
-
                     <p className={styles.errorMessage}>
                         {this.state.errors["unexpected"]}
                     </p>
+
+                    <Button type="submit" className={styles.registrationSubmitButton}>
+                        Create account
+                    </Button>
 
                     <p className={styles.loginLink}>
                         Already have an account? <a href={"/login"}>Sign in.</a>

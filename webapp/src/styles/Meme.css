@@ -1,10 +1,19 @@
 .memeCard {
-    width: 40%;
+    width: 100%;
+    max-width: 700px;
     margin: auto;
 }
 
 .memeTitle {
-   font-weight: bold;
+    font-weight: bold;
+}
+
+.pointsAndCommentsText {
+    margin-top: 1rem;
+}
+
+.buttonGroup {
+    width: 100%;
 }
 
 .upvoteButton {

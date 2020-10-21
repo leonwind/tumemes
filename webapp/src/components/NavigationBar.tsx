@@ -21,7 +21,9 @@ export const NavigationBar = () => {
     return (
         <div className={styles.navigationBar}>
             <Navbar className={"navbar"}>
-                <Navbar.Brand href={"/"} className={styles.navBarBrand}>TUMemes</Navbar.Brand>
+                <Navbar.Brand href={"/"} className={styles.navBarBrand}>
+                    TUMemes
+                </Navbar.Brand>
 
                 <Button className={styles.navBarButton} onClick={logOut}>
                    Log out

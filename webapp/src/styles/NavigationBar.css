@@ -1,20 +1,20 @@
 .navigationBar {
     position: -webkit-sticky; /* Safari */
     position: sticky;
+    min-height: 45px;
+    max-height: 80px;
     top: 0;
     z-index: 1;
     background-color: rgb(0, 101, 189);
 }
 
 .navBarBrand {
+    font-weight: bold;
+    font-size: 1.5rem;
     color: white !important;
 }
 
 .navBarButton {
     background-color: white;
     color: rgb(0, 101, 189);
-}
-
-.uploadLink {
-    color: white;
 }

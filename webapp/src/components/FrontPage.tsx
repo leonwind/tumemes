@@ -5,6 +5,7 @@ import {Meme} from "../types";
 import {MemeService} from "../service/memeService";
 import {NavigationBar} from "./NavigationBar";
 import {Redirect} from "react-router";
+import styles from "../styles/FrontPage.css"
 
 interface State {
     memes: Meme[],
@@ -50,7 +51,7 @@ export class FrontPage extends Component<{}, State> {
         const allMemes: JSX.Element[] = this.state.memes.map((meme: Meme) =>
             <MemeCard key={meme.memeID} meme={meme} showCommentsButton={true}/>);
         return (
-            <div>
+            <div className={styles.body}>
                 <NavigationBar/>
                 {allMemes}
             </div>

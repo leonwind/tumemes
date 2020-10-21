@@ -4,7 +4,6 @@ import {AuthorizationService} from "../service/authorizationService";
 import {Redirect} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import styles from "../styles/Login.css"
-import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 
 interface State {
@@ -64,8 +63,10 @@ export class LoginPage extends Component<{}, State> {
                     return;
                 }
 
-                this.setState({error: "An error occurred on the server. " +
-                        "Please try again later."});
+                this.setState({
+                    error: "An error occurred on the server. " +
+                        "Please try again later."
+                });
                 throw new Error(ans.statusText);
             })
     }
@@ -73,45 +74,52 @@ export class LoginPage extends Component<{}, State> {
     render() {
         // redirect to homepage if login was successful
         if (this.state.redirect) {
-            return (<Redirect to={"/"}/>);
+            /**
+             * If redirect to homepage without checking again throws an unauthorized
+             * error. With the if clause checking before it does not happen, event
+             * if it should be unnecessary
+             */
+            if (window.localStorage.getItem("access_token") !== null) {
+                return (<Redirect to={"/"}/>);
+            }
         }
 
         return (
             <div className={styles.body}>
-            <Form onSubmit={this.handleSubmit} className={styles.formLogIn}>
+                <Form onSubmit={this.handleSubmit} className={styles.formLogIn}>
 
-                <h3 className={styles.headline}>
-                    Sign in to TUMemes
-                </h3>
+                    <h3 className={styles.headline}>
+                        Sign in to TUMemes
+                    </h3>
 
-                <Form.Label htmlFor={"inputUsername"} srOnly>Username</Form.Label>
-                <Form.Control className={styles.formControlInput}
-                              type={"username"} id={"inputUsername"}
-                              value={this.state.username}
-                              onChange={this.handleUsernameChange}
-                              placeholder={"Email or username"}
-                              required/>
+                    <Form.Label htmlFor={"inputUsername"} srOnly>Username</Form.Label>
+                    <Form.Control className={styles.formControlInput}
+                                  type={"username"} id={"inputUsername"}
+                                  value={this.state.username}
+                                  onChange={this.handleUsernameChange}
+                                  placeholder={"Email or username"}
+                                  required/>
 
-                <Form.Label htmlFor={"inputPassword"} srOnly>Password</Form.Label>
-                <Form.Control className={styles.formControlInput}
-                              type={"password"} id={"inputPassword"}
-                              value={this.state.password}
-                              onChange={this.handlePasswordChange}
-                              placeholder={"Password"}
-                              required/>
+                    <Form.Label htmlFor={"inputPassword"} srOnly>Password</Form.Label>
+                    <Form.Control className={styles.formControlInput}
+                                  type={"password"} id={"inputPassword"}
+                                  value={this.state.password}
+                                  onChange={this.handlePasswordChange}
+                                  placeholder={"Password"}
+                                  required/>
 
-                <p className={styles.errorMessage}>
-                    {this.state.error}
-                </p>
+                    <p className={styles.errorMessage}>
+                        {this.state.error}
+                    </p>
 
-                <Button type="submit" className={styles.submitButton}>
-                    Sign in
-                </Button>
+                    <Button type="submit" className={styles.submitButton}>
+                        Sign in
+                    </Button>
 
-                <p className={styles.createAccountLink}>
-                    New here? <a href={"/register"}>Create an account.</a>
-                </p>
-            </Form>
+                    <p className={styles.createAccountLink}>
+                        New here? <a href={"/register"}>Create an account.</a>
+                    </p>
+                </Form>
             </div>
         );
     }

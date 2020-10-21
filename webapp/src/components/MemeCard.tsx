@@ -121,27 +121,28 @@ export class MemeCard extends Component<Props, State> {
                         </Card.Subtitle>
                     </Card.Header>
 
-                    <Card.Body>
-                        <Card.Img variant={"bottom"}
-                                  src={this.serverUrl + this.props.meme.imagePath}
-                                  alt={"Excellent meme"}>
-                        </Card.Img>
+                    <Card.Img variant={"top"}
+                              src={this.serverUrl + this.props.meme.imagePath}
+                              alt={"Excellent meme"}>
+                    </Card.Img>
 
-                        <Card.Text className={"text-muted"}>
+                    <Card.Body>
+                        <Card.Text className={"text-muted mb-2"}>
                             {this.props.meme.voteCount}
                             {this.props.meme.voteCount === 1 ? " point" : " points"} {" · "}
                             {this.props.meme.numComments}
                             {this.props.meme.numComments === 1 ? " comment" : " comments"}
                         </Card.Text>
 
-                        <ButtonGroup>
+                        <ButtonGroup className={styles.buttonGroup}>
                             {upvoteButton}
 
                             {downvoteButton}
 
                             {/* dont render comments button for the MemeCommentsPage */}
                             {this.props.showCommentsButton &&
-                            <Button variant={"outline-secondary"} onClick={this.goToComments}>
+                            <Button variant={"outline-secondary"}
+                                    onClick={this.goToComments}>
                                 <ModeCommentRoundedIcon/>
                             </Button>}
                         </ButtonGroup>
