@@ -3,31 +3,40 @@ import React from "react";
 
 export class VoteButtons {
 
+    /**
+     * Render the upvote and downvote buttons
+     * with the correct color depending on the current
+     * vote on the object (either meme or comment / reply)
+     * @param currVote
+     * @param upvoteButtonIcon
+     * @param downvoteButtonIcon
+     * @param upvoteFunc
+     * @param downvoteFunc
+     */
     public static createVoteButtons(
         currVote: number,
         upvoteButtonIcon: JSX.Element,
         downvoteButtonIcon: JSX.Element,
         upvoteFunc: () => void,
-        downvoteFunc: () => void):
-        {upvote: JSX.Element, downvote: JSX.Element} {
+        downvoteFunc: () => void): { upvote: JSX.Element, downvote: JSX.Element } {
 
         let upvoteButton: JSX.Element;
         let downvoteButton: JSX.Element;
 
-        // if comment is upvoted
+        // if object is upvoted
         if (currVote === 1) {
             upvoteButton =
-                <Button variant={"success"} onClick={upvoteFunc}>
+                <Button variant={"success"} onClick={upvoteFunc} size={"sm"}>
                     {upvoteButtonIcon}
                 </Button>;
 
             downvoteButton =
-                <Button variant={"outline-secondary"} onClick={downvoteFunc}>
+                <Button variant={"outline-secondary"} onClick={downvoteFunc} size={"sm"}>
                     {downvoteButtonIcon}
                 </Button>
         }
 
-        // if comment is downvoted
+        // if object is downvoted
         else if (currVote === -1) {
             upvoteButton =
                 <Button variant={"outline-secondary"} onClick={upvoteFunc}>
@@ -40,7 +49,7 @@ export class VoteButtons {
                 </Button>
         }
 
-        // if comment is not yet voted on
+        // if object is not yet voted on
         else {
             upvoteButton =
                 <Button variant={"outline-secondary"} onClick={upvoteFunc}>

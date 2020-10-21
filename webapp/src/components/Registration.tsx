@@ -4,8 +4,8 @@ import {AuthorizationService} from "../service/authorizationService";
 import {NewUser} from "../types";
 import {Redirect} from "react-router-dom";
 import styles from "../styles/Registration.css"
-import Card from "react-bootstrap/Card";
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
 
 interface State {
     username: string,
@@ -135,7 +135,7 @@ export class Registration extends Component<{}, State> {
 
         if (!Registration.isSecure(this.state.password)) {
             console.log("Password weak");
-            newErrors.password = "Password is too weak";
+            newErrors.password = "Password is too weak.";
             isValid = false;
         }
 
@@ -184,18 +184,16 @@ export class Registration extends Component<{}, State> {
 
                     if (data === "Username exists") {
                         newErrors.username = "Username already exists.";
-                    }
-                    else if (data === "Email exists") {
-                            newErrors.email = "Email already exists.";
-                    }
-                    else {
+                    } else if (data === "Email exists") {
+                        newErrors.email = "Email already exists.";
+                    } else {
                         newErrors.unexpected = "An error occurred on the server." +
                             "Please try again later.";
                         throw new Error(ans.statusText);
                     }
                     this.setState({errors: newErrors});
                 });
-            })
+            });
     }
 
     render() {
@@ -205,89 +203,82 @@ export class Registration extends Component<{}, State> {
         }
 
         return (
-            <div className={styles.registrationCard}>
-                <Card>
-                    <Card.Header as={"h5"} className={styles.registrationCardHeader}>
+            <div className={styles.body}>
+                <Form onSubmit={this.handleSubmit} className={styles.formRegistration}>
+                    <h3 className={styles.headline}>
                         Create your TUMemes account
-                    </Card.Header>
+                    </h3>
 
-                    <Card.Body className={styles.registrationCardFormText}>
-                        <form onSubmit={this.handleSubmit}>
+                    <Form.Group>
+                        <Form.Label htmlFor="inputUsername" srOnly>
+                            Username
+                        </Form.Label>
+                        <Form.Control type="username" id="inputUsername"
+                                      value={this.state.username}
+                                      onChange={this.handleUsernameChange}
+                                      placeholder="Username" required/>
+                        <p className={styles.errorMessage}>
+                            {this.state.errors["username"]}
+                        </p>
+                    </Form.Group>
 
-                            <Card.Text>
-                                <label htmlFor="username">
-                                    Username
-                                </label>
-                                <input type="username" className="form-control" id="username"
-                                       value={this.state.username}
-                                       onChange={this.handleUsernameChange}
-                                       placeholder="" required/>
-                                <span style={{color: "red"}}>
-                                    {this.state.errors["username"]}
-                                </span>
-                            </Card.Text>
+                    <Form.Group>
+                        <Form.Label htmlFor="inputEmail" srOnly>
+                            Email address
+                        </Form.Label>
+                        <Form.Control type="email" id="email"
+                                      value={this.state.email}
+                                      onChange={this.handleEmailChange}
+                                      placeholder="Email address" required/>
+                        <p className={styles.errorMessage}>
+                            {this.state.errors["email"]}
+                        </p>
+                    </Form.Group>
 
-                            <Card.Text>
-                                <label htmlFor="email">
-                                    Email address
-                                </label>
-                                <input type="email" className="form-control" id="email"
-                                       value={this.state.email}
-                                       onChange={this.handleEmailChange}
-                                       placeholder="" required/>
-                                <span style={{color: "red"}}>
-                                    {this.state.errors["email"]}
-                                </span>
-                            </Card.Text>
+                    <Form.Group>
+                        <Form.Label htmlFor="inputPassword" srOnly>
+                            Password
+                        </Form.Label>
+                        <Form.Control type="password" id="inputPassword"
+                                      value={this.state.password}
+                                      onChange={this.handlePasswordChange}
+                                      placeholder="Password" required/>
+                        <p className={styles.errorMessage}>
+                            {this.state.errors["password"]}
+                        </p>
 
-                            <Card.Text>
-                                <label htmlFor="password">
-                                    Password
-                                </label>
-                                <input type="password" className="form-control" id="password"
-                                       value={this.state.password}
-                                       onChange={this.handlePasswordChange}
-                                       placeholder="" required/>
-                                <span style={{color: "red"}}>
-                                    {this.state.errors["password"]}
-                                </span>
-                            </Card.Text>
-                            <Card.Text className={"text-muted"}>
-                                <small>
-                                Password needs to be at least 8 characters
-                                and contains one digit, one lowercase
-                                and one uppercase character.
-                                </small>
-                            </Card.Text>
+                        <Form.Text className={"text-muted"}>
+                            Password needs to be at least 8 characters
+                            and contains one digit, one lowercase
+                            and one uppercase character.
+                        </Form.Text>
+                    </Form.Group>
 
-                            <Card.Text>
-                                <label htmlFor="password">
-                                    Repeat Password
-                                </label>
-                                <input type="password" className="form-control" id="repeated_password"
-                                       value={this.state.repeatedPassword}
-                                       onChange={this.handleRepeatedPasswordChange}
-                                       placeholder="" required/>
-                                <span style={{color: "red"}}>
-                                    {this.state.errors["repeatedPassword"]}
-                                </span>
-                            </Card.Text>
+                    <Form.Group>
+                        <Form.Label htmlFor="inputPasswordAgain" srOnly>
+                            Confirm Password
+                        </Form.Label>
+                        <Form.Control type="password" id="inputPasswordAgain"
+                                      value={this.state.repeatedPassword}
+                                      onChange={this.handleRepeatedPasswordChange}
+                                      placeholder="Confirm password" required/>
+                        <p className={styles.errorMessage}>
+                            {this.state.errors["repeatedPassword"]}
+                        </p>
+                    </Form.Group>
 
-                            <Button type="submit" className={styles.registrationSubmitButton}>
-                               Create account
-                            </Button>
+                    <Button type="submit" className={styles.registrationSubmitButton}>
+                        Create account
+                    </Button>
 
-                        </form>
-                    </Card.Body>
-
-                    <span style={{color: "red"}}>
+                    <p className={styles.errorMessage}>
                         {this.state.errors["unexpected"]}
-                    </span>
+                    </p>
 
-                    <Card.Footer className={styles.registrationLogInLink}>
-                        Have an account? <a href={"/login"}>Sign in.</a>
-                    </Card.Footer>
-                </Card>
+                    <p className={styles.loginLink}>
+                        Already have an account? <a href={"/login"}>Sign in.</a>
+                    </p>
+                </Form>
             </div>
         );
     }

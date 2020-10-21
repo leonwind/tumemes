@@ -112,8 +112,10 @@ export class CommentCard extends Component<Props, State> {
     }
 
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
-        const upvoteButtonIcon: JSX.Element = <KeyboardArrowUp/>;
-        const downvoteButtonIcon: JSX.Element = <KeyboardArrowDown/>;
+        const upvoteButtonIcon: JSX.Element =
+            <KeyboardArrowUp className={styles.upvoteButton}/>;
+        const downvoteButtonIcon: JSX.Element =
+            <KeyboardArrowDown className={styles.downvoteButton}/>;
 
         return VoteButtons.createVoteButtons(
             this.state.currVote,
@@ -140,7 +142,10 @@ export class CommentCard extends Component<Props, State> {
                 <div className={styles.commentCard}>
                     <Card className={"mt-2"}>
                         <Card.Title className={"text-muted"}>
-                            {this.props.comment.author} {" · "} {this.timeDiff} ago
+                            {this.props.comment.author} {" · "}
+                            {this.props.comment.voteCount}
+                            {this.props.comment.voteCount === 1 ? " point" : " points"} {" · "}
+                            {this.timeDiff} ago
                         </Card.Title>
 
                         {this.props.comment.content}
@@ -166,7 +171,6 @@ export class CommentCard extends Component<Props, State> {
                         {upvoteButton}
                         {this.props.comment.voteCount}
                         {downvoteButton}
-
                     </Card>
                 </div>
                 {replyElements}

@@ -128,8 +128,10 @@ export class MemeCard extends Component<Props, State> {
                         </Card.Img>
 
                         <Card.Text className={"text-muted"}>
-                            {this.props.meme.voteCount} points {" · "}
-                            {this.props.meme.numComments} comments
+                            {this.props.meme.voteCount}
+                            {this.props.meme.voteCount === 1 ? " point" : " points"} {" · "}
+                            {this.props.meme.numComments}
+                            {this.props.meme.numComments === 1 ? " comment" : " comments"}
                         </Card.Text>
 
                         <ButtonGroup>

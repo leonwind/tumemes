@@ -5,6 +5,7 @@ import {Redirect} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import styles from "../styles/Login.css"
 import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
 
 interface State {
     username: string,
@@ -76,48 +77,41 @@ export class LoginPage extends Component<{}, State> {
         }
 
         return (
-            <div className={styles.loginCard}>
-                <Card>
-                    <form onSubmit={this.handleSubmit}>
-                        <Card.Header as={"h5"} className={styles.loginCardHeader}>
-                            Sign in to TUMemes
-                        </Card.Header>
+            <div className={styles.body}>
+            <Form onSubmit={this.handleSubmit} className={styles.formLogIn}>
 
-                        <Card.Body className={styles.loginCardFormText}>
-                            <Card.Text>
-                                <label htmlFor="username">
-                                    Username or email address
-                                </label>
-                                <input type="username" className="form-control" id="username"
-                                       value={this.state.username}
-                                       onChange={this.handleUsernameChange}
-                                       placeholder="" required/>
-                            </Card.Text>
+                <h3 className={styles.headline}>
+                    Sign in to TUMemes
+                </h3>
 
-                            <Card.Text>
-                                <label htmlFor="password">
-                                    Password
-                                </label>
-                                <input type="password" className="form-control" id="password"
-                                       value={this.state.password}
-                                       onChange={this.handlePasswordChange}
-                                       placeholder="" required/>
-                            </Card.Text>
+                <Form.Label htmlFor={"inputUsername"} srOnly>Username</Form.Label>
+                <Form.Control className={styles.formControlInput}
+                              type={"username"} id={"inputUsername"}
+                              value={this.state.username}
+                              onChange={this.handleUsernameChange}
+                              placeholder={"Email or username"}
+                              required/>
 
-                            <Card.Text className={styles.loginErrorMessage}>
-                                {this.state.error}
-                            </Card.Text>
+                <Form.Label htmlFor={"inputPassword"} srOnly>Password</Form.Label>
+                <Form.Control className={styles.formControlInput}
+                              type={"password"} id={"inputPassword"}
+                              value={this.state.password}
+                              onChange={this.handlePasswordChange}
+                              placeholder={"Password"}
+                              required/>
 
-                            <Button type="submit" className={styles.loginSubmitButton}>
-                                Sign in
-                            </Button>
-                        </Card.Body>
-                    </form>
+                <p className={styles.errorMessage}>
+                    {this.state.error}
+                </p>
 
-                    <Card.Footer className={styles.createAccountLink}>
-                        New here? <a href={"/register"}>Create an account.</a>
-                    </Card.Footer>
-                </Card>
+                <Button type="submit" className={styles.submitButton}>
+                    Sign in
+                </Button>
+
+                <p className={styles.createAccountLink}>
+                    New here? <a href={"/register"}>Create an account.</a>
+                </p>
+            </Form>
             </div>
         );
     }

@@ -14,6 +14,7 @@ export class HumanReadableTimeDiff {
     /**
      * Calculate human readable time difference between a past event
      * (timeHappened) and the current time
+     * @param timeHappened: timestamp when the event happened (e.g uploaded meme)
      */
     public static calculateTimeDiff(timeHappened: number): string {
        const seconds: number = Math.floor(

@@ -11,6 +11,14 @@
 
 }
 
+.upvoteButton {
+    text-align: center;
+}
+
+.downvoteButton {
+    text-align: center;
+}
+
 .loadRepliesButton {
     background: none !important;
     border: none;
