@@ -7,9 +7,10 @@ import {MemeCard} from "./MemeCard";
 import {NavigationBar} from "./NavigationBar";
 import {CommentService} from "../service/commentService";
 import {CommentCard} from "./CommentCard";
-import Card from "react-bootstrap/Card";
 import styles from "../styles/Comment.css"
 import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Dropdown from "react-bootstrap/Dropdown";
 
 interface Props {
     memeID: string
@@ -19,7 +20,9 @@ interface State {
     meme: Meme | null,
     comments: Comment[],
     redirect: boolean,
-    newCommentContent: string
+    newCommentContent: string,
+    sortByString: string,
+    sortByNew: boolean
 }
 
 export class MemeCommentsPage extends Component<RouteComponentProps<Props>, State> {
@@ -32,13 +35,16 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
             meme: null,
             comments: [],
             redirect: false,
-            newCommentContent: ""
-        }
+            newCommentContent: "",
+            sortByString: "new",
+            sortByNew: true
+        };
 
         this.memeID = this.props.match.params.memeID;
 
         this.handleNewCommentChange = this.handleNewCommentChange.bind(this);
         this.postComment = this.postComment.bind(this);
+        this.handleSelect = this.handleSelect.bind(this);
     }
 
     componentDidMount() {
@@ -64,36 +70,58 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
     }
 
     private loadComments() {
-        CommentService.getCommentsFromMeme(this.memeID)
-            .then((ans: Response) => {
-                if (ans.ok) {
-                    const commentPromise: Promise<Comment[]> = ans.json();
-                    commentPromise.then((comments: Comment[]) => {
-                        this.setState({comments});
-                    })
-                    return;
-                }
+        let promiseResponse: Promise<Response>;
+        if (this.state.sortByNew) {
+            console.log("SORT BY NEW");
+            promiseResponse = CommentService.getCommentsFromMemeByNew(this.memeID);
+        } else {
+            console.log("SORT BY POINTS");
+            promiseResponse = CommentService.getCommentsFromMemeByPoints(this.memeID);
+        }
 
-                // if unauthorized redirect to login
-                if (ans.status === 401) {
-                    this.setState({redirect: true});
-                }
+        promiseResponse.then((ans: Response) => {
+            if (ans.ok) {
+                const commentPromise: Promise<Comment[]> = ans.json();
+                commentPromise.then((comments: Comment[]) => {
+                    this.setState({comments});
+                })
+                return;
+            }
 
-                throw new Error(ans.statusText);
-            });
+            // if unauthorized redirect to login
+            if (ans.status === 401) {
+                this.setState({redirect: true});
+            }
+
+            throw new Error(ans.statusText);
+        });
     }
 
     private handleNewCommentChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({newCommentContent: event.target.value});
     }
 
+    private handleSelect(filter: string) {
+        if (filter === "new") {
+            this.setState({sortByString: "new"});
+            this.setState({sortByNew: true});
+        } else {
+            if (filter === "points") {
+                this.setState({sortByString: "points"});
+                this.setState({sortByNew: false});
+            }
+        }
+
+        this.loadComments();
+    }
+
     private postComment(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
         const newComment: NewComment = {
-           parentID: "",
-           memeID: this.memeID,
-           content: this.state.newCommentContent
+            parentID: "",
+            memeID: this.memeID,
+            content: this.state.newCommentContent
         };
 
         CommentService.postComment(newComment).then(() => {
@@ -120,27 +148,49 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
             <CommentCard key={comment.commentID} comment={comment}/>);
 
         return (
-            <div>
+            <div className={styles.body}>
                 <NavigationBar/>
 
-                {memeElement}
+                <div className={styles.content}>
+                    {memeElement}
 
-                <div className={styles.commentCard}>
-                    <Card className={"mt-3 mb-3"}>
-                        <form onSubmit={this.postComment}>
-                            <input type={"textarea"}
-                                   className={styles.writeCommentField}
-                                   value={this.state.newCommentContent}
-                                   onChange={this.handleNewCommentChange}
-                                   placeholder={"Write your comment..."}/>
-                            <Button type={"submit"}>
+                    <div>
+                        <Form onSubmit={this.postComment}>
+                            <Form.Control as={"textarea"} rows={3}
+                                          className={"mt-3"}
+                                          value={this.state.newCommentContent}
+                                          onChange={this.handleNewCommentChange}
+                                          placeholder={"Add a comment..."}/>
+
+                            <Button type={"submit"} className={"mt-2 float-right"}>
                                 Post
                             </Button>
-                        </form>
-                    </Card>
-                </div>
+                        </Form>
+                    </div>
 
-                {allComments}
+                    <div className={styles.space}/>
+
+                    <Dropdown className={"mt-4 float-right"}>
+                        <Dropdown.Toggle className={styles.sortByButton}
+                                         variant={"outline-primary"}
+                                         id={"dropdown-menu-align-right"}>
+                            SORT BY {this.state.sortByString.toUpperCase()}
+                        </Dropdown.Toggle>
+
+                        <Dropdown.Menu>
+                            <Dropdown.Item onSelect={() => this.handleSelect("new")}>
+                                NEW
+                            </Dropdown.Item>
+                            <Dropdown.Item onSelect={() => this.handleSelect("points")}>
+                                POINTS
+                            </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+
+                    <div className={styles.space}/>
+
+                    {allComments}
+                </div>
             </div>
         );
     }

@@ -139,7 +139,7 @@ export class CommentCard extends Component<Props, State> {
 
         return (
             <div>
-                <div className={styles.commentCard}>
+                <div>
                     <Card className={"mt-2"}>
                         <Card.Title className={"text-muted"}>
                             {this.props.comment.author} {" · "}

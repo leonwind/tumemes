@@ -61,8 +61,24 @@ public class CommentResource implements CommentService {
   @GET
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
-  public List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID) {
-    return commentDAO.getCommentsFromMemeByDate(memeID, user.getName());
+  public List<Comment> getCommentsFromMeme(@Auth User user,
+                                           @PathParam("memeID") String memeID,
+                                           @QueryParam("sortBy") String sortBy) {
+    String username = user.getName();
+
+    if (sortBy == null) {
+      return commentDAO.getCommentsFromMemeByDate(memeID, username);
+    }
+
+    if (sortBy.equals("votes")) {
+      System.out.println("GET BY VOTES");
+
+      List<Comment> ans = commentDAO.getCommentsFromMemeByVotes(memeID, username);
+      System.out.println(ans);
+      return ans;
+    }
+
+    return commentDAO.getCommentsFromMemeByDate(memeID, username);
   }
 
   @Override
@@ -71,6 +87,6 @@ public class CommentResource implements CommentService {
   @Produces(MediaType.APPLICATION_JSON)
   public List<Comment> getReplies(@Auth User user,
                                   @PathParam("commentID") String commentID) {
-    return commentDAO.getAllRepliesByDate(commentID, user.getName());
+    return commentDAO.getAllReplies(commentID, user.getName());
   }
 }

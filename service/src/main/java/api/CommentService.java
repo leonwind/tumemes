@@ -21,7 +21,9 @@ public interface CommentService {
   @GET
   @Path("/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
-  List<Comment> getCommentsFromMeme(@Auth User user, @PathParam("memeID") String memeID);
+  List<Comment> getCommentsFromMeme(@Auth User user,
+                                    @PathParam("memeID") String memeID,
+                                    @QueryParam("sortBy") String sortBy);
 
   @GET
   @Path("/replies/{commentID}")

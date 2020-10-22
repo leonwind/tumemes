@@ -88,28 +88,9 @@ public interface CommentDAO {
           + "GROUP BY commentID "
           + ") v on v.commentID = c.commentID "
           + "WHERE parentID = :parentCommentID "
-          + "ORDER BY voteCount DESC, created DESC")
-  @RegisterRowMapper(ReplyMapper.class)
-  List<Comment> getAllRepliesByVotes(
-      @Bind("parentCommentID") String parentCommentID,
-      @Bind("currUsername") String username);
-
-  @SqlQuery(
-      "SELECT c.*, "
-          + "COALESCE(v.voteCount, 0) as voteCount, "
-          + "COALESCE(v.userVote, 0) as userVote "
-          + "FROM comments c "
-          + "LEFT JOIN ( "
-          + "SELECT commentID, "
-          + "SUM(vote) as voteCount,"
-          + "SUM(vote) FILTER (WHERE username = :currUsername) as userVote "
-          + "FROM commentvotes "
-          + "GROUP BY commentID "
-          + ") v on v.commentID = c.commentID "
-          + "WHERE parentID = :parentCommentID "
           + "ORDER BY created DESC")
   @RegisterRowMapper(ReplyMapper.class)
-  List<Comment> getAllRepliesByDate(
+  List<Comment> getAllReplies(
       @Bind("parentCommentID") String parentCommentID,
       @Bind("currUsername") String username);
 }

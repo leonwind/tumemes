@@ -6,7 +6,7 @@ import {Redirect} from "react-router-dom";
 import styles from "../styles/Registration.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import logo from "../logo.svg";
+import logo from "../../assets/logo.svg";
 
 interface State {
     username: string,

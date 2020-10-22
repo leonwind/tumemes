@@ -50,6 +50,7 @@ module.exports = {
                         }
                     }]
             },
+            // rule for pictures
             {
                 test: /\.(png|jp(e*)g|svg|gif)$/,
                 use: [
@@ -66,7 +67,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             template: PATHS.htmlEntry,
-            favicon: "./src/favicons/favicon.ico"
+            favicon: "./assets/favicons/favicon.ico"
         }),
     ],
     devServer: {

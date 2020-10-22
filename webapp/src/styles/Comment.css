@@ -1,14 +1,25 @@
-.commentCard {
-    width: 40%;
-    margin: auto;
+.body {
+    height: 100%;
+    background-color: #f5f5f5;
 }
 
-.writeCommentField {
+.content {
     width: 100%;
+    max-width: 800px;
+    margin: auto;
+    border: none;
 }
 
-.postCommentButton {
+.commentCard {
+}
 
+.space {
+    clear: both;
+}
+
+.sortByButton {
+    font-weight: bold;
+    border: none;
 }
 
 .upvoteButton {

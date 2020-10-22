@@ -4,7 +4,7 @@ import {NewComment} from "../types";
 
 export class CommentService {
 
-   static async postComment(newComment: NewComment) {
+    static async postComment(newComment: NewComment) {
         const data: string = JSON.stringify({
             "parentID": newComment.parentID,
             "memeID": newComment.memeID,
@@ -15,14 +15,21 @@ export class CommentService {
             method: "POST",
             headers: JSON_AUTH_HEADER,
             body: data
-       });
-   }
+        });
+    }
 
-    static async getCommentsFromMeme(memeID: string): Promise<Response> {
+    static async getCommentsFromMemeByNew(memeID: string): Promise<Response> {
         return await Requests.sendRequest("comments/" + memeID, {
             method: "GET",
             headers: AUTH_HEADER
         }, false);
+    }
+
+    static async getCommentsFromMemeByPoints(memeID: string): Promise<Response> {
+        return await Requests.sendRequest("comments/" + memeID + "?sortBy=votes", {
+                method: "GET",
+                headers: AUTH_HEADER
+            }, false);
     }
 
     static async getRepliesOfComment(commentID: string): Promise<Response> {
