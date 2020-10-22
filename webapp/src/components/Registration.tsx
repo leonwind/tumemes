@@ -6,6 +6,7 @@ import {Redirect} from "react-router-dom";
 import styles from "../styles/Registration.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import logo from "../logo.svg";
 
 interface State {
     username: string,
@@ -212,6 +213,9 @@ export class Registration extends Component<{}, State> {
         return (
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit} className={styles.formRegistration}>
+
+                    <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
+
                     <h3 className={styles.headline}>
                         Create your TUMemes account
                     </h3>

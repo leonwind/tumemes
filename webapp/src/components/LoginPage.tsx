@@ -5,6 +5,7 @@ import {Redirect} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import styles from "../styles/Login.css"
 import Form from "react-bootstrap/Form";
+import logo from "../logo.svg";
 
 interface State {
     username: string,
@@ -87,6 +88,8 @@ export class LoginPage extends Component<{}, State> {
         return (
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit} className={styles.formLogIn}>
+
+                    <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
 
                     <h3 className={styles.headline}>
                         Sign in to TUMemes
