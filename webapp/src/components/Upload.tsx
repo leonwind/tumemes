@@ -2,8 +2,6 @@ import React, {Component} from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import {MemeService} from "../service/memeService";
 import Form from "react-bootstrap/Form";
-import Col from "react-bootstrap/Col";
-import {Row} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 interface State {
