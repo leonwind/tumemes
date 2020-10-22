@@ -5,16 +5,25 @@
     max-height: 80px;
     top: 0;
     z-index: 1;
-    background-color: rgb(0, 101, 189);
+    background-color: rgb(0, 101, 189) !important;
 }
 
 .navBarBrand {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 2rem;
     color: white !important;
 }
 
 .navBarButton {
     background-color: white;
+    color: rgb(0, 101, 189);
+}
+
+.navBarButton:hover {
+    background-color: rgb(0, 101, 189);
+}
+
+.modalHeadline {
+    font-weight: bold;
     color: rgb(0, 101, 189);
 }

@@ -26,12 +26,16 @@ export class VoteButtons {
         // if object is upvoted
         if (currVote === 1) {
             upvoteButton =
-                <Button variant={"success"} onClick={upvoteFunc} size={"sm"}>
+                <Button variant={"success"}
+                        onClick={upvoteFunc}
+                        size={"sm"}>
                     {upvoteButtonIcon}
                 </Button>;
 
             downvoteButton =
-                <Button variant={"outline-secondary"} onClick={downvoteFunc} size={"sm"}>
+                <Button variant={"outline-secondary"}
+                        onClick={downvoteFunc}
+                        size={"sm"}>
                     {downvoteButtonIcon}
                 </Button>
         }
@@ -39,12 +43,16 @@ export class VoteButtons {
         // if object is downvoted
         else if (currVote === -1) {
             upvoteButton =
-                <Button variant={"outline-secondary"} onClick={upvoteFunc}>
+                <Button variant={"outline-secondary"}
+                        onClick={upvoteFunc}
+                        size={"sm"}>
                     {upvoteButtonIcon}
                 </Button>;
 
             downvoteButton =
-                <Button variant={"danger"} onClick={downvoteFunc}>
+                <Button variant={"danger"}
+                        onClick={downvoteFunc}
+                        size={"sm"}>
                     {downvoteButtonIcon}
                 </Button>
         }
@@ -52,12 +60,16 @@ export class VoteButtons {
         // if object is not yet voted on
         else {
             upvoteButton =
-                <Button variant={"outline-secondary"} onClick={upvoteFunc}>
+                <Button variant={"outline-secondary"}
+                        onClick={upvoteFunc}
+                        size={"sm"}>
                     {upvoteButtonIcon}
                 </Button>;
 
             downvoteButton =
-                <Button variant={"outline-secondary"} onClick={downvoteFunc}>
+                <Button variant={"outline-secondary"}
+                        onClick={downvoteFunc}
+                        size={"sm"}>
                     {downvoteButtonIcon}
                 </Button>
         }
