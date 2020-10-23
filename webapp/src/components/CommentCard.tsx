@@ -6,10 +6,11 @@ import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {CommentService} from "../service/commentService";
 import {ReplyCard} from "./ReplyCard"
 import Button from "react-bootstrap/Button";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@material-ui/icons";
+import {KeyboardArrowDown, KeyboardArrowUp, Send} from "@material-ui/icons";
 import {VoteService} from "../service/voteService";
 import {VoteButtons} from "./VoteButtons";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import Form from "react-bootstrap/Form";
 
 
 interface Props {
@@ -39,6 +40,7 @@ export class CommentCard extends Component<Props, State> {
 
         this.timeDiff = HumanReadableTimeDiff.calculateTimeDiff(this.props.comment.created);
 
+        this.loadRepliesButton = this.loadRepliesButton.bind(this);
         this.loadReplies = this.loadReplies.bind(this);
         this.handleNewReplyChange = this.handleNewReplyChange.bind(this);
         this.upvote = this.upvote.bind(this);
@@ -46,7 +48,7 @@ export class CommentCard extends Component<Props, State> {
         this.postReply = this.postReply.bind(this);
     }
 
-    private loadReplies() {
+    private loadRepliesButton() {
         if (this.state.renderReplies) {
             this.setState({
                 renderReplies: false,
@@ -54,7 +56,10 @@ export class CommentCard extends Component<Props, State> {
             });
             return;
         }
+        this.loadReplies();
+    }
 
+    private loadReplies() {
         CommentService.getRepliesOfComment(this.props.comment.commentID)
             .then((ans: Response) => {
                 if (ans.ok) {
@@ -68,6 +73,7 @@ export class CommentCard extends Component<Props, State> {
                 }
             });
     }
+
 
     private handleNewReplyChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({newReplyContent: event.target.value});
@@ -163,42 +169,66 @@ export class CommentCard extends Component<Props, State> {
                     </Card.Text>
 
                     <Card.Footer>
-                        {/*
-                        <form onSubmit={this.postReply}>
-                            <input type={"textarea"}
-                                   className={styles.writeCommentField}
-                                   value={this.state.newReplyContent}
-                                   onChange={this.handleNewReplyChange}
-                                   placeholder={"Add a reply..."}/>
-                            <Button type={"submit"}>
-                                Post
-                            </Button>
-                        </form>*/}
-
                         <ButtonGroup>
-                           {upvoteButton}
+                            {upvoteButton}
                             {downvoteButton}
                         </ButtonGroup>
 
                         {this.props.comment.numReplies > 0
-                         && !this.state.renderReplies &&
+                        && !this.state.renderReplies &&
                         <Button variant={"outline-primary"}
                                 className={"float-right"}
-                                onClick={this.loadReplies}>
+                                onClick={this.loadRepliesButton}>
                             Load {this.props.comment.numReplies}
                             {this.props.comment.numReplies === 1 ? " reply" : " replies"}
                         </Button>}
 
-                        {this.state.renderReplies &&
+                        {this.state.renderReplies
+                        && this.props.comment.numReplies > 0 &&
                         <Button variant={"outline-primary"}
-                                 className={"float-right"}
-                                 onClick={this.loadReplies}>
+                                className={"float-right"}
+                                onClick={this.loadRepliesButton}>
                             Hide
                             {this.props.comment.numReplies === 1 ? " reply" : " replies"}
                         </Button>}
 
+                        {this.props.comment.numReplies === 0
+                        && !this.state.renderReplies &&
+                        <Button variant={"outline-primary"}
+                                className={"float-right"}
+                                onClick={() => {this.setState({renderReplies: true})}}>
+                           Add reply
+                        </Button>}
+
+                        {this.props.comment.numReplies === 0
+                        && this.state.renderReplies &&
+                        <Button variant={"outline-secondary"}
+                                className={"float-right"}
+                                onClick={() => {this.setState({renderReplies: false})}}>
+                            Cancel
+                        </Button>}
+
                     </Card.Footer>
                 </Card>
+
+                {this.state.renderReplies &&
+                <div className={styles.addReplyDiv}>
+                    <Form onSubmit={this.postReply}>
+                        <Form.Control as={"textarea"} rows={3}
+                                      className={styles.replyTextArea}
+                                      value={this.state.newReplyContent}
+                                      onChange={this.handleNewReplyChange}
+                                      placeholder={"Add a reply..."}/>
+
+                        <Button type={"submit"}
+                                variant={"outline-primary"}
+                                className={styles.submitReplyButton}>
+                            <Send className={styles.sendReplyIcon}/>
+                        </Button>
+                    </Form>
+                </div>}
+
+                <div className={styles.space}/>
 
                 {replyElements}
 

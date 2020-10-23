@@ -10,6 +10,7 @@ export class VoteButtons {
      * @param currVote
      * @param upvoteButtonIcon
      * @param downvoteButtonIcon
+     * @param stylesheet
      * @param upvoteFunc
      * @param downvoteFunc
      */
@@ -18,7 +19,8 @@ export class VoteButtons {
         upvoteButtonIcon: JSX.Element,
         downvoteButtonIcon: JSX.Element,
         upvoteFunc: () => void,
-        downvoteFunc: () => void): { upvote: JSX.Element, downvote: JSX.Element } {
+        downvoteFunc: () => void,
+        stylesheet: string = ""): { upvote: JSX.Element, downvote: JSX.Element } {
 
         let upvoteButton: JSX.Element;
         let downvoteButton: JSX.Element;
@@ -27,6 +29,7 @@ export class VoteButtons {
         if (currVote === 1) {
             upvoteButton =
                 <Button variant={"success"}
+                        className={stylesheet}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -34,6 +37,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"outline-secondary"}
+                        className={stylesheet}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}
@@ -44,6 +48,7 @@ export class VoteButtons {
         else if (currVote === -1) {
             upvoteButton =
                 <Button variant={"outline-secondary"}
+                        className={stylesheet}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -51,6 +56,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"danger"}
+                        className={stylesheet}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}
@@ -61,6 +67,7 @@ export class VoteButtons {
         else {
             upvoteButton =
                 <Button variant={"outline-secondary"}
+                        className={stylesheet}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -68,6 +75,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"outline-secondary"}
+                        className={stylesheet}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}

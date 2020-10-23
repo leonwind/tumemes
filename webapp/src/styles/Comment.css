@@ -10,9 +10,6 @@
     border: none;
 }
 
-.commentCard {
-}
-
 .space {
     clear: both;
 }
@@ -30,27 +27,45 @@
     text-align: center;
 }
 
-.loadRepliesButton {
-    background: none !important;
-    border: none;
-    padding: 0 !important;
-    font-family: arial, sans-serif;
-    color: #069;
-    cursor: pointer;
-    float: left;
+.authorName {
+    font-weight: bold
 }
 
-.loadRepliesButton:hover {
-    text-decoration: underline;
+.addReplyDiv {
+    width: 90%;
+    margin-left: 10%;
+    display: inline-block;
+    position: relative;
+}
+
+.replyTextArea {
+    display: block;
+}
+
+.submitReplyButton {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+}
+
+.sendReplyIcon {
+}
+
+.replyParent {
+    display: flex;
+}
+
+.replyVoteButtonsDiv {
+    width: 10%;
+}
+
+.replyVoteButtons {
+    border: none;
+    display: block;
 }
 
 .replyCard {
-    width: 38%;
-    margin: 0 auto;
-    position: relative;
-    left: 1%;
-}
-
-.authorName {
-    font-weight: bold
+    flex: 1;
 }
