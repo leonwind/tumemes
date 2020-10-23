@@ -55,27 +55,23 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                     memePromise.then((meme: Meme) => {
                         this.setState({meme})
                     })
-                    return;
+                } else {
+                    if (ans.status === 401) {
+                        this.setState({redirect: true});
+                        return;
+                    } else {
+                        throw new Error(ans.statusText);
+                    }
                 }
-
-                if (ans.status === 401) {
-                    this.setState({redirect: true});
-                    return;
-                }
-
-                throw new Error(ans.statusText);
+                this.loadComments();
             });
-
-        this.loadComments();
     }
 
     private loadComments() {
         let promiseResponse: Promise<Response>;
         if (this.state.sortByNew) {
-            console.log("SORT BY NEW");
             promiseResponse = CommentService.getCommentsFromMemeByNew(this.memeID);
         } else {
-            console.log("SORT BY POINTS");
             promiseResponse = CommentService.getCommentsFromMemeByPoints(this.memeID);
         }
 
@@ -103,16 +99,19 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
 
     private handleSelect(filter: string) {
         if (filter === "new") {
-            this.setState({sortByString: "new"});
-            this.setState({sortByNew: true});
+            this.setState({
+                sortByString: "new",
+                sortByNew: true
+            }, () => this.loadComments());
         } else {
             if (filter === "points") {
-                this.setState({sortByString: "points"});
-                this.setState({sortByNew: false});
+                this.setState({
+                    sortByString: "points",
+                    sortByNew: false
+                }, () => this.loadComments());
             }
         }
 
-        this.loadComments();
     }
 
     private postComment(event: FormEvent<HTMLFormElement>) {
@@ -154,20 +153,19 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                 <div className={styles.content}>
                     {memeElement}
 
-                    <div>
-                        <Form onSubmit={this.postComment}>
-                            <Form.Control as={"textarea"} rows={3}
-                                          className={"mt-3"}
-                                          value={this.state.newCommentContent}
-                                          onChange={this.handleNewCommentChange}
-                                          placeholder={"Add a comment..."}/>
+                    <Form onSubmit={this.postComment}>
+                        <Form.Control as={"textarea"} rows={3}
+                                      className={"mt-3"}
+                                      value={this.state.newCommentContent}
+                                      onChange={this.handleNewCommentChange}
+                                      placeholder={"Add a comment..."}/>
 
-                            <Button type={"submit"} className={"mt-2 float-right"}>
-                                Post
-                            </Button>
-                        </Form>
-                    </div>
+                        <Button type={"submit"} className={"mt-2 float-right"}>
+                            Post
+                        </Button>
+                    </Form>
 
+                    {/* Align the floating add comment field with the sort by button */}
                     <div className={styles.space}/>
 
                     <Dropdown className={"mt-4 float-right"}>
@@ -187,6 +185,7 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                         </Dropdown.Menu>
                     </Dropdown>
 
+                    {/* Align the floating add comment field with the comments */}
                     <div className={styles.space}/>
 
                     {allComments}

@@ -9,6 +9,7 @@ import Button from "react-bootstrap/Button";
 import {KeyboardArrowDown, KeyboardArrowUp} from "@material-ui/icons";
 import {VoteService} from "../service/voteService";
 import {VoteButtons} from "./VoteButtons";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 
 
 interface Props {
@@ -46,13 +47,23 @@ export class CommentCard extends Component<Props, State> {
     }
 
     private loadReplies() {
+        if (this.state.renderReplies) {
+            this.setState({
+                renderReplies: false,
+                replies: []
+            });
+            return;
+        }
+
         CommentService.getRepliesOfComment(this.props.comment.commentID)
             .then((ans: Response) => {
                 if (ans.ok) {
                     const repliesPromise: Promise<Comment[]> = ans.json();
-                    repliesPromise.then((replies: Comment[]) => {
-                        this.setState({replies});
-                        this.setState({renderReplies: true});
+                    repliesPromise.then((newReplies: Comment[]) => {
+                        this.setState({
+                            renderReplies: true,
+                            replies: newReplies
+                        });
                     })
                 }
             });
@@ -139,24 +150,20 @@ export class CommentCard extends Component<Props, State> {
 
         return (
             <div>
-                <div>
-                    <Card className={"mt-2"}>
-                        <Card.Title className={"text-muted"}>
-                            {this.props.comment.author} {" · "}
-                            {this.props.comment.voteCount}
-                            {this.props.comment.voteCount === 1 ? " point" : " points"} {" · "}
-                            {this.timeDiff} ago
-                        </Card.Title>
+                <Card className={"mb-3"}>
+                    <Card.Text className={"text-muted ml-2 mt-1"}>
+                        {this.props.comment.author} {" · "}
+                        {this.props.comment.voteCount}
+                        {this.props.comment.voteCount === 1 ? " point" : " points"} {" · "}
+                        {this.timeDiff} ago
+                    </Card.Text>
 
+                    <Card.Text className={"ml-2"}>
                         {this.props.comment.content}
+                    </Card.Text>
 
-                        {this.props.comment.numReplies > 0 &&
-                        <button className={styles.loadRepliesButton}
-                                onClick={this.loadReplies}>
-                            Load {this.props.comment.numReplies}
-                            {this.props.comment.numReplies === 1 ? " reply" : " replies"}
-                        </button>}
-
+                    <Card.Footer>
+                        {/*
                         <form onSubmit={this.postReply}>
                             <input type={"textarea"}
                                    className={styles.writeCommentField}
@@ -166,14 +173,35 @@ export class CommentCard extends Component<Props, State> {
                             <Button type={"submit"}>
                                 Post
                             </Button>
-                        </form>
+                        </form>*/}
 
-                        {upvoteButton}
-                        {this.props.comment.voteCount}
-                        {downvoteButton}
-                    </Card>
-                </div>
+                        <ButtonGroup>
+                           {upvoteButton}
+                            {downvoteButton}
+                        </ButtonGroup>
+
+                        {this.props.comment.numReplies > 0
+                         && !this.state.renderReplies &&
+                        <Button variant={"outline-primary"}
+                                className={"float-right"}
+                                onClick={this.loadReplies}>
+                            Load {this.props.comment.numReplies}
+                            {this.props.comment.numReplies === 1 ? " reply" : " replies"}
+                        </Button>}
+
+                        {this.state.renderReplies &&
+                        <Button variant={"outline-primary"}
+                                 className={"float-right"}
+                                 onClick={this.loadReplies}>
+                            Hide
+                            {this.props.comment.numReplies === 1 ? " reply" : " replies"}
+                        </Button>}
+
+                    </Card.Footer>
+                </Card>
+
                 {replyElements}
+
             </div>
         );
     }
