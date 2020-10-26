@@ -10,6 +10,38 @@
     border: none;
 }
 
+.upvote {
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+    /* bootstrap success color */
+    color: #28a745;
+}
+
+.noVote {
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+    /* bootstrap secondary color */
+    color: #868e96;
+}
+
+.downvote {
+    font-weight: bold;
+    border: none;
+    background-color: transparent;
+    /* bootstrap danger color */
+    color: #dc3545;
+}
+
+.upvoteIcon {
+    transform: rotate(270deg);
+}
+
+.downvoteIcon {
+    transform: rotate(90deg);
+}
+
 .space {
     clear: both;
 }
@@ -19,21 +51,9 @@
     border: none;
 }
 
-.upvoteButton {
-    text-align: center;
-}
-
-.downvoteButton {
-    text-align: center;
-}
-
-.authorName {
-    font-weight: bold
-}
-
 .addReplyDiv {
-    width: 90%;
-    margin-left: 10%;
+    width: 95%;
+    margin-left: 5%;
     display: inline-block;
     position: relative;
 }
@@ -50,20 +70,14 @@
     border: none;
 }
 
-.sendReplyIcon {
-}
-
 .replyParent {
     display: flex;
 }
 
 .replyVoteButtonsDiv {
-    width: 10%;
-}
-
-.replyVoteButtons {
-    border: none;
-    display: block;
+    display: inline-block !important;
+    width: 5%;
+    min-width: 35px;
 }
 
 .replyCard {

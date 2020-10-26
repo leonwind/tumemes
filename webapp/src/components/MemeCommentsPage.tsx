@@ -159,9 +159,10 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                                       className={"mt-3"}
                                       value={this.state.newCommentContent}
                                       onChange={this.handleNewCommentChange}
-                                      placeholder={"Add a comment..."}/>
+                                      placeholder={"Add a comment..."}
+                                      required/>
 
-                        <Button type={"submit"} className={"mt-2 float-right"}>
+                        <Button type={"submit"} className={"mt-2 float-right mb-3"}>
                             Post
                         </Button>
                     </Form>
@@ -169,7 +170,9 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                     {/* Align the floating add comment field with the sort by button */}
                     <div className={styles.space}/>
 
-                    <Dropdown className={"mt-4 float-right"}>
+                    {/* Only render if at least one comment exists */}
+                    {this.state.comments.length > 0 &&
+                    <Dropdown className={"mt-4 mb-1 float-right"}>
                         <Dropdown.Toggle className={styles.sortByButton}
                                          variant={"outline-primary"}
                                          id={"dropdown-menu-align-right"}>
@@ -184,7 +187,7 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                                 POINTS
                             </Dropdown.Item>
                         </Dropdown.Menu>
-                    </Dropdown>
+                    </Dropdown>}
 
                     {/* Align the floating add comment field with the comments */}
                     <div className={styles.space}/>

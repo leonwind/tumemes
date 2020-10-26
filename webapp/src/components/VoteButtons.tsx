@@ -7,12 +7,6 @@ export class VoteButtons {
      * Render the upvote and downvote buttons
      * with the correct color depending on the current
      * vote on the object (either meme or comment / reply)
-     * @param currVote
-     * @param upvoteButtonIcon
-     * @param downvoteButtonIcon
-     * @param stylesheet
-     * @param upvoteFunc
-     * @param downvoteFunc
      */
     public static createVoteButtons(
         currVote: number,
@@ -20,7 +14,9 @@ export class VoteButtons {
         downvoteButtonIcon: JSX.Element,
         upvoteFunc: () => void,
         downvoteFunc: () => void,
-        stylesheet: string = ""): { upvote: JSX.Element, downvote: JSX.Element } {
+        stylesUpvote: string = "",
+        stylesNoVote: string = "",
+        stylesDownvote: string = ""): { upvote: JSX.Element, downvote: JSX.Element } {
 
         let upvoteButton: JSX.Element;
         let downvoteButton: JSX.Element;
@@ -29,7 +25,7 @@ export class VoteButtons {
         if (currVote === 1) {
             upvoteButton =
                 <Button variant={"success"}
-                        className={stylesheet}
+                        className={stylesUpvote}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -37,7 +33,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"outline-secondary"}
-                        className={stylesheet}
+                        className={stylesNoVote}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}
@@ -48,7 +44,7 @@ export class VoteButtons {
         else if (currVote === -1) {
             upvoteButton =
                 <Button variant={"outline-secondary"}
-                        className={stylesheet}
+                        className={stylesNoVote}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -56,7 +52,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"danger"}
-                        className={stylesheet}
+                        className={stylesDownvote}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}
@@ -67,7 +63,7 @@ export class VoteButtons {
         else {
             upvoteButton =
                 <Button variant={"outline-secondary"}
-                        className={stylesheet}
+                        className={stylesNoVote}
                         onClick={upvoteFunc}
                         size={"sm"}>
                     {upvoteButtonIcon}
@@ -75,7 +71,7 @@ export class VoteButtons {
 
             downvoteButton =
                 <Button variant={"outline-secondary"}
-                        className={stylesheet}
+                        className={stylesNoVote}
                         onClick={downvoteFunc}
                         size={"sm"}>
                     {downvoteButtonIcon}

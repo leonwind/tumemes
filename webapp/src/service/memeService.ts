@@ -1,6 +1,6 @@
 import {NewMeme} from "../types";
 import {Requests} from "./requests";
-import {AUTH_HEADER, JSON_AUTH_HEADER} from "./headers";
+import {AUTH_HEADER} from "./headers";
 
 export class MemeService {
     static async getMemes(): Promise<Response> {

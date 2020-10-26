@@ -4,7 +4,7 @@ import styles from "../styles/Comment.css";
 import {Card} from "react-bootstrap";
 import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {VoteService} from "../service/voteService";
-import {KeyboardArrowDown, KeyboardArrowUp} from "@material-ui/icons";
+import ForwardIcon from "@material-ui/icons/Forward"
 import {VoteButtons} from "./VoteButtons";
 
 interface Props {
@@ -66,8 +66,8 @@ export class ReplyCard extends Component<Props, State> {
     }
 
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
-        const upvoteButtonIcon: JSX.Element = <KeyboardArrowUp/>;
-        const downvoteButtonIcon: JSX.Element = <KeyboardArrowDown/>;
+        const upvoteButtonIcon: JSX.Element = <ForwardIcon className={styles.upvoteIcon}/>;
+        const downvoteButtonIcon: JSX.Element = <ForwardIcon className={styles.downvoteIcon}/>;
 
         return VoteButtons.createVoteButtons(
             this.state.currVote,
@@ -75,7 +75,9 @@ export class ReplyCard extends Component<Props, State> {
             downvoteButtonIcon,
             this.upvote,
             this.downvote,
-            styles.replyVoteButtons);
+            styles.upvote,
+            styles.noVote,
+            styles.downvote);
     }
 
     render() {
@@ -84,26 +86,26 @@ export class ReplyCard extends Component<Props, State> {
         const downvoteButton: JSX.Element = buttons.downvote;
 
         return (
-            <div>
-                <div className={styles.replyParent}>
-                    <div className={styles.replyVoteButtonsDiv}>
-                        {upvoteButton}
-                        {downvoteButton}
-                    </div>
-                    <div className={styles.replyCard}>
-                        <Card className={"mb-2"}>
-                            <Card.Text className={"text-muted ml-2 mt-1"}>
-                                {this.props.reply.author} {" · "}
-                                {this.props.reply.voteCount}
-                                {this.props.reply.voteCount === 1 ? " point" : " points"} {" · "}
-                                {this.timeDiff} ago
-                            </Card.Text>
+            <div className={styles.replyParent}>
 
-                            <Card.Text className={"ml-2 mb-1"}>
-                                {this.props.reply.content}
-                            </Card.Text>
-                        </Card>
-                    </div>
+                <div className={styles.replyVoteButtonsDiv}>
+                    {upvoteButton}
+                    {downvoteButton}
+                </div>
+
+                <div className={styles.replyCard}>
+                    <Card className={"mb-2"}>
+                        <Card.Text className={"text-muted ml-2 mt-1"}>
+                            {this.props.reply.author} {" · "}
+                            {this.props.reply.voteCount}
+                            {this.props.reply.voteCount === 1 ? " point" : " points"} {" · "}
+                            {this.timeDiff} ago
+                        </Card.Text>
+
+                        <Card.Text className={"ml-2 mb-1"}>
+                            {this.props.reply.content}
+                        </Card.Text>
+                    </Card>
                 </div>
             </div>
         );
