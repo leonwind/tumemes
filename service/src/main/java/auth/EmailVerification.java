@@ -34,14 +34,14 @@ public class EmailVerification {
         URL + urlToken);
 
     to = "leon.windheuser@gmail.com";
-    // Create a Properties object to contain connection configuration information.
+    // Create a Properties object to contain connection configuration information
     Properties props = System.getProperties();
     props.put("mail.transport.protocol", "smtp");
     props.put("mail.smtp.port", PORT);
     props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.smtp.auth", "true");
 
-    // Create a Session object to represent a mail session with the specified properties.
+    // Create a Session object to represent a mail session with the specified properties
     Session session = Session.getDefaultInstance(props);
 
     MimeMessage msg = new MimeMessage(session);
@@ -54,7 +54,7 @@ public class EmailVerification {
 
     try {
       log.info("Sending email");
-      // Connect to Amazon SES using the SMTP username and password you specified above.
+      // Connect to Amazon SES using the SMTP username and password
       transport.connect(HOSTNAME, smtpUsername, smtpPassword);
 
       // Send the email.

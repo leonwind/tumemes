@@ -7,6 +7,8 @@ import styles from "../styles/Registration.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import logo from "../../assets/logo.svg";
+import Modal from "react-bootstrap/Modal";
+import Spinner from "react-bootstrap/Spinner";
 
 interface State {
     username: string,
@@ -20,7 +22,9 @@ interface State {
         repeatedPassword: string,
         unexpected: string
     },
-    redirect: boolean
+    redirect: boolean,
+    isLoading: boolean,
+    show: boolean
 }
 
 const allowedDomains = new Set([
@@ -42,13 +46,17 @@ export class Registration extends Component<{}, State> {
                 repeatedPassword: "",
                 unexpected: ""
             },
-            redirect: false
+            redirect: false,
+            isLoading: false,
+            show: false
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleRepeatedPasswordChange = this.handleRepeatedPasswordChange.bind(this);
+        this.handleShowModal = this.handleShowModal.bind(this);
+        this.handleCloseModal = this.handleCloseModal.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
@@ -66,6 +74,20 @@ export class Registration extends Component<{}, State> {
 
     private handleRepeatedPasswordChange(event: ChangeEvent<HTMLInputElement>) {
         this.setState({repeatedPassword: event.target.value});
+    }
+
+    private handleShowModal() {
+        this.setState({
+            show: true,
+            isLoading: false
+        });
+    }
+
+    private handleCloseModal() {
+        this.setState({
+            show: false,
+            redirect: true
+        });
     }
 
     private static isDigit(char: string): boolean {
@@ -163,11 +185,14 @@ export class Registration extends Component<{}, State> {
             password: this.state.password
         }
 
+        this.setState({isLoading: true});
+
         AuthorizationService.registerUser(newUser)
             .then((ans: Response) => {
                 const dataPromise: Promise<string> = ans.text();
                 if (ans.ok) {
-                    this.setState({redirect: true});
+                    this.handleShowModal();
+                    return;
                 }
 
                 let newErrors = {
@@ -178,24 +203,32 @@ export class Registration extends Component<{}, State> {
                     unexpected: ""
                 };
 
-                if (ans.status === 401) {
+                if (ans.status === 400) {
                     dataPromise.then((data: string) => {
                         if (data === "Username exists") {
                             newErrors.username = "Username already exists.";
                         } else if (data === "Email exists") {
                             newErrors.email = "Email already exists.";
+                        } else {
+                            newErrors.unexpected =
+                                "An error occurred on the server. Please try again later.";
+                            throw new Error(ans.statusText);
                         }
 
-                        this.setState({errors: newErrors});
-                        return;
+                        this.setState({
+                            errors: newErrors,
+                            isLoading: false
+                        });
                     });
+                } else {
+                    newErrors.unexpected =
+                        "An error occurred on the server. Please try again later.";
+                    this.setState({
+                        errors: newErrors,
+                        isLoading: false
+                    });
+                    throw new Error(ans.statusText);
                 }
-
-                newErrors.unexpected =
-                    "An error occurred on the server. Please try again later.";
-                this.setState({errors: newErrors});
-                throw new Error(ans.statusText);
-
                 }
             );
     }
@@ -278,7 +311,13 @@ export class Registration extends Component<{}, State> {
                         {this.state.errors["unexpected"]}
                     </p>
 
-                    <Button type="submit" className={styles.registrationSubmitButton}>
+                    <Button type="submit"
+                            className={styles.registrationSubmitButton}
+                            disabled={this.state.isLoading}>
+                        {this.state.isLoading &&
+                        <Spinner animation="border" role="status" size={"sm"}>
+                            <span className="sr-only">Loading...</span>
+                        </Spinner>} {" "}
                         Create account
                     </Button>
 
@@ -286,6 +325,24 @@ export class Registration extends Component<{}, State> {
                         Already have an account? <a href={"/login"}>Sign in.</a>
                     </p>
                 </Form>
+
+                <Modal show={this.state.show} onHide={this.handleCloseModal} centered>
+                    <Modal.Header closeButton>
+                        <h4 className={styles.modalHeadline}>
+                            Verify your account
+                        </h4>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        To verify your TUMemes account, please click on the link you have got sent via email.
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                        <Button onClick={this.handleCloseModal}>
+                           Understood
+                        </Button>
+                    </Modal.Footer>
+                </Modal>
             </div>
         );
     }

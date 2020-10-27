@@ -40,3 +40,8 @@
     margin: 1rem;
     text-align: center;
 }
+
+.modalHeadline {
+    font-weight: bold;
+    color: rgb(0, 101, 189);
+}
