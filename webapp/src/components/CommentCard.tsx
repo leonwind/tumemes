@@ -6,7 +6,7 @@ import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {CommentService} from "../service/commentService";
 import {ReplyCard} from "./ReplyCard"
 import Button from "react-bootstrap/Button";
-import {KeyboardArrowDown, KeyboardArrowUp, Send} from "@material-ui/icons";
+import {Send} from "@material-ui/icons";
 import ForwardIcon from "@material-ui/icons/Forward"
 import {VoteService} from "../service/voteService";
 import {VoteButtons} from "./VoteButtons";
@@ -199,7 +199,7 @@ export class CommentCard extends Component<Props, State> {
                 <ReplyCard key={reply.commentID} reply={reply}/>);
         }
 
-        const replyButton: JSX.Element = this.createReplyButton();
+        let replyButton: JSX.Element = this.createReplyButton();
 
         return (
             <div>

@@ -88,7 +88,7 @@ public interface CommentDAO {
           + "GROUP BY commentID "
           + ") v on v.commentID = c.commentID "
           + "WHERE parentID = :parentCommentID "
-          + "ORDER BY created DESC")
+          + "ORDER BY created ASC")
   @RegisterRowMapper(ReplyMapper.class)
   List<Comment> getAllReplies(
       @Bind("parentCommentID") String parentCommentID,

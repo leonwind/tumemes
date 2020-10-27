@@ -2,3 +2,10 @@
     height: 100%;
     background-color: #f5f5f5;
 }
+
+.sortByCard {
+    width: 100%;
+    max-width: 800px;
+    margin: auto;
+    z-index: -10;
+}

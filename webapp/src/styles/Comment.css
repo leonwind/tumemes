@@ -72,6 +72,7 @@
 
 .replyParent {
     display: flex;
+    align-items: center;
 }
 
 .replyVoteButtonsDiv {

@@ -6,6 +6,11 @@ import {MemeService} from "../service/memeService";
 import {NavigationBar} from "./NavigationBar";
 import {Redirect} from "react-router";
 import styles from "../styles/FrontPage.css"
+import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
+import ToggleButton from "react-bootstrap/ToggleButton";
+import Card from "react-bootstrap/Card";
+import {AccessTime, TrendingUp} from "@material-ui/icons";
+import ForwardIcon from "@material-ui/icons/Forward";
 
 interface State {
     memes: Meme[],
@@ -50,9 +55,26 @@ export class FrontPage extends Component<{}, State> {
 
         const allMemes: JSX.Element[] = this.state.memes.map((meme: Meme) =>
             <MemeCard key={meme.memeID} meme={meme} showCommentsButton={true}/>);
+
         return (
             <div className={styles.body}>
                 <NavigationBar/>
+
+                <div className={styles.sortByCard}>
+                    <Card className={"mt-4"}>
+                        <ToggleButtonGroup type="radio" name="options" defaultValue={1}>
+                            <ToggleButton value={1}>
+                                <AccessTime/> {" "}
+                                NEW
+                            </ToggleButton>
+                            <ToggleButton value={2}>
+                                <TrendingUp/> {" "}
+                                POINTS
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+                    </Card>
+                </div>
+
                 {allMemes}
             </div>
         );

@@ -1,11 +1,13 @@
 jwtSecret: "secret"
 
+smtpSecret: ${SMTP_SECRET}
+
 server:
   rootPath: '/api/*'
 
 database:
   driverClass: org.postgresql.Driver
-  user: tumemes # TODO
+  user: tumemes
   password: ""
   url: jdbc:postgresql://localhost:5432/tumemes
   properties:
