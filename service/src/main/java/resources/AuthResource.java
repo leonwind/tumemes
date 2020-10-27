@@ -38,7 +38,8 @@ public class AuthResource implements AuthService {
   private final String smtpPassword;
 
   // one hour until normal token gets expired
-  private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
+  private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1L);
+  private final Duration TTL_EMAIL_VERIFICATION = Duration.ofDays(1L);
 
   public AuthResource(UserDAO userDAO, String secretKey, String smtpUsername, String smtpPassword) {
     this.userDAO = userDAO;
@@ -116,12 +117,12 @@ public class AuthResource implements AuthService {
     }
   }
 
-  private String createAccessToken(String subject) {
+  private String createToken(String subject, Duration TTL) {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
     long currMillis = System.currentTimeMillis();
     Date currDate = new Date(currMillis);
 
-    Date expirationDate = new Date(currMillis + this.TTL_ACCESS_TOKEN.toMillis());
+    Date expirationDate = new Date(currMillis + TTL.toMillis());
 
     byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secretKey);
 
@@ -163,9 +164,13 @@ public class AuthResource implements AuthService {
           enc.encodeToString(salt));
 
       log.info("Successfully added new user");
-      String token = createAccessToken(newUser.getEmail());
+      String token = createToken(newUser.getEmail(), this.TTL_ACCESS_TOKEN);
       try {
-        EmailVerification.sendVerificationEmail(newUser.getEmail(), smtpUsername, smtpPassword);
+        EmailVerification.sendVerificationEmail(
+            newUser.getEmail(),
+            smtpUsername,
+            smtpPassword,
+            this.createToken(newUser.getEmail(), this.TTL_EMAIL_VERIFICATION));
       } catch (Exception e) {
         e.printStackTrace();
         return Response.status(400).entity("Unable to send email").build();
@@ -203,7 +208,7 @@ public class AuthResource implements AuthService {
       String hashedPassword = Base64.getEncoder().encodeToString(hash);
 
       if (hashedPassword.equals(user.getHash())) {
-        String token = createAccessToken(user.getEmail());
+        String token = createToken(user.getEmail(), this.TTL_ACCESS_TOKEN);
         return Response.ok(token).build();
       }
       return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -219,7 +224,7 @@ public class AuthResource implements AuthService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response generateRefreshToken(@Auth User user) {
-    String token = createAccessToken(user.getEmail());
+    String token = createToken(user.getEmail(), this.TTL_ACCESS_TOKEN);
     return Response.ok(token).build();
   }
 }

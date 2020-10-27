@@ -8,12 +8,14 @@ public class User implements Principal {
   private final String email;
   private final String hash;
   private final String salt;
+  private final boolean verified;
 
-  public User(String name, String email, String hash, String salt) {
+  public User(String name, String email, String hash, String salt, boolean verified) {
     this.name = name;
     this.email = email;
     this.hash = hash;
     this.salt = salt;
+    this.verified = verified;
   }
 
   @Override
@@ -31,5 +33,9 @@ public class User implements Principal {
 
   public String getSalt() {
     return salt;
+  }
+
+  public boolean isVerified() {
+    return verified;
   }
 }

@@ -18,13 +18,13 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, User> {
     this.secretKey = secretKey;
   }
 
-  @Override
-  public Optional<User> authenticate(JWTCredentials credentials) throws AuthenticationException {
+  public static Optional<User> verifyToken(UserDAO userDAO, String secretKey, String jwtToken)
+      throws AuthenticationException {
     try {
       Claims claims =
           Jwts.parser()
-              .setSigningKey(DatatypeConverter.parseBase64Binary(this.secretKey))
-              .parseClaimsJws(credentials.getJwtToken())
+              .setSigningKey(DatatypeConverter.parseBase64Binary(secretKey))
+              .parseClaimsJws(jwtToken)
               .getBody();
       User user = userDAO.getUserByEmail(claims.getSubject());
       return Optional.of(user);
@@ -33,7 +33,13 @@ public class JWTAuthenticator implements Authenticator<JWTCredentials, User> {
         | MalformedJwtException
         | SignatureException
         | IllegalArgumentException e) {
+      System.out.println(e.getMessage());
       return Optional.empty();
     }
+  }
+
+  @Override
+  public Optional<User> authenticate(JWTCredentials credentials) throws AuthenticationException {
+    return verifyToken(this.userDAO, this.secretKey, credentials.getJwtToken());
   }
 }

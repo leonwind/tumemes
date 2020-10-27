@@ -66,13 +66,18 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
     final PingResource pingResource = new PingResource();
     final AuthResource authResource =
-        new AuthResource(userDAO, configuration.getJwtSecret(),
-            configuration.getSMTPUsername(), configuration.getSmtpPassword());
+        new AuthResource(
+            userDAO,
+            configuration.getJwtSecret(),
+            configuration.getSMTPUsername(),
+            configuration.getSmtpPassword());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource =
         new VoteResource(memeDAO, memeVoteDAO, commentDAO, commentVoteDAO);
     final CommentResource commentResource = new CommentResource(commentDAO, memeDAO);
+    final EmailVerificationResource emailVerificationResource =
+        new EmailVerificationResource(userDAO, configuration.getJwtSecret());
 
     environment.jersey().register(pingResource);
     environment.jersey().register(authResource);
@@ -80,5 +85,6 @@ public class Application extends io.dropwizard.Application<Configuration> {
     environment.jersey().register(uploadResource);
     environment.jersey().register(voteResource);
     environment.jersey().register(commentResource);
+    environment.jersey().register(emailVerificationResource);
   }
 }

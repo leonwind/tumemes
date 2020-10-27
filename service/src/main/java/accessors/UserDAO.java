@@ -9,13 +9,16 @@ import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
 public interface UserDAO {
   @SqlUpdate(
-      "INSERT INTO users (username, email, hash, salt) VALUES "
-          + "(:username, :email, :hash, :salt)")
+      "INSERT INTO users (username, email, hash, salt, verified) VALUES "
+          + "(:username, :email, :hash, :salt, FALSE)")
   void addNewUser(
       @Bind("username") String username,
       @Bind("email") String email,
       @Bind("hash") String hash,
       @Bind("salt") String salt);
+
+  @SqlUpdate("UPDATE users SET verified = TRUE WHERE email = :currEmail")
+  void verifyUser(@Bind("currEmail") String currEmail);
 
   @SqlQuery("SELECT EXISTS (SELECT 1 FROM users WHERE username = :username)")
   boolean doesUsernameExist(@Bind("username") String username);
