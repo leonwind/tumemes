@@ -39,7 +39,7 @@ public class EmailVerificationResource implements EmailVerificationService {
       }
 
       userDAO.verifyUser(user.getEmail());
-      return Response.ok("Verified the email " + user.getEmail()).build();
+      return Response.ok("Verified the account with email " + user.getEmail()).build();
 
     } catch (AuthenticationException ex) {
       return Response.status(400).entity(ex.getMessage()).build();

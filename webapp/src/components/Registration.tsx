@@ -167,11 +167,7 @@ export class Registration extends Component<{}, State> {
             .then((ans: Response) => {
                 const dataPromise: Promise<string> = ans.text();
                 if (ans.ok) {
-                    dataPromise.then((data: string) => {
-                        window.localStorage.setItem("access_token", data);
-                        this.setState({redirect: true});
-                        return;
-                    })
+                    this.setState({redirect: true});
                 }
 
                 let newErrors = {
@@ -184,7 +180,6 @@ export class Registration extends Component<{}, State> {
 
                 if (ans.status === 401) {
                     dataPromise.then((data: string) => {
-
                         if (data === "Username exists") {
                             newErrors.username = "Username already exists.";
                         } else if (data === "Email exists") {
@@ -201,13 +196,14 @@ export class Registration extends Component<{}, State> {
                 this.setState({errors: newErrors});
                 throw new Error(ans.statusText);
 
-            });
+                }
+            );
     }
 
     render() {
         // redirect to homepage if registration was successful
         if (this.state.redirect) {
-            return (<Redirect to={"/"}/>);
+            return (<Redirect to={"/login"}/>);
         }
 
         return (

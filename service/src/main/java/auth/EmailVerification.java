@@ -18,7 +18,7 @@ public class EmailVerification {
   private static final String FROM = "no-reply@tumemes.de";
   private static final String FROM_NAME = "no-reply";
 
-  // send over server in Frankfurt, DE
+  // send over server in Frankfurt, Germany
   private static final String HOSTNAME = "email-smtp.eu-central-1.amazonaws.com";
   private static final int PORT = 25;
 

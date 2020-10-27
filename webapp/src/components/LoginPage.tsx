@@ -59,8 +59,19 @@ export class LoginPage extends Component<{}, State> {
                 }
 
                 if (ans.status === 401) {
-                    this.setState({error: "Incorrect username or password."});
-                    this.setState({password: ""});
+                    dataPromise.then((data: string) => {
+                        if (data === "Account not validated") {
+                            this.setState({
+                                error: "Please validate your account.",
+                                password: ""
+                            });
+                        } else {
+                            this.setState({
+                                error: "Incorrect username or password",
+                                password: ""
+                            });
+                        }
+                    });
                     return;
                 }
 

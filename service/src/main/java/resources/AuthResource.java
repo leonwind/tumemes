@@ -164,7 +164,6 @@ public class AuthResource implements AuthService {
           enc.encodeToString(salt));
 
       log.info("Successfully added new user");
-      String token = createToken(newUser.getEmail(), this.TTL_ACCESS_TOKEN);
       try {
         EmailVerification.sendVerificationEmail(
             newUser.getEmail(),
@@ -175,7 +174,7 @@ public class AuthResource implements AuthService {
         e.printStackTrace();
         return Response.status(400).entity("Unable to send email").build();
       }
-      return Response.ok().entity(token).build();
+      return Response.ok().entity("Registered user successfully").build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();
@@ -201,6 +200,10 @@ public class AuthResource implements AuthService {
 
     if (user == null) {
       return Response.status(Response.Status.UNAUTHORIZED).build();
+    }
+
+    if (!user.isVerified()) {
+      return Response.status(Response.Status.UNAUTHORIZED).entity("Account not validated").build();
     }
 
     try {
