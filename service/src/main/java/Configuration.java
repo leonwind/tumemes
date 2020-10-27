@@ -9,7 +9,9 @@ import javax.validation.constraints.NotNull;
 public class Configuration extends io.dropwizard.Configuration
     implements AssetsBundleConfiguration {
 
-  @Valid @NotNull private String jwtSecret;
+  @Valid @NotNull @JsonProperty private String jwtSecret;
+  @Valid @NotNull @JsonProperty private String smtpUsername;
+  @Valid @NotNull @JsonProperty private String smtpPassword;
   @Valid @NotNull private DataSourceFactory database = new DataSourceFactory();
 
   @Valid @NotNull @JsonProperty
@@ -17,6 +19,14 @@ public class Configuration extends io.dropwizard.Configuration
 
   public String getJwtSecret() {
     return jwtSecret;
+  }
+
+ public String getSMTPUsername() {
+    return smtpUsername;
+  }
+
+  public String getSmtpPassword() {
+    return smtpPassword;
   }
 
   @JsonProperty("database")

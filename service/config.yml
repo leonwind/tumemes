@@ -1,6 +1,7 @@
-jwtSecret: "secret"
+jwtSecret: ${JWT_SECRET}
 
-smtpSecret: ${SMTP_SECRET}
+smtpUsername: ${SMTP_USERNAME}
+smtpPassword: ${SMTP_PASSWORD}
 
 server:
   rootPath: '/api/*'

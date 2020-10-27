@@ -6,6 +6,8 @@ import io.dropwizard.auth.AuthFilter;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.UnauthorizedHandler;
 import io.dropwizard.bundles.assets.ConfiguredAssetsBundle;
+import io.dropwizard.configuration.EnvironmentVariableSubstitutor;
+import io.dropwizard.configuration.SubstitutingSourceProvider;
 import io.dropwizard.forms.MultiPartBundle;
 import io.dropwizard.jdbi3.JdbiFactory;
 import io.dropwizard.setup.Bootstrap;
@@ -27,6 +29,11 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
   @Override
   public void initialize(Bootstrap<Configuration> bootstrap) {
+    // Enable variable substitution with environment variables
+    bootstrap.setConfigurationSourceProvider(
+        new SubstitutingSourceProvider(
+            bootstrap.getConfigurationSourceProvider(), new EnvironmentVariableSubstitutor(false)));
+
     bootstrap.addBundle(new MultiPartBundle());
     bootstrap.addBundle(new ConfiguredAssetsBundle("/images/", "/images/"));
   }
@@ -58,7 +65,9 @@ public class Application extends io.dropwizard.Application<Configuration> {
     environment.jersey().register(unauthorizedHandler);
 
     final PingResource pingResource = new PingResource();
-    final AuthResource authResource = new AuthResource(userDAO, configuration.getJwtSecret());
+    final AuthResource authResource =
+        new AuthResource(userDAO, configuration.getJwtSecret(),
+            configuration.getSMTPUsername(), configuration.getSmtpPassword());
     final MemeResource memeResource = new MemeResource(memeDAO);
     final UploadResource uploadResource = new UploadResource(memeDAO);
     final VoteResource voteResource =

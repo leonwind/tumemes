@@ -2,6 +2,7 @@ package resources;
 
 import accessors.UserDAO;
 import api.AuthService;
+import auth.EmailVerification;
 import auth.Hashing;
 import core.LoginUser;
 import core.NewUser;
@@ -27,20 +28,23 @@ import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Date;
-import java.util.UUID;
 
 public class AuthResource implements AuthService {
 
   private static final Logger log = LoggerFactory.getLogger(AuthResource.class);
   private final UserDAO userDAO;
   private final String secretKey;
+  private final String smtpUsername;
+  private final String smtpPassword;
 
   // one hour until normal token gets expired
   private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1);
 
-  public AuthResource(UserDAO userDAO, String secretKey) {
+  public AuthResource(UserDAO userDAO, String secretKey, String smtpUsername, String smtpPassword) {
     this.userDAO = userDAO;
     this.secretKey = secretKey;
+    this.smtpUsername = smtpUsername;
+    this.smtpPassword = smtpPassword;
   }
 
   private static boolean isEmailDomainSupported(String email) {
@@ -138,7 +142,7 @@ public class AuthResource implements AuthService {
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
   public Response registerUser(NewUser newUser) {
-   log.info("Register new user");
+    log.info("Register new user");
 
     try {
       verifyUserCredentials(newUser);
@@ -160,11 +164,17 @@ public class AuthResource implements AuthService {
 
       log.info("Successfully added new user");
       String token = createAccessToken(newUser.getEmail());
+      try {
+        EmailVerification.sendVerificationEmail(newUser.getEmail(), smtpUsername, smtpPassword);
+      } catch (Exception e) {
+        e.printStackTrace();
+        return Response.status(400).entity("Unable to send email").build();
+      }
       return Response.ok().entity(token).build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
       e.printStackTrace();
-      return Response.status(400).entity("Error occurred while hashing your password.").build();
+      return Response.status(400).entity("Error occurred while hashing password.").build();
     }
   }
 

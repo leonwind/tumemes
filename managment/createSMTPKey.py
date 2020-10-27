@@ -3,6 +3,8 @@
 """ 
 Convert AWS SES IAM secret access key into 
 an AWS SES SMTP password
+Source:
+https://docs.aws.amazon.com/ses/latest/DeveloperGuide/smtp-credentials.html?icmpid=docs_ses_console
 """
 
 import hmac
