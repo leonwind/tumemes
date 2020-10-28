@@ -9,6 +9,7 @@ import Form from "react-bootstrap/Form";
 import logo from "../../assets/logo.svg";
 import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
+import {LinkCollection} from "./LinkCollection";
 
 interface State {
     username: string,
@@ -251,6 +252,8 @@ export class Registration extends Component<{}, State> {
                         Create your TUMemes account
                     </h3>
 
+                    <hr className={"m-4"}/>
+
                     <Form.Group>
                         <Form.Label htmlFor="inputUsername" srOnly>
                             Username
@@ -327,13 +330,7 @@ export class Registration extends Component<{}, State> {
                         Already have an account? <a href={"/login"}>Sign in.</a>
                     </p>
 
-                    <hr className={"m-4"}/>
-
-                    <div className={styles.linkCollection}>
-                        <a href={"mailto:admin@tumemes.de"}>Contact</a> {" · "}
-                        <a href={"impressum"}>Impressum</a> {" · "}
-                        <a href={"https://github.com/leonwind/tumemes"}>Code</a>
-                    </div>
+                    <LinkCollection/>
                 </Form>
 
                 <Modal show={this.state.show} onHide={this.handleCloseModal} centered>

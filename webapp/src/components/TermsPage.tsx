@@ -1,20 +1,20 @@
 import React from 'react'
 import navBarStyles from "../styles/NavigationBar.css";
-import styles from "../styles/Impressum.css"
+import styles from "../styles/Terms.css"
 import Navbar from "react-bootstrap/Navbar";
 import {Email, GitHub, Phone} from "@material-ui/icons";
 
-export const Impressum = () => {
+export const Terms = () => {
     return (
-        <div>
+        <div className={styles.body}>
             <Navbar className={navBarStyles.navigationBar} expand={"md"} variant={"dark"}>
                 <Navbar.Brand href={"/"} className={navBarStyles.navBarBrand}>
                     TUMemes
                 </Navbar.Brand>
             </Navbar>
 
-            <div className={styles.body}>
-                <h1 className={"mb-3"}>Impressum</h1>
+            <div className={styles.terms}>
+                <h1 className={"mb-3 mt-3"}>Impressum</h1>
 
                 <h3>Angaben gemäß § 5 TMG</h3>
                 <p>

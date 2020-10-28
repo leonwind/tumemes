@@ -202,18 +202,20 @@ public class AuthResource implements AuthService {
       return Response.status(Response.Status.UNAUTHORIZED).build();
     }
 
-    if (!user.isVerified()) {
-      return Response.status(Response.Status.UNAUTHORIZED).entity("Account not validated").build();
-    }
-
     try {
       byte[] hash = Hashing.generateHash(password, user.getSalt());
       String hashedPassword = Base64.getEncoder().encodeToString(hash);
 
       if (hashedPassword.equals(user.getHash())) {
+        if (!user.isVerified()) {
+          return Response.status(Response.Status.UNAUTHORIZED).entity("Account not validated").build();
+        }
+
         String token = createToken(user.getEmail(), this.TTL_ACCESS_TOKEN);
         return Response.ok(token).build();
       }
+
+      // password or username wrong
       return Response.status(Response.Status.UNAUTHORIZED).build();
 
     } catch (NoSuchAlgorithmException | InvalidKeySpecException e) {

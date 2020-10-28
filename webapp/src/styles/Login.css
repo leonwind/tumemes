@@ -66,10 +66,3 @@
     text-align: center;
 }
 
-.linkCollection {
-    width: 80%;
-    margin: auto;
-    display: flex;
-    align-items: stretch;
-    justify-content: space-between;
-}

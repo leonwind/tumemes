@@ -1,3 +1,7 @@
+/**
+ * Spreadsheet for forgot password and resend validation email
+ */
+
 .body {
     height: 100%;
     min-height: 100vh;
@@ -10,42 +14,28 @@
     background-color: #f5f5f5;
 }
 
-.formRegistration {
-    width: 100%;
-    max-width: 320px;
-    padding: 15px;
-    margin: 0 auto;
-}
-
-.logo {
-    text-align: center;
-}
-
 .headline {
     margin-bottom: 1rem;
     color: rgb(0, 101, 189);
     text-align: center;
 }
 
-.registrationSubmitButton {
+.form {
+    text-align: center;
+    width: 100%;
+    max-width: 320px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.infoText {
+    text-align: justify;
+}
+
+.submitButton {
     width: 100%;
     margin-top: 1rem;
     outline-color: rgb(0, 101, 189);
     background-color: rgb(0, 101, 189);
     color: white;
-}
-
-.errorMessage {
-    color: red;
-    text-align: center;
-}
-
-.loginLink {
-    margin: 1rem;
-    text-align: center;
-}
-
-.modalHeadline {
-    font-weight: bold;
-    color: rgb(0, 101, 189);
 }

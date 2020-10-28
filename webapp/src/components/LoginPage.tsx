@@ -6,12 +6,14 @@ import Button from "react-bootstrap/Button";
 import styles from "../styles/Login.css"
 import Form from "react-bootstrap/Form";
 import logo from "../../assets/logo.svg";
+import {LinkCollection} from "./LinkCollection";
 
 interface State {
     username: string,
     password: string,
     error: string,
-    redirect: boolean
+    redirect: boolean,
+    resetPassword: boolean
 }
 
 export class LoginPage extends Component<{}, State> {
@@ -22,7 +24,10 @@ export class LoginPage extends Component<{}, State> {
             username: "",
             password: "",
             error: "",
-            redirect: false
+            redirect: false,
+            // if true show reset password link,
+            // otherwise show resend validation link
+            resetPassword: true
         };
 
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -63,12 +68,14 @@ export class LoginPage extends Component<{}, State> {
                         if (data === "Account not validated") {
                             this.setState({
                                 error: "Please validate your account.",
-                                password: ""
+                                password: "",
+                                resetPassword: false
                             });
                         } else {
                             this.setState({
                                 error: "Incorrect username or password",
-                                password: ""
+                                password: "",
+                                resetPassword: true
                             });
                         }
                     });
@@ -106,6 +113,8 @@ export class LoginPage extends Component<{}, State> {
                         Sign in to TUMemes
                     </h3>
 
+                    <hr className={"m-4"}/>
+
                     <Form.Label htmlFor={"inputUsername"} srOnly>Username</Form.Label>
                     <Form.Control className={styles.formControlInput}
                                   type={"username"} id={"inputUsername"}
@@ -126,6 +135,16 @@ export class LoginPage extends Component<{}, State> {
                         {this.state.error}
                     </p>
 
+                    {this.state.resetPassword &&
+                    <a href={"/password_reset"}>
+                        Forgot password?
+                    </a>}
+
+                    {!this.state.resetPassword &&
+                    <a href={"/verification_resend"}>
+                        Resend account verification email?
+                    </a>}
+
                     <Button type="submit" className={styles.submitButton}>
                         Sign in
                     </Button>
@@ -134,13 +153,7 @@ export class LoginPage extends Component<{}, State> {
                         New here? <a href={"/register"}>Create an account.</a>
                     </p>
 
-                    <hr className={"m-4"}/>
-
-                    <div className={styles.linkCollection}>
-                        <a href={"mailto:admin@tumemes.de"}>Contact</a> {" · "}
-                        <a href={"impressum"}>Impressum</a> {" · "}
-                        <a href={"https://github.com/leonwind/tumemes"}>Code</a>
-                    </div>
+                    <LinkCollection/>
                 </Form>
             </div>
         );
