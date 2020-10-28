@@ -1,0 +1,93 @@
+package resources;
+
+import accessors.UserDAO;
+import api.AccountService;
+import auth.EmailSender;
+import auth.SecurePassword;
+import auth.Token;
+import core.PasswordReset;
+import core.User;
+import io.dropwizard.auth.AuthenticationException;
+
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.time.Duration;
+import java.util.Optional;
+
+public class AccountResource implements AccountService {
+
+  private final UserDAO userDAO;
+  private final String secretKey;
+  private final String smtpUsername;
+  private final String smtpPassword;
+
+  public AccountResource(
+      UserDAO userDAO, String secretKey, String smtpUsername, String smtpPassword) {
+    this.userDAO = userDAO;
+    this.secretKey = secretKey;
+    this.smtpUsername = smtpUsername;
+    this.smtpPassword = smtpPassword;
+  }
+
+  @GET
+  @Path("/verification/{token}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Response validateEmail(@PathParam("token") String token) {
+    try {
+      Optional<User> userOptional = Token.verifyToken(this.userDAO, this.secretKey, token);
+
+      if (userOptional.isEmpty()) {
+        return Response.status(400).entity("User does not exist").build();
+      }
+
+      User user = userOptional.get();
+      if (user.isVerified()) {
+        return Response.ok("Email already verified").build();
+      }
+
+      userDAO.verifyUser(user.getEmail());
+      return Response.ok("Verified the account with email " + user.getEmail()).build();
+
+    } catch (AuthenticationException ex) {
+      return Response.status(400).entity(ex.getMessage()).build();
+    }
+  }
+
+  @POST
+  @Path("/request_password_reset")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response requestPasswordReset(Email email) {
+    User user = userDAO.getUserByEmail(email.getEmail());
+
+    if (user == null) {
+      return Response.status(400).entity("No user exists with this email").build();
+    }
+
+    try {
+      String token = Token.createToken(secretKey, email.getEmail(), Duration.ofDays(1L));
+      EmailSender.sendPasswordResetEmail(email.getEmail(), smtpUsername, smtpPassword, token);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      return Response.status(400).entity("Unable to send email").build();
+    }
+
+    return Response.ok().build();
+  }
+
+  @POST
+  @Path("/password_reset/{token}")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response resetPassword(@PathParam("token") String token, PasswordReset passwordReset) {
+
+    if (!SecurePassword.isSecure(passwordReset.getNewPassword())) {
+      return Response.status(400)
+          .entity(
+              "Password should be at least 8 characters and "
+                  + "contains one digit, one lowercase and one uppercase character")
+          .build();
+    }
+
+    return Response.ok().build();
+  }
+}

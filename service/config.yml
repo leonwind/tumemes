@@ -1,5 +1,6 @@
+# extract sensitive informations
+# from environment variables
 jwtSecret: ${JWT_SECRET}
-
 smtpUsername: ${SMTP_USERNAME}
 smtpPassword: ${SMTP_PASSWORD}
 

@@ -10,7 +10,7 @@ interface State {
     redirect: boolean
 }
 
-export class ResendVerificationMailPage extends Component<{}, State> {
+export class RequestPasswordResetPage extends Component<{}, State> {
 
     constructor(props: any) {
         super(props);
@@ -38,14 +38,14 @@ export class ResendVerificationMailPage extends Component<{}, State> {
                     <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
 
                     <h3 className={styles.headline}>
-                        Send new verification email
+                        Reset your password
                     </h3>
 
                     <hr className={"m-4"}/>
 
                     <p className={styles.infoText}>
-                        Enter the email of your account and we will send you a new link
-                        to validate your account.
+                        Enter the email of your verified account and we will send you a link to reset
+                        your password.
                     </p>
 
                     <Form.Label htmlFor={"inputEmail"} srOnly>
@@ -57,7 +57,7 @@ export class ResendVerificationMailPage extends Component<{}, State> {
                                   placeholder="Enter your email" required/>
 
                     <Button type={"submit"} className={styles.submitButton}>
-                        Resend verification email
+                        Send password reset email
                     </Button>
 
                     <LinkCollection/>

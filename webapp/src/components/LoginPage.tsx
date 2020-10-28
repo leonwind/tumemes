@@ -136,12 +136,12 @@ export class LoginPage extends Component<{}, State> {
                     </p>
 
                     {this.state.resetPassword &&
-                    <a href={"/password_reset"}>
+                    <a href={"/request_password_reset"}>
                         Forgot password?
                     </a>}
 
                     {!this.state.resetPassword &&
-                    <a href={"/verification_resend"}>
+                    <a href={"/request_verification_resend"}>
                         Resend account verification email?
                     </a>}
 

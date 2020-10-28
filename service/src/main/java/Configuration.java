@@ -25,7 +25,7 @@ public class Configuration extends io.dropwizard.Configuration
     return smtpUsername;
   }
 
-  public String getSmtpPassword() {
+  public String getSMTPPassword() {
     return smtpPassword;
   }
 

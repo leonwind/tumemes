@@ -28,4 +28,6 @@ public interface AuthService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   Response generateRefreshToken(@Auth User user);
+
+
 }

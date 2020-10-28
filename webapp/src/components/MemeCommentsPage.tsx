@@ -11,7 +11,6 @@ import styles from "../styles/Comment.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
-import {Send} from "@material-ui/icons";
 
 interface Props {
     memeID: string

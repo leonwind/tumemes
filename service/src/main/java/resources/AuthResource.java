@@ -2,32 +2,27 @@ package resources;
 
 import accessors.UserDAO;
 import api.AuthService;
-import auth.EmailVerification;
+import auth.EmailSender;
 import auth.Hashing;
+import auth.SecurePassword;
+import auth.Token;
 import core.LoginUser;
 import core.NewUser;
 import core.User;
 import enums.AllowedEmailDomains;
 import exceptions.DomainNotSupportedException;
 import io.dropwizard.auth.Auth;
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.crypto.spec.SecretKeySpec;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
 import java.util.Arrays;
 import java.util.Base64;
-import java.util.Date;
 
 public class AuthResource implements AuthService {
 
@@ -58,35 +53,6 @@ public class AuthResource implements AuthService {
     return email.indexOf('@') != -1;
   }
 
-  private static boolean isSecure(String password) {
-    if (password.length() < 8) {
-      return false;
-    }
-
-    boolean containsDigit = false;
-    boolean containsLowerCase = false;
-    boolean containsUpperCase = false;
-
-    for (int i = 0; i < password.length(); i++) {
-      char curr = password.charAt(i);
-
-      if (Character.isDigit(curr)) {
-        containsDigit = true;
-        continue;
-      }
-
-      if (Character.isLowerCase(curr)) {
-        containsLowerCase = true;
-        continue;
-      }
-
-      if (Character.isUpperCase(curr)) {
-        containsUpperCase = true;
-      }
-    }
-    return containsDigit && containsLowerCase && containsUpperCase;
-  }
-
   /** Check if the new user satisfies all the given constraints */
   private void verifyUserCredentials(NewUser newUser) throws Exception {
     if (newUser.getName().indexOf('@') != -1) {
@@ -109,32 +75,12 @@ public class AuthResource implements AuthService {
       throw new Exception("Email exists");
     }
 
-    if (!isSecure(newUser.getPassword())) {
+    if (!SecurePassword.isSecure(newUser.getPassword())) {
       log.info("Password weak");
       throw new Exception(
           "Password should be at least 8 characters and "
               + "contains one digit, one lowercase and one uppercase character.");
     }
-  }
-
-  private String createToken(String subject, Duration TTL) {
-    SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
-    long currMillis = System.currentTimeMillis();
-    Date currDate = new Date(currMillis);
-
-    Date expirationDate = new Date(currMillis + TTL.toMillis());
-
-    byte[] apiKeySecretBytes = DatatypeConverter.parseBase64Binary(this.secretKey);
-
-    Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
-
-    JwtBuilder builder =
-        Jwts.builder()
-            .setIssuedAt(currDate)
-            .setExpiration(expirationDate)
-            .setSubject(subject)
-            .signWith(signatureAlgorithm, signingKey);
-    return builder.compact();
   }
 
   @Override
@@ -165,11 +111,11 @@ public class AuthResource implements AuthService {
 
       log.info("Successfully added new user");
       try {
-        EmailVerification.sendVerificationEmail(
+        EmailSender.sendVerificationEmail(
             newUser.getEmail(),
             smtpUsername,
             smtpPassword,
-            this.createToken(newUser.getEmail(), this.TTL_EMAIL_VERIFICATION));
+            Token.createToken(secretKey, newUser.getEmail(), TTL_EMAIL_VERIFICATION));
       } catch (Exception e) {
         e.printStackTrace();
         return Response.status(400).entity("Unable to send email").build();
@@ -208,10 +154,12 @@ public class AuthResource implements AuthService {
 
       if (hashedPassword.equals(user.getHash())) {
         if (!user.isVerified()) {
-          return Response.status(Response.Status.UNAUTHORIZED).entity("Account not validated").build();
+          return Response.status(Response.Status.UNAUTHORIZED)
+              .entity("Account not validated")
+              .build();
         }
 
-        String token = createToken(user.getEmail(), this.TTL_ACCESS_TOKEN);
+        String token = Token.createToken(secretKey, user.getEmail(), TTL_ACCESS_TOKEN);
         return Response.ok(token).build();
       }
 
@@ -229,7 +177,7 @@ public class AuthResource implements AuthService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public Response generateRefreshToken(@Auth User user) {
-    String token = createToken(user.getEmail(), this.TTL_ACCESS_TOKEN);
+    String token = Token.createToken(secretKey, user.getEmail(), TTL_ACCESS_TOKEN);
     return Response.ok(token).build();
   }
 }
