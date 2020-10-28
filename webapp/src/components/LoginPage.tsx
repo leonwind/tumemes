@@ -133,6 +133,14 @@ export class LoginPage extends Component<{}, State> {
                     <p className={styles.createAccountLink}>
                         New here? <a href={"/register"}>Create an account.</a>
                     </p>
+
+                    <hr className={"m-4"}/>
+
+                    <div className={styles.linkCollection}>
+                        <a href={"mailto:admin@tumemes.de"}>Contact</a> {" · "}
+                        <a href={"impressum"}>Impressum</a> {" · "}
+                        <a href={"https://github.com/leonwind/tumemes"}>Code</a>
+                    </div>
                 </Form>
             </div>
         );

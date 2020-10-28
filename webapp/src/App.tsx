@@ -5,6 +5,7 @@ import {Upload} from "./components/Upload";
 import {LoginPage} from "./components/LoginPage";
 import {Registration} from "./components/Registration";
 import {MemeCommentsPage} from "./components/MemeCommentsPage";
+import {Impressum} from "./components/ImpressumPage";
 
 export class App extends Component {
 
@@ -20,16 +21,15 @@ export class App extends Component {
                         <Registration/>
                     </Route>
 
-                    <Route path={"/upload"} exact={true}>
-                        <Upload/>
-                    </Route>
-
                     <Route path={"/meme/:memeID"} component={MemeCommentsPage}/>
+
+                    <Route path={"/impressum"} exact={true}>
+                        <Impressum/>
+                    </Route>
 
                     <Route path={"/"} exact={true}>
                         <FrontPage/>
                     </Route>
-
                 </Switch>
             </Router>
         )

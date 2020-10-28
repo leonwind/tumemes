@@ -1,5 +1,6 @@
 .body {
-    height: 100vh;
+    height: 100%;
+    min-height: 100vh;
     display: -ms-flexbox;
     display: flex;
     -ms-flex-align: center;
@@ -63,4 +64,12 @@
 .createAccountLink {
     margin: 1rem;
     text-align: center;
+}
+
+.linkCollection {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
 }

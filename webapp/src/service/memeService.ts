@@ -3,8 +3,11 @@ import {Requests} from "./requests";
 import {AUTH_HEADER} from "./headers";
 
 export class MemeService {
-    static async getMemes(): Promise<Response> {
-        return await Requests.sendRequest("memes", {
+    /**
+     * @param queryParam to retrieve memes sort by new or sort by points
+     */
+    static async getMemes(queryParam: string = ""): Promise<Response> {
+        return await Requests.sendRequest("memes" + queryParam, {
             method: "GET",
             headers: AUTH_HEADER
         }, false);

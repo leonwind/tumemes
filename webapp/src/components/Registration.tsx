@@ -243,7 +243,9 @@ export class Registration extends Component<{}, State> {
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit} className={styles.formRegistration}>
 
-                    <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
+                    <div className={styles.logo}>
+                        <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
+                    </div>
 
                     <h3 className={styles.headline}>
                         Create your TUMemes account
@@ -324,6 +326,14 @@ export class Registration extends Component<{}, State> {
                     <p className={styles.loginLink}>
                         Already have an account? <a href={"/login"}>Sign in.</a>
                     </p>
+
+                    <hr className={"m-4"}/>
+
+                    <div className={styles.linkCollection}>
+                        <a href={"mailto:admin@tumemes.de"}>Contact</a> {" · "}
+                        <a href={"impressum"}>Impressum</a> {" · "}
+                        <a href={"https://github.com/leonwind/tumemes"}>Code</a>
+                    </div>
                 </Form>
 
                 <Modal show={this.state.show} onHide={this.handleCloseModal} centered>
@@ -334,7 +344,18 @@ export class Registration extends Component<{}, State> {
                     </Modal.Header>
 
                     <Modal.Body>
-                        To verify your TUMemes account, please click on the link you have got sent via email.
+                        <p>
+                            To verify your TUMemes account, please click on the link you have got sent via email.
+                            Note that the link will expire in one day.
+                        </p>
+                        <p>
+                            If you configured that your TUM account automatically forwards your email
+                            to your primary email account, it may take a while until it arrives.
+                        </p>
+                        <p>
+                            However, you can also directly log in into your
+                            <a href={"https://mail.tum.de"}> TUM Email account</a>.
+                        </p>
                     </Modal.Body>
 
                     <Modal.Footer>

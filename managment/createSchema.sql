@@ -84,7 +84,8 @@ CREATE TABLE public.users (
     username character varying(32) NOT NULL,
     email character varying(64) NOT NULL,
     hash character varying(64) NOT NULL,
-    salt character varying(64) NOT NULL
+    salt character varying(64) NOT NULL,
+    verified boolean
 );
 
 
