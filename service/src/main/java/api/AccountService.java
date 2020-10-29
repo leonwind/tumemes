@@ -10,6 +10,11 @@ import javax.ws.rs.core.Response;
 @Path("/account")
 public interface AccountService {
 
+  @POST
+  @Path("/request/verification")
+  @Consumes(MediaType.APPLICATION_JSON)
+  Response requestNewVerification(Email email);
+
   @GET
   @Path("/verification/{token}")
   @Produces(MediaType.APPLICATION_JSON)

@@ -4,6 +4,16 @@ import {PasswordReset} from "../types";
 
 export class AccountService {
 
+    static async requestNewVerification(email: string) {
+        const data: string = JSON.stringify({"email": email});
+
+        await Requests.sendRequest("account/request/verification", {
+            method: "POST",
+            headers: JSON_HEADER,
+            body: data
+        });
+    }
+
     static async requestPasswordReset(email: string) {
         const data: string = JSON.stringify({"email": email});
 

@@ -7,7 +7,7 @@ import {MemeCommentsPage} from "./components/MemeCommentsPage";
 import {Terms} from "./components/TermsPage";
 import {PageNotFound} from "./components/PageNotFound";
 import {RequestPasswordResetPage} from "./components/RequestPasswordResetPage";
-import {RequestVerificationMailResendPage} from "./components/RequestVerificationMailResendPage";
+import {RequestNewVerification} from "./components/RequestNewVerification";
 import {PasswordResetPage} from "./components/PasswordResetPage";
 
 export class App extends Component {
@@ -37,7 +37,7 @@ export class App extends Component {
                     <Route path={"/password_reset/:token"} component={PasswordResetPage}/>
 
                     <Route path={"/request_verification_resend"} exact={true}>
-                        <RequestVerificationMailResendPage/>
+                        <RequestNewVerification/>
                     </Route>
 
                     <Route path={"/"} exact={true}>

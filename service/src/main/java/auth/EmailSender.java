@@ -95,8 +95,6 @@ public class EmailSender {
         );
 
     to = "leon.windheuser@gmail.com";
-    System.out.println(smtpUsername);
-    System.out.println(smtpPassword);
     sendEmail(to, smtpUsername, smtpPassword, subject, body);
   }
 }

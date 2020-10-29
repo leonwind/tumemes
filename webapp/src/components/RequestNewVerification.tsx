@@ -4,13 +4,14 @@ import Form from "react-bootstrap/Form";
 import logo from "../../assets/logo.svg";
 import Button from "react-bootstrap/Button";
 import {LinkCollection} from "./LinkCollection";
+import {AccountService} from "../service/accountService";
 
 interface State {
     email: string,
     redirect: boolean
 }
 
-export class RequestVerificationMailResendPage extends Component<{}, State> {
+export class RequestNewVerification extends Component<{}, State> {
 
     constructor(props: any) {
         super(props);
@@ -29,6 +30,8 @@ export class RequestVerificationMailResendPage extends Component<{}, State> {
 
     private handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
+
+        AccountService.requestNewVerification(this.state.email);
     }
 
     render() {

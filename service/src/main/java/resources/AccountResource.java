@@ -34,6 +34,29 @@ public class AccountResource implements AccountService {
     this.smtpPassword = smtpPassword;
   }
 
+  @POST
+  @Path("/request/verification")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response requestNewVerification(Email email) {
+    User user = userDAO.getUserByEmail(email.getEmail());
+
+    if (user == null) {
+      return Response.status(400).entity("No user exists with this email").build();
+    }
+
+    if (user.isVerified()) {
+      return Response.ok("User already verified").build();
+    }
+
+    try {
+      EmailSender.sendVerificationEmail(email.getEmail(), smtpUsername, smtpPassword,
+          Token.createToken(secretKey, email.getEmail(), Duration.ofDays(1L)));
+      return Response.ok("Sent email").build();
+    } catch (Exception ex) {
+      return Response.status(400).entity("Could not send email").build();
+    }
+  }
+
   @GET
   @Path("/verification/{token}")
   @Produces(MediaType.APPLICATION_JSON)
