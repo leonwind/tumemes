@@ -4,17 +4,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PasswordReset {
 
-  private final String email;
+  private final String token;
   private final String newPassword;
 
   public PasswordReset(
-      @JsonProperty("email") String email, @JsonProperty("newPassword") String newPassword) {
-    this.email = email;
+      @JsonProperty("token") String token,
+      @JsonProperty("newPassword") String newPassword) {
+    this.token = token;
     this.newPassword = newPassword;
   }
 
-  public String getEmail() {
-    return email;
+  public String getToken() {
+    return token;
   }
 
   public String getNewPassword() {

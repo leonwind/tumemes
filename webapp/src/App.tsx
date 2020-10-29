@@ -2,7 +2,7 @@ import React, {Component} from "react"
 import {FrontPage} from './components/FrontPage'
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {LoginPage} from "./components/LoginPage";
-import {Registration} from "./components/Registration";
+import {RegistrationPage} from "./components/RegistrationPage";
 import {MemeCommentsPage} from "./components/MemeCommentsPage";
 import {Terms} from "./components/TermsPage";
 import {PageNotFound} from "./components/PageNotFound";
@@ -21,7 +21,7 @@ export class App extends Component {
                     </Route>
 
                     <Route path={"/register"} exact={true}>
-                        <Registration/>
+                        <RegistrationPage/>
                     </Route>
 
                     <Route path={"/meme/:memeID"} component={MemeCommentsPage}/>

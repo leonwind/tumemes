@@ -10,6 +10,7 @@ import logo from "../../assets/logo.svg";
 import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import {LinkCollection} from "./LinkCollection";
+import {SecurePassword} from "./SecurePassword";
 
 interface State {
     username: string,
@@ -33,7 +34,7 @@ const allowedDomains = new Set([
     "mytum.de"
 ]);
 
-export class Registration extends Component<{}, State> {
+export class RegistrationPage extends Component<{}, State> {
 
     constructor(props: any) {
         super(props);
@@ -91,44 +92,6 @@ export class Registration extends Component<{}, State> {
         });
     }
 
-    private static isDigit(char: string): boolean {
-        return char >= '0' && char <= '9';
-    }
-
-    private static isSecure(password: string): boolean {
-        if (password.length < 8) {
-            return false;
-        }
-
-        let containsDigit: boolean = false;
-        let containsLowerCase: boolean = false;
-        let containsUpperCase: boolean = false;
-
-        for (let i = 0; i < password.length; i++) {
-            let curr: string = password.charAt(i);
-
-            if (Registration.isDigit(curr)) {
-                containsDigit = true;
-                continue;
-            }
-
-            if (curr === curr.toLowerCase()) {
-                containsLowerCase = true;
-                continue;
-            }
-
-            if (curr === curr.toUpperCase()) {
-                containsUpperCase = true;
-            }
-
-            // if everything satisfied, return true before finishing loop
-            if (containsDigit && containsLowerCase && containsUpperCase) {
-                return true;
-            }
-        }
-        return containsDigit && containsLowerCase && containsUpperCase;
-    }
-
     private static getDomain(email: string): string {
         return email.substr(email.indexOf('@') + 1);
     }
@@ -145,26 +108,22 @@ export class Registration extends Component<{}, State> {
         let isValid: boolean = true;
 
         if (this.state.username.includes('@')) {
-            console.log("Username contains @");
             newErrors.username = "@ is not allowed in the username.";
             isValid = false;
         }
 
-        const domain: string = Registration.getDomain(this.state.email);
+        const domain: string = RegistrationPage.getDomain(this.state.email);
         if (!allowedDomains.has(domain)) {
-            console.log("Domain wrong");
             newErrors.email = "Only @tum.de and @mytum.de emails are supported.";
             isValid = false;
         }
 
-        if (!Registration.isSecure(this.state.password)) {
-            console.log("Password weak");
+        if (!SecurePassword.isSecure(this.state.password)) {
             newErrors.password = "Password is too weak.";
             isValid = false;
         }
 
         if (this.state.password !== this.state.repeatedPassword) {
-            console.log("Password and repeated password do not match");
             newErrors.repeatedPassword = "Passwords do not match.";
             isValid = false;
         }

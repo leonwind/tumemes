@@ -16,14 +16,14 @@ public interface AccountService {
   Response validateEmail(@PathParam("token") String token);
 
   @POST
-  @Path("/request_password_reset")
+  @Path("/request/password_reset/")
   @Consumes(MediaType.APPLICATION_JSON)
   Response requestPasswordReset(Email email);
 
   @POST
-  @Path("/password_reset/{token}")
+  @Path("/password_reset")
   @Consumes(MediaType.APPLICATION_JSON)
-  Response resetPassword(@PathParam("token") String token, PasswordReset passwordReset);
+  Response resetPassword(PasswordReset passwordReset);
 
   class Email {
     private final String email;

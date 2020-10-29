@@ -33,4 +33,10 @@ public interface UserDAO {
   @SqlQuery("SELECT * FROM users WHERE email = :email")
   @RegisterRowMapper(UserMapper.class)
   User getUserByEmail(@Bind("email") String email);
+
+  @SqlUpdate("UPDATE users SET hash = :newHash, salt = :newSalt WHERE email = :currEmail")
+  void updateUserPassword(
+      @Bind("currEmail") String currEmail,
+      @Bind("newHash") String newHash,
+      @Bind("newSalt") String newSalt);
 }

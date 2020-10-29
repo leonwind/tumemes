@@ -3,6 +3,7 @@ package resources;
 import accessors.UserDAO;
 import api.AccountService;
 import auth.EmailSender;
+import auth.Hashing;
 import auth.SecurePassword;
 import auth.Token;
 import core.PasswordReset;
@@ -12,7 +13,10 @@ import io.dropwizard.auth.AuthenticationException;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.time.Duration;
+import java.util.Base64;
 import java.util.Optional;
 
 public class AccountResource implements AccountService {
@@ -38,7 +42,7 @@ public class AccountResource implements AccountService {
       Optional<User> userOptional = Token.verifyToken(this.userDAO, this.secretKey, token);
 
       if (userOptional.isEmpty()) {
-        return Response.status(400).entity("User does not exist").build();
+        return Response.status(400).entity("Token is not valid").build();
       }
 
       User user = userOptional.get();
@@ -55,7 +59,7 @@ public class AccountResource implements AccountService {
   }
 
   @POST
-  @Path("/request_password_reset")
+  @Path("/request/password_reset/")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response requestPasswordReset(Email email) {
     User user = userDAO.getUserByEmail(email.getEmail());
@@ -76,18 +80,42 @@ public class AccountResource implements AccountService {
   }
 
   @POST
-  @Path("/password_reset/{token}")
+  @Path("/password_reset")
   @Consumes(MediaType.APPLICATION_JSON)
-  public Response resetPassword(@PathParam("token") String token, PasswordReset passwordReset) {
+  public Response resetPassword(PasswordReset passwordReset) {
+    try {
+      Optional<User> userOptional = Token.verifyToken(userDAO, secretKey, passwordReset.getToken());
 
-    if (!SecurePassword.isSecure(passwordReset.getNewPassword())) {
-      return Response.status(400)
-          .entity(
-              "Password should be at least 8 characters and "
-                  + "contains one digit, one lowercase and one uppercase character")
-          .build();
+      if (userOptional.isEmpty()) {
+        return Response.status(400).entity("Token is not valid").build();
+      }
+
+      User user = userOptional.get();
+      System.out.println(user.getEmail());
+
+      if (!SecurePassword.isSecure(passwordReset.getNewPassword())) {
+        return Response.status(400)
+            .entity(
+                "Password should be at least 8 characters and "
+                    + "contains one digit, one lowercase and one uppercase character")
+            .build();
+      }
+
+      byte[] newSalt = Hashing.generateSalt();
+      try {
+        byte[] newHash = Hashing.generateHash(passwordReset.getNewPassword(), newSalt);
+
+        Base64.Encoder enc = Base64.getEncoder();
+        userDAO.updateUserPassword(
+            user.getEmail(), enc.encodeToString(newHash), enc.encodeToString(newSalt));
+
+        return Response.ok("Updated password").build();
+
+      } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
+        return Response.status(400).entity("Error occurred while changing your password").build();
+      }
+    } catch (AuthenticationException ex) {
+      return Response.status(400).entity(ex.getMessage()).build();
     }
-
-    return Response.ok().build();
   }
 }

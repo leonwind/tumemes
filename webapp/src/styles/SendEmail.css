@@ -39,3 +39,8 @@
     background-color: rgb(0, 101, 189);
     color: white;
 }
+
+.errorMessage {
+    color: red;
+    text-align: center;
+}

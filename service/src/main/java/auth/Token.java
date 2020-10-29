@@ -4,6 +4,8 @@ import accessors.UserDAO;
 import core.User;
 import io.dropwizard.auth.AuthenticationException;
 import io.jsonwebtoken.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
@@ -13,6 +15,8 @@ import java.util.Date;
 import java.util.Optional;
 
 public class Token {
+
+  private static final Logger log = LoggerFactory.getLogger(Token.class);
 
   public static String createToken(String secretKey, String subject, Duration TTL) {
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -49,7 +53,7 @@ public class Token {
         | MalformedJwtException
         | SignatureException
         | IllegalArgumentException e) {
-      System.out.println(e.getMessage());
+      log.info(e.getMessage());
       return Optional.empty();
     }
   }

@@ -42,3 +42,8 @@ export interface NewComment {
     memeID: string,
     content: string
 }
+
+export interface PasswordReset {
+    token: string,
+    newPassword: string
+}
