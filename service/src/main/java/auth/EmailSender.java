@@ -65,7 +65,7 @@ public class EmailSender {
       String to, String smtpUsername, String smtpPassword, String token) throws Exception {
 
     String subject = "TUMemes Email Verification";
-    String url = "http://localhost:8080/api/account/verification/" + token;
+    String url = DOMAIN + "/verification/" + token;
     String link = "<a href='" + url + "'>link</a>";
     String body =
         String.join(

@@ -15,10 +15,10 @@ public interface AccountService {
   @Consumes(MediaType.APPLICATION_JSON)
   Response requestNewVerification(Email email);
 
-  @GET
-  @Path("/verification/{token}")
-  @Produces(MediaType.APPLICATION_JSON)
-  Response validateEmail(@PathParam("token") String token);
+  @POST
+  @Path("/verification/")
+  @Consumes(MediaType.APPLICATION_JSON)
+  Response validateEmail(TokenString token);
 
   @POST
   @Path("/request/password_reset/")
@@ -39,6 +39,18 @@ public interface AccountService {
 
     public String getEmail() {
       return email;
+    }
+  }
+
+  class TokenString {
+    private final String token;
+
+    public TokenString(@JsonProperty("token") String token) {
+      this.token = token;
+    }
+
+    public String getToken() {
+      return token;
     }
   }
 }

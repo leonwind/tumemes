@@ -14,6 +14,16 @@ export class AccountService {
         });
     }
 
+    static async validateAccount(token: string): Promise<Response> {
+        const data: string = JSON.stringify({"token": token});
+
+        return await Requests.sendRequest("account/verification", {
+            method: "POST",
+            headers: JSON_HEADER,
+            body: data
+        }, false);
+    }
+
     static async requestPasswordReset(email: string) {
         const data: string = JSON.stringify({"email": email});
 

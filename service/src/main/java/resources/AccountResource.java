@@ -34,6 +34,7 @@ public class AccountResource implements AccountService {
     this.smtpPassword = smtpPassword;
   }
 
+  @Override
   @POST
   @Path("/request/verification")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -57,12 +58,15 @@ public class AccountResource implements AccountService {
     }
   }
 
-  @GET
-  @Path("/verification/{token}")
-  @Produces(MediaType.APPLICATION_JSON)
-  public Response validateEmail(@PathParam("token") String token) {
+  @Override
+  @POST
+  @Path("/verification/")
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Response validateEmail(TokenString token) {
+    System.out.println("VERIFY");
     try {
-      Optional<User> userOptional = Token.verifyToken(this.userDAO, this.secretKey, token);
+      Optional<User> userOptional = Token.verifyToken(this.userDAO,
+          this.secretKey, token.getToken());
 
       if (userOptional.isEmpty()) {
         return Response.status(400).entity("Token is not valid").build();
@@ -74,6 +78,7 @@ public class AccountResource implements AccountService {
       }
 
       userDAO.verifyUser(user.getEmail());
+      System.out.println("SUCCESS");
       return Response.ok("Verified the account with email " + user.getEmail()).build();
 
     } catch (AuthenticationException ex) {
@@ -81,6 +86,7 @@ public class AccountResource implements AccountService {
     }
   }
 
+  @Override
   @POST
   @Path("/request/password_reset/")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -102,6 +108,7 @@ public class AccountResource implements AccountService {
     return Response.ok().build();
   }
 
+  @Override
   @POST
   @Path("/password_reset")
   @Consumes(MediaType.APPLICATION_JSON)
@@ -114,7 +121,6 @@ public class AccountResource implements AccountService {
       }
 
       User user = userOptional.get();
-      System.out.println(user.getEmail());
 
       if (!SecurePassword.isSecure(passwordReset.getNewPassword())) {
         return Response.status(400)

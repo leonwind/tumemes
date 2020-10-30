@@ -3,7 +3,6 @@ package core;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class PasswordReset {
-
   private final String token;
   private final String newPassword;
 

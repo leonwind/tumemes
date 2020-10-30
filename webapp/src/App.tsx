@@ -9,6 +9,7 @@ import {PageNotFound} from "./components/PageNotFound";
 import {RequestPasswordResetPage} from "./components/RequestPasswordResetPage";
 import {RequestNewVerification} from "./components/RequestNewVerification";
 import {PasswordResetPage} from "./components/PasswordResetPage";
+import {ValidateAccountPage} from "./components/ValidateAccountPage";
 
 export class App extends Component {
 
@@ -16,37 +17,27 @@ export class App extends Component {
         return (
             <Router>
                 <Switch>
-                    <Route path={"/login"} exact={true}>
-                       <LoginPage/>
-                    </Route>
+                    <Route path={"/"} component={FrontPage} exact={true}/>
 
-                    <Route path={"/register"} exact={true}>
-                        <RegistrationPage/>
-                    </Route>
+                    <Route path={"/login"} component={LoginPage} exact={true} />
+
+                    <Route path={"/register"} component={RegistrationPage} exact={true}/>
 
                     <Route path={"/meme/:memeID"} component={MemeCommentsPage}/>
 
-                    <Route path={"/terms"} exact={true}>
-                        <Terms/>
-                    </Route>
+                    <Route path={"/terms"} component={Terms} exact={true}/>
 
-                    <Route path={"/request_password_reset"} exact={true}>
-                        <RequestPasswordResetPage/>
-                    </Route>
+                    <Route path={"/request_password_reset"} component={RequestPasswordResetPage}
+                           exact={true}/>
+
+                    <Route path={"/request_verification_resend"} component={RequestNewVerification}
+                           exact={true}/>
 
                     <Route path={"/password_reset/:token"} component={PasswordResetPage}/>
 
-                    <Route path={"/request_verification_resend"} exact={true}>
-                        <RequestNewVerification/>
-                    </Route>
+                    <Route path={"/verification/:token"} component={ValidateAccountPage}/>
 
-                    <Route path={"/"} exact={true}>
-                        <FrontPage/>
-                    </Route>
-
-                    <Route>
-                        <PageNotFound/>
-                    </Route>
+                    <Route component={PageNotFound}/>
                 </Switch>
             </Router>
         )

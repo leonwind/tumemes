@@ -38,7 +38,9 @@ export class RequestNewVerification extends Component<{}, State> {
         return (
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit} className={styles.form}>
-                    <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
+                    <a href={"/"}>
+                        <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
+                    </a>
 
                     <h3 className={styles.headline}>
                         Send new verification email
