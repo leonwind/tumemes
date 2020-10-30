@@ -7,6 +7,7 @@ import org.jdbi.v3.sqlobject.customizer.Bind;
 import org.jdbi.v3.sqlobject.statement.SqlQuery;
 import org.jdbi.v3.sqlobject.statement.SqlUpdate;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public interface MemeDAO {
           + ") c on c.memeID = memes.memeID "
           + "WHERE voteCount < :limit "
           + "ORDER BY voteCount DESC, created DESC "
-          + "LIMIT 3")
+          + "LIMIT 5")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByVotes(@Bind("currUsername") String username, @Bind("limit") long limit);
 
@@ -77,11 +78,12 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "WHERE extract(EPOCH FROM created) < :limit "
+          + "WHERE created < :limit "
           + "ORDER BY created DESC "
-          + "LIMIT 3")
+          + "LIMIT 5")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByDate(@Bind("currUsername") String username, @Bind("limit") long limit);
+  List<Meme> getAllMemesByDate(
+      @Bind("currUsername") String username, @Bind("limit") Timestamp limit);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "

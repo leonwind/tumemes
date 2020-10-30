@@ -16,7 +16,7 @@ interface State {
     memes: Meme[],
     memeIDs: Set<string>,
     sortByNew: boolean,
-    loadMore: boolean,
+    hasMore: boolean,
     redirect: boolean
 }
 
@@ -28,7 +28,7 @@ export class FrontPage extends Component<{}, State> {
             memes: [],
             memeIDs: new Set(),
             sortByNew: true,
-            loadMore: true,
+            hasMore: true,
             redirect: false
         };
 
@@ -36,6 +36,10 @@ export class FrontPage extends Component<{}, State> {
         this.handleSortByPoints = this.handleSortByPoints.bind(this);
 
         window.onscroll = debounce(() => {
+            if (!this.state.hasMore) {
+                return;
+            }
+
             if (window.innerHeight + document.documentElement.scrollTop
                 === document.documentElement.offsetHeight) {
                 this.loadMemes();
@@ -44,14 +48,24 @@ export class FrontPage extends Component<{}, State> {
     }
 
     private handleSortByNew() {
-        this.setState({sortByNew: true},
+        this.setState({
+                sortByNew: true,
+                memes: [],
+                memeIDs: new Set(),
+                hasMore: true
+            },
             () => {
                 this.loadMemes()
             });
     }
 
     private handleSortByPoints() {
-        this.setState({sortByNew: false},
+        this.setState({
+                sortByNew: false,
+                memes: [],
+                memeIDs: new Set(),
+                hasMore: true
+            },
             () => {
                 this.loadMemes()
             });
@@ -63,26 +77,18 @@ export class FrontPage extends Component<{}, State> {
 
     private loadMemes() {
         console.log("LOAD MORE");
-        let sortByParam: string = "&sortBy=created";
-        let limitParamValue: number = 1603323813600;
+        let sortByParam: string = "";
+        let limitParamValue: number = Number.MAX_SAFE_INTEGER;
 
-        if (this.state.memes.length > 0) {
-            limitParamValue = this.state.memes[this.state.memes.length - 1].created;
-        }
-
-        /*if (this.state.sortByNew) {
+        if (this.state.sortByNew) {
             sortByParam = "&sortBy=created";
-        }*/
-
-        /*if (this.state.sortByNew) {
-            //sortByParam = "&sortBy=created";
 
             if (this.state.memes.length > 0) {
                 limitParamValue = this.state.memes[this.state.memes.length - 1].created;
             }
         } else if (this.state.memes.length > 0) {
             limitParamValue = this.state.memes[this.state.memes.length - 1].voteCount;
-        }*/
+        }
 
         MemeService.getMemes(limitParamValue, sortByParam)
             .then((ans: Response) => {
@@ -90,7 +96,11 @@ export class FrontPage extends Component<{}, State> {
                     const memesPromise: Promise<Meme[]> = ans.json();
 
                     memesPromise.then((memes: Meme[]) => {
-                        console.table(memes);
+                        if (memes.length === 0) {
+                            this.setState({hasMore: false});
+                            return;
+                        }
+
                         let newMemes: Meme[] = this.state.memes;
 
                         memes.forEach((newMeme: Meme) => {
@@ -140,8 +150,8 @@ export class FrontPage extends Component<{}, State> {
                         </ToggleButtonGroup>
                     </Card>
                 </div>
-
                 {allMemes}
+
             </div>
         );
     }

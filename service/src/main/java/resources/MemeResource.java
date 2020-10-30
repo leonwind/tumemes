@@ -8,6 +8,7 @@ import io.dropwizard.auth.Auth;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class MemeResource implements MemeService {
@@ -20,17 +21,17 @@ public class MemeResource implements MemeService {
 
 
   /**
-   * 2147483647 = Integer.MAX_VALUE
+   * 9007199254740991 = Number.MAX_SAFE_INTEGER
+   * Javascript safe upper limit
+   * = 2^53 - 1
    */
   @Override
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public List<Meme> getMemes(
       @Auth User user,
-      @QueryParam("limit") @DefaultValue("9223372036854775807") long limit,
+      @QueryParam("limit") @DefaultValue("9007199254740991") long limit,
       @QueryParam("sortBy") String sortBy) {
-    System.out.println(limit);
-
     String username = user.getName();
 
     if (sortBy == null) {
@@ -38,9 +39,7 @@ public class MemeResource implements MemeService {
     }
 
     if (sortBy.equals("created")) {
-      List<Meme> ans = memeDAO.getAllMemesByDate(username, limit);
-      System.out.println(ans);
-      return ans;
+      return memeDAO.getAllMemesByDate(username, new Timestamp(limit));
     }
 
     return memeDAO.getAllMemesByVotes(username, limit);
