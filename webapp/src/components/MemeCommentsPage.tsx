@@ -11,6 +11,7 @@ import styles from "../styles/Comment.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
+import {AccessTime, TrendingUp} from "@material-ui/icons";
 
 interface Props {
     memeID: string
@@ -171,7 +172,7 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
 
                     {/* Only render if at least one comment exists */}
                     {this.state.comments.length > 0 &&
-                    <Dropdown className={"mt-4 mb-1 float-right"}>
+                    <Dropdown className={"mt-4 mb-1 float-right"} alignRight>
                         <Dropdown.Toggle className={styles.sortByButton}
                                          variant={"outline-primary"}
                                          id={"dropdown-menu-align-right"}>
@@ -180,9 +181,11 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
 
                         <Dropdown.Menu>
                             <Dropdown.Item onSelect={() => this.handleSelect("new")}>
+                                <AccessTime/> {" "}
                                 NEW
                             </Dropdown.Item>
                             <Dropdown.Item onSelect={() => this.handleSelect("points")}>
+                                <TrendingUp/> {" "}
                                 POINTS
                             </Dropdown.Item>
                         </Dropdown.Menu>

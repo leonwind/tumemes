@@ -9,6 +9,7 @@ import io.dropwizard.auth.Auth;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MemeResource implements MemeService {
@@ -19,11 +20,9 @@ public class MemeResource implements MemeService {
     this.memeDAO = memeDAO;
   }
 
-
   /**
-   * 9007199254740991 = Number.MAX_SAFE_INTEGER
+   * 9007199254740991 = 2^53 - 1 = Number.MAX_SAFE_INTEGER
    * Javascript safe upper limit
-   * = 2^53 - 1
    */
   @Override
   @GET
@@ -35,19 +34,43 @@ public class MemeResource implements MemeService {
     String username = user.getName();
 
     if (sortBy == null) {
-      return memeDAO.getAllMemesByVotes(username, limit);
+      return memeDAO.getAllMemesByVotes(username, limit, false);
     }
 
     if (sortBy.equals("created")) {
-      return memeDAO.getAllMemesByDate(username, new Timestamp(limit));
+      return memeDAO.getAllMemesByDate(username, new Timestamp(limit), false);
     }
 
-    return memeDAO.getAllMemesByVotes(username, limit);
+    return memeDAO.getAllMemesByVotes(username, limit, false);
   }
 
   @Override
   @GET
-  @Path("/{memeID}")
+  @Path("/user/{username}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public List<Meme> getMemesFromUser(
+      @Auth User user,
+      @PathParam("username") String username,
+      @QueryParam("limit") @DefaultValue("9007199254740991") long limit,
+      @QueryParam("sortBy") String sortBy) {
+    if (!username.equals(user.getName())) {
+      return new ArrayList<>();
+    }
+
+    if (sortBy == null) {
+      return memeDAO.getAllMemesByVotes(username, limit, true);
+    }
+
+    if (sortBy.equals("created")) {
+      return memeDAO.getAllMemesByDate(username, new Timestamp(limit), true);
+    }
+
+    return memeDAO.getAllMemesByVotes(username, limit, true);
+  }
+
+  @Override
+  @GET
+  @Path("/meme/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
   public Meme getMemeByID(@Auth User user, @PathParam("memeID") String memeID) {
     if (memeDAO.memeIDExists(memeID)) {

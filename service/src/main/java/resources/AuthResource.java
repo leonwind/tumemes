@@ -32,8 +32,7 @@ public class AuthResource implements AuthService {
   private final String smtpUsername;
   private final String smtpPassword;
 
-  // one hour until normal token gets expired
-  private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(1L);
+  private final Duration TTL_ACCESS_TOKEN = Duration.ofHours(5L);
   private final Duration TTL_EMAIL_VERIFICATION = Duration.ofDays(1L);
 
   public AuthResource(UserDAO userDAO, String secretKey, String smtpUsername, String smtpPassword) {

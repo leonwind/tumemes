@@ -51,11 +51,15 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "WHERE voteCount < :limit "
+          + "WHERE voteCount <= :maxVote "
+          + "AND (author = :currUsername OR :fromUser IS FALSE) "
           + "ORDER BY voteCount DESC, created DESC "
           + "LIMIT 5")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByVotes(@Bind("currUsername") String username, @Bind("limit") long limit);
+  List<Meme> getAllMemesByVotes(
+      @Bind("currUsername") String username,
+      @Bind("maxVote") long maxVote,
+      @Bind("fromUser") boolean fromUser);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
@@ -78,12 +82,15 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "WHERE created < :limit "
+          + "WHERE created < :lastTimestamp "
+          + "AND (author = :currUsername OR :fromUser IS FALSE) "
           + "ORDER BY created DESC "
           + "LIMIT 5")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByDate(
-      @Bind("currUsername") String username, @Bind("limit") Timestamp limit);
+      @Bind("currUsername") String username,
+      @Bind("lastTimestamp") Timestamp lastTimestamp,
+      @Bind("fromUser") boolean fromUser);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "

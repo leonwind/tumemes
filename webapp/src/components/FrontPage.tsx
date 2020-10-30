@@ -20,7 +20,11 @@ interface State {
     redirect: boolean
 }
 
-export class FrontPage extends Component<{}, State> {
+interface Props {
+    user: string
+}
+
+export class FrontPage extends Component<Props, State> {
 
     constructor(props: any) {
         super(props);
@@ -40,6 +44,7 @@ export class FrontPage extends Component<{}, State> {
                 return;
             }
 
+            // load more memes if user hits the end of the page
             if (window.innerHeight + document.documentElement.scrollTop
                 === document.documentElement.offsetHeight) {
                 this.loadMemes();
@@ -76,7 +81,6 @@ export class FrontPage extends Component<{}, State> {
     }
 
     private loadMemes() {
-        console.log("LOAD MORE");
         let sortByParam: string = "";
         let limitParamValue: number = Number.MAX_SAFE_INTEGER;
 
@@ -90,8 +94,14 @@ export class FrontPage extends Component<{}, State> {
             limitParamValue = this.state.memes[this.state.memes.length - 1].voteCount;
         }
 
-        MemeService.getMemes(limitParamValue, sortByParam)
-            .then((ans: Response) => {
+        let ansPromise: Promise<Response>;
+        if (this.props.user === undefined || this.props.user === null) {
+            ansPromise = MemeService.getMemes(limitParamValue, sortByParam);
+        } else {
+            ansPromise = MemeService.getMemesFromUser(this.props.user, limitParamValue, sortByParam);
+        }
+
+        ansPromise.then((ans: Response) => {
                 if (ans.ok) {
                     const memesPromise: Promise<Meme[]> = ans.json();
 
@@ -156,4 +166,3 @@ export class FrontPage extends Component<{}, State> {
         );
     }
 }
-

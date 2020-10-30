@@ -47,3 +47,9 @@ export interface PasswordReset {
     token: string,
     newPassword: string
 }
+
+export interface Token {
+    iat: number,
+    exp: number,
+    sub: string
+}

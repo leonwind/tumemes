@@ -17,8 +17,8 @@ export class HumanReadableTimeDiff {
      * @param timeHappened: timestamp when the event happened (e.g uploaded meme)
      */
     public static calculateTimeDiff(timeHappened: number): string {
-       const seconds: number = Math.floor(
-           (new Date().getTime() - timeHappened) / 1000);
+        const seconds: number = Math.floor(
+            (new Date().getTime() - timeHappened) / 1000);
 
         // 31536000 = one year in seconds
         let interval: number = Math.floor(seconds / 31536000);

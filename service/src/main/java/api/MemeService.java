@@ -12,7 +12,8 @@ import java.util.List;
 public interface MemeService {
 
   /**
-   * 2147483647 = Integer.MAX_VALUE
+   * 9007199254740991 = 2^53 - 1 = Number.MAX_SAFE_INTEGER
+   * Javascript safe upper limit
    */
   @GET
   @Produces(MediaType.APPLICATION_JSON)
@@ -22,7 +23,16 @@ public interface MemeService {
       @QueryParam("sortBy") String sortBy);
 
   @GET
-  @Path("/{memeID}")
+  @Path("/user/{username}")
+  @Produces(MediaType.APPLICATION_JSON)
+  List<Meme> getMemesFromUser(
+      @Auth User user,
+      @PathParam("username") String username,
+      @QueryParam("limit") @DefaultValue("9223372036854775807") long limit,
+      @QueryParam("sortBy") String sortBy);
+
+  @GET
+  @Path("/meme/{memeID}")
   @Produces(MediaType.APPLICATION_JSON)
   Meme getMemeByID(@Auth User user, @PathParam("memeID") String memeID);
 }

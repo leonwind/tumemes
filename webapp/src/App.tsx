@@ -10,6 +10,7 @@ import {RequestPasswordResetPage} from "./components/RequestPasswordResetPage";
 import {RequestNewVerification} from "./components/RequestNewVerification";
 import {PasswordResetPage} from "./components/PasswordResetPage";
 import {ValidateAccountPage} from "./components/ValidateAccountPage";
+import {MemesByUserPage} from "./components/MemesByUserPage";
 
 export class App extends Component {
 
@@ -24,6 +25,8 @@ export class App extends Component {
                     <Route path={"/register"} component={RegistrationPage} exact={true}/>
 
                     <Route path={"/meme/:memeID"} component={MemeCommentsPage}/>
+
+                    <Route path={"/user/:username"} component={MemesByUserPage}/>
 
                     <Route path={"/terms"} component={Terms} exact={true}/>
 
