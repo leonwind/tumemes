@@ -4,12 +4,14 @@ import {AUTH_HEADER} from "./headers";
 
 export class MemeService {
     /**
+     * @param limitParamValue
      * @param queryParam to retrieve memes sort by new or sort by points
      */
-    static async getMemes(queryParam: string = ""): Promise<Response> {
-        return await Requests.sendRequest("memes" + queryParam, {
+    static async getMemes(limitParamValue: number, queryParam: string = ""): Promise<Response> {
+        return await Requests.sendRequest("memes?limit=" + limitParamValue + queryParam, {
             method: "GET",
             headers: AUTH_HEADER
+
         }, false);
     }
 

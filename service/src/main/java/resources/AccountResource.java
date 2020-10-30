@@ -63,7 +63,6 @@ public class AccountResource implements AccountService {
   @Path("/verification/")
   @Consumes(MediaType.APPLICATION_JSON)
   public Response validateEmail(TokenString token) {
-    System.out.println("VERIFY");
     try {
       Optional<User> userOptional = Token.verifyToken(this.userDAO,
           this.secretKey, token.getToken());
@@ -78,7 +77,6 @@ public class AccountResource implements AccountService {
       }
 
       userDAO.verifyUser(user.getEmail());
-      System.out.println("SUCCESS");
       return Response.ok("Verified the account with email " + user.getEmail()).build();
 
     } catch (AuthenticationException ex) {

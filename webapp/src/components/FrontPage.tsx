@@ -10,10 +10,13 @@ import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import Card from "react-bootstrap/Card";
 import {AccessTime, TrendingUp} from "@material-ui/icons";
+import debounce from "lodash/debounce";
 
 interface State {
     memes: Meme[],
+    memeIDs: Set<string>,
     sortByNew: boolean,
+    loadMore: boolean,
     redirect: boolean
 }
 
@@ -23,40 +26,80 @@ export class FrontPage extends Component<{}, State> {
         super(props);
         this.state = {
             memes: [],
+            memeIDs: new Set(),
             sortByNew: true,
+            loadMore: true,
             redirect: false
         };
 
         this.handleSortByNew = this.handleSortByNew.bind(this);
         this.handleSortByPoints = this.handleSortByPoints.bind(this);
+
+        window.onscroll = debounce(() => {
+            if (window.innerHeight + document.documentElement.scrollTop
+                === document.documentElement.offsetHeight) {
+                this.loadMemes();
+            }
+        }, 500);
     }
 
     private handleSortByNew() {
         this.setState({sortByNew: true},
-            () => {this.loadMemes()});
+            () => {
+                this.loadMemes()
+            });
     }
 
     private handleSortByPoints() {
         this.setState({sortByNew: false},
-            () => {this.loadMemes()});
+            () => {
+                this.loadMemes()
+            });
     }
 
     componentDidMount() {
-       this.loadMemes();
+        this.loadMemes();
     }
 
     private loadMemes() {
-        let queryParam: string = "";
-        if (this.state.sortByNew) {
-            queryParam = "?sortBy=created";
+        console.log("LOAD MORE");
+        let sortByParam: string = "&sortBy=created";
+        let limitParamValue: number = 1603323813600;
+
+        if (this.state.memes.length > 0) {
+            limitParamValue = this.state.memes[this.state.memes.length - 1].created;
         }
 
-        MemeService.getMemes(queryParam)
+        /*if (this.state.sortByNew) {
+            sortByParam = "&sortBy=created";
+        }*/
+
+        /*if (this.state.sortByNew) {
+            //sortByParam = "&sortBy=created";
+
+            if (this.state.memes.length > 0) {
+                limitParamValue = this.state.memes[this.state.memes.length - 1].created;
+            }
+        } else if (this.state.memes.length > 0) {
+            limitParamValue = this.state.memes[this.state.memes.length - 1].voteCount;
+        }*/
+
+        MemeService.getMemes(limitParamValue, sortByParam)
             .then((ans: Response) => {
                 if (ans.ok) {
                     const memesPromise: Promise<Meme[]> = ans.json();
+
                     memesPromise.then((memes: Meme[]) => {
-                        this.setState({memes});
+                        console.table(memes);
+                        let newMemes: Meme[] = this.state.memes;
+
+                        memes.forEach((newMeme: Meme) => {
+                            if (!this.state.memeIDs.has(newMeme.memeID)) {
+                                this.state.memeIDs.add(newMeme.memeID);
+                                newMemes.push(newMeme);
+                            }
+                        });
+                        this.setState({memes: newMemes});
                     })
                     return;
                 }

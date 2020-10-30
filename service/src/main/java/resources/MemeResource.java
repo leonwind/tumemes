@@ -18,22 +18,32 @@ public class MemeResource implements MemeService {
     this.memeDAO = memeDAO;
   }
 
+
+  /**
+   * 2147483647 = Integer.MAX_VALUE
+   */
   @Override
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public List<Meme> getMemes(@Auth User user,
-                             @QueryParam("sortBy") String sortBy) {
+  public List<Meme> getMemes(
+      @Auth User user,
+      @QueryParam("limit") @DefaultValue("9223372036854775807") long limit,
+      @QueryParam("sortBy") String sortBy) {
+    System.out.println(limit);
+
     String username = user.getName();
 
     if (sortBy == null) {
-      return memeDAO.getAllMemesByVotes(username);
+      return memeDAO.getAllMemesByVotes(username, limit);
     }
 
     if (sortBy.equals("created")) {
-      return memeDAO.getAllMemesByDate(username);
+      List<Meme> ans = memeDAO.getAllMemesByDate(username, limit);
+      System.out.println(ans);
+      return ans;
     }
 
-    return memeDAO.getAllMemesByVotes(username);
+    return memeDAO.getAllMemesByVotes(username, limit);
   }
 
   @Override
@@ -47,5 +57,4 @@ public class MemeResource implements MemeService {
 
     return null;
   }
-
 }

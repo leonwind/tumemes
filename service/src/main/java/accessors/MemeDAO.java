@@ -26,8 +26,8 @@ public interface MemeDAO {
       @Bind("created") Date created);
 
   /**
-   * Sorry for this shit indentation. The Google Java Formatter does not allow //formatter:off,
-   * making it impossible to proper indent the query
+   * Sorry for this shit indentation. The Google Java Formatter does not allow formatter:off, making
+   * it impossible to proper indent the query
    */
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
@@ -50,9 +50,11 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "ORDER BY voteCount DESC, created DESC")
+          + "WHERE voteCount < :limit "
+          + "ORDER BY voteCount DESC, created DESC "
+          + "LIMIT 3")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByVotes(@Bind("currUsername") String username);
+  List<Meme> getAllMemesByVotes(@Bind("currUsername") String username, @Bind("limit") long limit);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
@@ -75,9 +77,11 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "ORDER BY created DESC")
+          + "WHERE extract(EPOCH FROM created) < :limit "
+          + "ORDER BY created DESC "
+          + "LIMIT 3")
   @RegisterRowMapper(MemeMapper.class)
-  List<Meme> getAllMemesByDate(@Bind("currUsername") String username);
+  List<Meme> getAllMemesByDate(@Bind("currUsername") String username, @Bind("limit") long limit);
 
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
@@ -102,6 +106,5 @@ public interface MemeDAO {
           + ") c on c.memeID = :currMemeID "
           + "WHERE memes.memeID = :currMemeID ")
   @RegisterRowMapper(MemeMapper.class)
-  Meme getMemeByID(@Bind("currMemeID") String currMemeID,
-                   @Bind("currUsername") String username);
+  Meme getMemeByID(@Bind("currMemeID") String currMemeID, @Bind("currUsername") String username);
 }
