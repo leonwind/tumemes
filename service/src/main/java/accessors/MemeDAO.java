@@ -52,9 +52,9 @@ public interface MemeDAO {
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
           + "WHERE voteCount <= :maxVote "
-          + "AND (author = :currUsername OR :fromUser IS FALSE) "
+          + "AND (:fromUser IS FALSE OR author = :currUsername)"
           + "ORDER BY voteCount DESC, created DESC "
-          + "LIMIT 5")
+          + "LIMIT 10")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByVotes(
       @Bind("currUsername") String username,
@@ -83,9 +83,9 @@ public interface MemeDAO {
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
           + "WHERE created < :lastTimestamp "
-          + "AND (author = :currUsername OR :fromUser IS FALSE) "
+          + "AND (:fromUser IS FALSE OR author = :currUsername) "
           + "ORDER BY created DESC "
-          + "LIMIT 5")
+          + "LIMIT 10")
   @RegisterRowMapper(MemeMapper.class)
   List<Meme> getAllMemesByDate(
       @Bind("currUsername") String username,

@@ -105,7 +105,9 @@ export class LoginPage extends Component<{}, State> {
 
         return (
             <div className={styles.body}>
-                <Form onSubmit={this.handleSubmit} className={styles.formLogIn}>
+                <Form onSubmit={this.handleSubmit}
+                      className={styles.formLogIn}
+                      autoComplete={"on"}>
 
                     <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
 

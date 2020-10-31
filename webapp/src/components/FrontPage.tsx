@@ -86,11 +86,12 @@ export class FrontPage extends Component<Props, State> {
 
         if (this.state.sortByNew) {
             sortByParam = "&sortBy=created";
-
             if (this.state.memes.length > 0) {
                 limitParamValue = this.state.memes[this.state.memes.length - 1].created;
             }
-        } else if (this.state.memes.length > 0) {
+        }
+        // sort by votes
+        else if (this.state.memes.length > 0) {
             limitParamValue = this.state.memes[this.state.memes.length - 1].voteCount;
         }
 
@@ -106,6 +107,7 @@ export class FrontPage extends Component<Props, State> {
                     const memesPromise: Promise<Meme[]> = ans.json();
 
                     memesPromise.then((memes: Meme[]) => {
+                        console.table(memes);
                         if (memes.length === 0) {
                             this.setState({hasMore: false});
                             return;

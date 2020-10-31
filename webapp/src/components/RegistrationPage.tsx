@@ -201,7 +201,8 @@ export class RegistrationPage extends Component<{}, State> {
 
         return (
             <div className={styles.body}>
-                <Form onSubmit={this.handleSubmit} className={styles.formRegistration}>
+                <Form onSubmit={this.handleSubmit}
+                      className={styles.formRegistration}>
 
                     <div className={styles.logo}>
                         <img className={"mb-5"} src={logo} alt={"Logo"} width={"72"} height={"72"}/>
@@ -246,7 +247,8 @@ export class RegistrationPage extends Component<{}, State> {
                         <Form.Control type="password" id="inputPassword"
                                       value={this.state.password}
                                       onChange={this.handlePasswordChange}
-                                      placeholder="Password" required/>
+                                      placeholder="Password" required
+                                      autoComplete={"new-password"}/>
                         <p className={styles.errorMessage}>
                             {this.state.errors["password"]}
                         </p>
@@ -265,7 +267,8 @@ export class RegistrationPage extends Component<{}, State> {
                         <Form.Control type="password" id="inputPasswordAgain"
                                       value={this.state.repeatedPassword}
                                       onChange={this.handleRepeatedPasswordChange}
-                                      placeholder="Confirm password" required/>
+                                      placeholder="Confirm password" required
+                                      autoComplete={"new-password"}/>
                         <p className={styles.errorMessage}>
                             {this.state.errors["repeatedPassword"]}
                         </p>
