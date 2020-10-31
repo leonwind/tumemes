@@ -56,9 +56,10 @@ export class LoginPage extends Component<{}, State> {
                 const dataPromise: Promise<string> = ans.text();
                 if (ans.ok) {
                     dataPromise.then((data: string) => {
-                        window.localStorage.setItem("access_token", data);
-                        window.localStorage.setItem("username", this.state.username);
-                        this.setState({redirect: true});
+                        this.setState({redirect: true}, () => {
+                            window.localStorage.setItem("access_token", data);
+                            window.localStorage.setItem("username", this.state.username);
+                        });
                         return;
                     })
                 }
@@ -93,14 +94,7 @@ export class LoginPage extends Component<{}, State> {
     render() {
         // redirect to homepage if login was successful
         if (this.state.redirect) {
-            /**
-             * If redirect to homepage without checking again throws an unauthorized
-             * error. With the if clause checking before it does not happen, event
-             * if it should be unnecessary
-             */
-            if (window.localStorage.getItem("access_token") !== null) {
-                return (<Redirect to={"/"}/>);
-            }
+            return (<Redirect to={"/"}/>);
         }
 
         return (

@@ -54,9 +54,9 @@ ALTER TABLE public.commentvotes OWNER TO tumemes;
 --
 
 CREATE TABLE public.memes (
-    memeid character varying NOT NULL,
-    title character varying,
-    author character varying,
+    memeid text NOT NULL,
+    title text,
+    author text,
     created timestamp without time zone
 );
 
@@ -68,8 +68,8 @@ ALTER TABLE public.memes OWNER TO tumemes;
 --
 
 CREATE TABLE public.memevotes (
-    memeid character varying,
-    username character varying,
+    memeid text,
+    username text,
     vote integer
 );
 
@@ -81,10 +81,10 @@ ALTER TABLE public.memevotes OWNER TO tumemes;
 --
 
 CREATE TABLE public.users (
-    username character varying(32) NOT NULL,
-    email character varying(64) NOT NULL,
-    hash character varying(64) NOT NULL,
-    salt character varying(64) NOT NULL,
+    username text NOT NULL,
+    email text NOT NULL,
+    hash text NOT NULL,
+    salt text NOT NULL,
     verified boolean
 );
 
