@@ -11,6 +11,7 @@ import {Redirect} from "react-router";
 import {HumanReadableTimeDiff} from "./HumanReadableTimeDiff";
 import {VoteService} from "../service/voteService";
 import {VoteButtons} from "./VoteButtons";
+import history from "../customHistory";
 
 interface Props {
     meme: Meme,
@@ -26,7 +27,6 @@ interface State {
      * -1 => downvoted
      */
     currVote: number,
-    redirect: boolean
 }
 
 export class MemeCard extends Component<Props, State> {
@@ -37,7 +37,6 @@ export class MemeCard extends Component<Props, State> {
         super(props);
         this.state = {
             currVote: this.props.meme.userVote,
-            redirect: false
         };
 
         this.timeDiff = HumanReadableTimeDiff.calculateTimeDiff(this.props.meme.created);
@@ -82,7 +81,7 @@ export class MemeCard extends Component<Props, State> {
     }
 
     private goToComments() {
-        this.setState({redirect: true});
+        history.push("/meme/" + this.props.meme.memeID);
     }
 
     private createVoteButtons(): { upvote: JSX.Element, downvote: JSX.Element } {
@@ -98,10 +97,6 @@ export class MemeCard extends Component<Props, State> {
     }
 
     render() {
-        if (this.state.redirect) {
-            return (<Redirect to={"/meme/" + this.props.meme.memeID}/>);
-        }
-
         const buttons: { upvote: JSX.Element, downvote: JSX.Element } = this.createVoteButtons();
         const upvoteButton: JSX.Element = buttons.upvote;
         const downvoteButton: JSX.Element = buttons.downvote;

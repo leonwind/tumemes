@@ -1,6 +1,6 @@
 import React, {ChangeEvent, Component, FormEvent} from "react";
 import {Comment, Meme, NewComment} from "../types";
-import {Redirect, RouteComponentProps} from "react-router";
+import {RouteComponentProps} from "react-router";
 import {MemeService} from "../service/memeService";
 import {PageNotFound} from "./PageNotFound";
 import {MemeCard} from "./MemeCard";
@@ -12,6 +12,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Dropdown from "react-bootstrap/Dropdown";
 import {AccessTime, TrendingUp} from "@material-ui/icons";
+import history from "../customHistory";
 
 interface Props {
     memeID: string
@@ -20,7 +21,6 @@ interface Props {
 interface State {
     meme: Meme | null,
     comments: Comment[],
-    redirect: boolean,
     newCommentContent: string,
     sortByString: string,
     sortByNew: boolean
@@ -35,7 +35,6 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
         this.state = {
             meme: null,
             comments: [],
-            redirect: false,
             newCommentContent: "",
             sortByString: "new",
             sortByNew: true
@@ -58,8 +57,7 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
                     })
                 } else {
                     if (ans.status === 401) {
-                        this.setState({redirect: true});
-                        return;
+                        history.push("/login");
                     } else {
                         throw new Error(ans.statusText);
                     }
@@ -87,7 +85,7 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
 
             // if unauthorized redirect to login
             if (ans.status === 401) {
-                this.setState({redirect: true});
+                history.push("/login");
             }
 
             throw new Error(ans.statusText);
@@ -131,10 +129,6 @@ export class MemeCommentsPage extends Component<RouteComponentProps<Props>, Stat
     }
 
     render() {
-        if (this.state.redirect) {
-            return (<Redirect to={"/login"}/>);
-        }
-
         if (this.state.meme === null) {
             return (<PageNotFound/>);
         }

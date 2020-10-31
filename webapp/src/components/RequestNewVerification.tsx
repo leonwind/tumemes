@@ -5,6 +5,7 @@ import logo from "../../assets/logo.svg";
 import Button from "react-bootstrap/Button";
 import {LinkCollection} from "./LinkCollection";
 import {AccountService} from "../service/accountService";
+import history from "../customHistory";
 
 interface State {
     email: string,
@@ -31,7 +32,10 @@ export class RequestNewVerification extends Component<{}, State> {
     private handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        AccountService.requestNewVerification(this.state.email);
+        AccountService.requestNewVerification(this.state.email)
+            .then(() => {
+                history.push("/login");
+            });
     }
 
     render() {

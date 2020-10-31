@@ -7,12 +7,12 @@ import styles from "../styles/Login.css"
 import Form from "react-bootstrap/Form";
 import logo from "../../assets/logo.svg";
 import {LinkCollection} from "./LinkCollection";
+import history from "../customHistory";
 
 interface State {
     username: string,
     password: string,
     error: string,
-    redirect: boolean,
     resetPassword: boolean
 }
 
@@ -24,7 +24,6 @@ export class LoginPage extends Component<{}, State> {
             username: "",
             password: "",
             error: "",
-            redirect: false,
             // if true show reset password link,
             // otherwise show resend validation link
             resetPassword: true
@@ -56,11 +55,9 @@ export class LoginPage extends Component<{}, State> {
                 const dataPromise: Promise<string> = ans.text();
                 if (ans.ok) {
                     dataPromise.then((data: string) => {
-                        this.setState({redirect: true}, () => {
-                            window.localStorage.setItem("access_token", data);
-                            window.localStorage.setItem("username", this.state.username);
-                        });
-                        return;
+                        window.localStorage.setItem("access_token", data);
+                        window.localStorage.setItem("username", this.state.username);
+                        history.push("/");
                     })
                 }
 
@@ -92,11 +89,6 @@ export class LoginPage extends Component<{}, State> {
     }
 
     render() {
-        // redirect to homepage if login was successful
-        if (this.state.redirect) {
-            return (<Redirect to={"/"}/>);
-        }
-
         return (
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit}

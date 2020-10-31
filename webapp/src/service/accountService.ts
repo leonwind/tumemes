@@ -4,14 +4,14 @@ import {PasswordReset} from "../types";
 
 export class AccountService {
 
-    static async requestNewVerification(email: string) {
+    static async requestNewVerification(email: string): Promise<Response> {
         const data: string = JSON.stringify({"email": email});
 
-        await Requests.sendRequest("account/request/verification", {
+        return await Requests.sendRequest("account/request/verification", {
             method: "POST",
             headers: JSON_HEADER,
             body: data
-        });
+        }, false);
     }
 
     static async validateAccount(token: string): Promise<Response> {
@@ -24,26 +24,26 @@ export class AccountService {
         }, false);
     }
 
-    static async requestPasswordReset(email: string) {
+    static async requestPasswordReset(email: string): Promise<Response> {
         const data: string = JSON.stringify({"email": email});
 
-        await Requests.sendRequest("account/request/password_reset", {
+        return await Requests.sendRequest("account/request/password_reset", {
             method: "POST",
             headers: JSON_HEADER,
             body: data
-        });
+        }, false);
     }
 
-    static async resetPassword(resetPassword: PasswordReset) {
+    static async resetPassword(resetPassword: PasswordReset): Promise<Response> {
         const data: string = JSON.stringify({
             "token": resetPassword.token,
             "newPassword": resetPassword.newPassword
         });
 
-        await Requests.sendRequest("account/password_reset", {
+        return await Requests.sendRequest("account/password_reset", {
             method: "POST",
             headers: JSON_HEADER,
             body: data
-        });
+        }, false);
     }
 }

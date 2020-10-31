@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, {useState} from 'react'
 import styles from "../styles/NavigationBar.css"
 import Button from "react-bootstrap/Button";
-import {useHistory} from 'react-router-dom';
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
@@ -10,10 +9,10 @@ import {AddRounded, ExitToApp, InsertPhoto, Lock, Person} from "@material-ui/ico
 import {Upload} from "./Upload";
 import Modal from "react-bootstrap/Modal";
 import Dropdown from "react-bootstrap/Dropdown";
+import history from "../customHistory";
 
 export const NavigationBar = () => {
     const [show, setShow]: [boolean, any] = useState(false);
-    const history = useHistory();
 
     const handleShow = () => {
         setShow(true);
@@ -57,12 +56,6 @@ export const NavigationBar = () => {
                                 Upload
                             </Button>
 
-                            {/*
-                            <Button className={styles.navBarButton} onClick={logOut}>
-                                <ExitToApp/> {" "}
-                                Sign out
-                            </Button>*/}
-
                             <Dropdown className={"ml-1"} alignRight>
                                 <Dropdown.Toggle className={styles.navBarButton}
                                                  id={"dropdown-menu-align-right"}>
@@ -71,7 +64,6 @@ export const NavigationBar = () => {
                                 </Dropdown.Toggle>
 
                                 <Dropdown.Menu>
-
                                     <Dropdown.Item onSelect={visitUsersMemes}>
                                         <InsertPhoto/> {" "}
                                         Your memes

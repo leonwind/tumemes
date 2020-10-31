@@ -8,6 +8,7 @@ import {LinkCollection} from "./LinkCollection";
 import {SecurePassword} from "./SecurePassword";
 import {PasswordReset} from "../types";
 import {AccountService} from "../service/accountService";
+import history from "../customHistory";
 
 interface Props {
     token: string
@@ -71,7 +72,12 @@ export class PasswordResetPage extends Component<RouteComponentProps<Props>, Sta
             newPassword: this.state.password
         };
 
-        AccountService.resetPassword(passwordReset);
+        AccountService.resetPassword(passwordReset)
+            .then((ans: Response) => {
+                if (ans.ok) {
+                    history.push("/login");
+                }
+            });
     }
 
     render() {

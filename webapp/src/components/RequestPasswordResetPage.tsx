@@ -5,6 +5,7 @@ import logo from "../../assets/logo.svg";
 import Button from "react-bootstrap/Button";
 import {LinkCollection} from "./LinkCollection";
 import {AccountService} from "../service/accountService";
+import history from "../customHistory";
 
 interface State {
     email: string,
@@ -22,6 +23,7 @@ export class RequestPasswordResetPage extends Component<{}, State> {
 
         this.handleEmailChange = this.handleEmailChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
     }
 
     private handleEmailChange(event: ChangeEvent<HTMLInputElement>) {
@@ -31,7 +33,10 @@ export class RequestPasswordResetPage extends Component<{}, State> {
     private handleSubmit(event: FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        AccountService.requestPasswordReset(this.state.email);
+        AccountService.requestPasswordReset(this.state.email)
+            .then(() => {
+                history.push("/login");
+            });
     }
 
     render() {

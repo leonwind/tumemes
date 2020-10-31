@@ -2,7 +2,6 @@ import 'bootstrap/dist/css/bootstrap.css';
 import React, {ChangeEvent, Component, FormEvent} from "react";
 import {AuthorizationService} from "../service/authorizationService";
 import {NewUser} from "../types";
-import {Redirect} from "react-router-dom";
 import styles from "../styles/Registration.css"
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -11,6 +10,7 @@ import Modal from "react-bootstrap/Modal";
 import Spinner from "react-bootstrap/Spinner";
 import {LinkCollection} from "./LinkCollection";
 import {SecurePassword} from "./SecurePassword";
+import history from "../customHistory"
 
 interface State {
     username: string,
@@ -24,7 +24,6 @@ interface State {
         repeatedPassword: string,
         unexpected: string
     },
-    redirect: boolean,
     isLoading: boolean,
     show: boolean
 }
@@ -48,7 +47,6 @@ export class RegistrationPage extends Component<{}, State> {
                 repeatedPassword: "",
                 unexpected: ""
             },
-            redirect: false,
             isLoading: false,
             show: false
         };
@@ -86,10 +84,8 @@ export class RegistrationPage extends Component<{}, State> {
     }
 
     private handleCloseModal() {
-        this.setState({
-            show: false,
-            redirect: true
-        });
+        this.setState({show: false});
+        history.push("/login");
     }
 
     private static getDomain(email: string): string {
@@ -194,11 +190,6 @@ export class RegistrationPage extends Component<{}, State> {
     }
 
     render() {
-        // redirect to homepage if registration was successful
-        if (this.state.redirect) {
-            return (<Redirect to={"/login"}/>);
-        }
-
         return (
             <div className={styles.body}>
                 <Form onSubmit={this.handleSubmit}
