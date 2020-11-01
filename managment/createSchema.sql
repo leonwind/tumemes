@@ -28,8 +28,8 @@ CREATE TABLE public.comments (
     commentid text NOT NULL,
     parentid text,
     memeid text NOT NULL,
-    content text,
-    author text,
+    content text NOT NULL,
+    author text NOT NULL,
     created timestamp without time zone
 );
 
@@ -55,8 +55,8 @@ ALTER TABLE public.commentvotes OWNER TO tumemes;
 
 CREATE TABLE public.memes (
     memeid text NOT NULL,
-    title text,
-    author text,
+    title text NOT NULL,
+    author text NOT NULL,
     created timestamp without time zone
 );
 
@@ -68,8 +68,8 @@ ALTER TABLE public.memes OWNER TO tumemes;
 --
 
 CREATE TABLE public.memevotes (
-    memeid text,
-    username text,
+    memeid text NOT NULL,
+    username text NOT NULL,
     vote integer
 );
 

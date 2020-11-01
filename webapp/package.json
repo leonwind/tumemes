@@ -24,7 +24,6 @@
     "react": "^16.13.1",
     "react-bootstrap": "^1.0.1",
     "react-dom": "^16.13.1",
-    "react-redux": "^7.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "^3.4.3",
@@ -55,7 +54,6 @@
   "devDependencies": {
     "css-loader": "^3.5.3",
     "html-webpack-plugin": "^4.3.0",
-    "redux-devtools": "^3.5.0",
     "style-loader": "^1.2.1",
     "ts-loader": "^7.0.4",
     "webpack-cli": "^3.3.11",

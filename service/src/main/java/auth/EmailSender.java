@@ -74,7 +74,6 @@ public class EmailSender {
             "or by copy-pasting the following into your browser:<br/> <br/>",
             url);
 
-    to = "leon.windheuser@gmail.com";
     sendEmail(to, smtpUsername, smtpPassword, subject, body);
   }
 
@@ -94,7 +93,6 @@ public class EmailSender {
             "If you do not have requested to reset your password, please ignore this email."
         );
 
-    to = "leon.windheuser@gmail.com";
     sendEmail(to, smtpUsername, smtpPassword, subject, body);
   }
 }

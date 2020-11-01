@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+    backend:
+        container_name: tumemes-service
+
+    postgresdb:
+        image: postgres
+        ports:
+            - "5432:5432:"
+        environment:
+            - POSTGRES_USER: tumemes
+            - POSTGRES_PASSWORD: 
+            - POSTGRES_DB: tumemes
