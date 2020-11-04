@@ -40,6 +40,9 @@ public class Application extends io.dropwizard.Application<Configuration> {
 
   @Override
   public void run(Configuration configuration, Environment environment) {
+    // TODO: Fix and refactor meme class
+    MemeImageDAO.setMemeFileLocation(configuration.getMemeFolder());
+
     final JdbiFactory factory = new JdbiFactory();
     final Jdbi jdbi = factory.build(environment, configuration.getDatabase(), "postgres");
 

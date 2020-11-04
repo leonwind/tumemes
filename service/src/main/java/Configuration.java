@@ -5,6 +5,8 @@ import io.dropwizard.db.DataSourceFactory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Configuration extends io.dropwizard.Configuration
     implements AssetsBundleConfiguration {
@@ -12,6 +14,7 @@ public class Configuration extends io.dropwizard.Configuration
   @Valid @NotNull @JsonProperty private String jwtSecret;
   @Valid @NotNull @JsonProperty private String smtpUsername;
   @Valid @NotNull @JsonProperty private String smtpPassword;
+  @Valid @NotNull @JsonProperty private String memeFolder;
   @Valid @NotNull private DataSourceFactory database = new DataSourceFactory();
 
   @Valid @NotNull @JsonProperty
@@ -27,6 +30,10 @@ public class Configuration extends io.dropwizard.Configuration
 
   public String getSMTPPassword() {
     return smtpPassword;
+  }
+
+  public Path getMemeFolder() {
+    return Paths.get(memeFolder);
   }
 
   @JsonProperty("database")

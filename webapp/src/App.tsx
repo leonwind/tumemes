@@ -11,8 +11,8 @@ import {RequestNewVerification} from "./components/RequestNewVerification";
 import {PasswordResetPage} from "./components/PasswordResetPage";
 import {ValidateAccountPage} from "./components/ValidateAccountPage";
 import {MemesByUserPage} from "./components/MemesByUserPage";
-import history from "./customHistory";
 import {Router} from "react-router";
+import history from "./customHistory";
 
 
 export class App extends Component {

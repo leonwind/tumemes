@@ -10,18 +10,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.UUID;
 
 public class MemeImageDAO {
 
-  private static final String MEME_FILE_LOCATION = "images/";
+  private static String MEME_FILE_LOCATION;
   // Store all images as .jpg
   // Real image extension does not matter since all browsers only care about
   // the header and not the image extension
   private static final String IMAGE_EXTENSION = ".jpg";
   // Maximum file size is limited to 1 MiB (1024 * 1024 Bytes)
   private static final long MAX_FILE_SIZE = 1048576;
+
+  public static void setMemeFileLocation(Path path) {
+    MEME_FILE_LOCATION = path.toString();
+  }
 
   public static void saveImage(InputStream image, FormDataContentDisposition fileDetail, Meme meme)
       throws Exception {

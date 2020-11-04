@@ -20,16 +20,9 @@ services:
             - DATABASE_CONNECTION=postgres:5432/tumemes
             - DATABASE_USER=tumemes
             - DATABASE_PWD=test
+            - MEME_FOLDER=/memes
+        volumes:
+            - /var/www/memes:/memes
         depends_on: 
             - postgres
         build: ./service
-
-    web:
-        image: nginx:alpine
-        ports:
-            - "3000:3000"
-        volumes:
-            - ./webapp/dist/index.html
-        depends_on: 
-            - tumemes-service
-
