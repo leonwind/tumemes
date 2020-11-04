@@ -1,13 +1,35 @@
 version: '3.8'
 services:
-    backend:
-        container_name: tumemes-service
-
-    postgresdb:
+    postgres:
+        container_name: postgres
+        hostname: postgres
         image: postgres
+        build: ./managment
         ports:
-            - "5432:5432:"
+            - "5432:5432"
         environment:
-            - POSTGRES_USER: tumemes
-            - POSTGRES_PASSWORD: 
-            - POSTGRES_DB: tumemes
+            - POSTGRES_USER=tumemes
+            - POSTGRES_PASSWORD=test
+            - POSTGRES_DB=tumemes
+
+    tumemes-service:
+        container_name: tumemes-service
+        ports:
+            - "8080:8080"
+        environment:
+            - DATABASE_CONNECTION=postgres:5432/tumemes
+            - DATABASE_USER=tumemes
+            - DATABASE_PWD=test
+        depends_on: 
+            - postgres
+        build: ./service
+
+    web:
+        image: nginx:alpine
+        ports:
+            - "3000:3000"
+        volumes:
+            - ./webapp/dist/index.html
+        depends_on: 
+            - tumemes-service
+
