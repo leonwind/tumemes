@@ -14,7 +14,7 @@ public class EmailSender {
 
   private static final Logger log = LoggerFactory.getLogger(EmailSender.class);
 
-  private static final String DOMAIN = "http://localhost:3000";
+  private static final String DOMAIN = "http://tumemes.de";
 
   private static final String FROM = "no-reply@tumemes.de";
   private static final String FROM_NAME = "no-reply";
