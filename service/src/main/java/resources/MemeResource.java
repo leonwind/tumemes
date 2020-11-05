@@ -58,7 +58,7 @@ public class MemeResource implements MemeService {
       @PathParam("username") String username,
       @QueryParam("limit") @DefaultValue("9007199254740991") long limit,
       @QueryParam("sortBy") String sortBy) {
-    if (!username.equals(user.getName())) {
+    if (!username.equals(user.getName()) && !username.equals(user.getEmail())) {
       return new ArrayList<>();
     }
 

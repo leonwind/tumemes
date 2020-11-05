@@ -4,12 +4,14 @@ services:
         container_name: postgres
         hostname: postgres
         image: postgres
+        volumes:
+            - /root/db_data:/var/lib/postgresql/data
         build: ./managment
         ports:
             - "5432:5432"
         environment:
             - POSTGRES_USER=tumemes
-            - POSTGRES_PASSWORD=test
+            - POSTGRES_PASSWORD=${DB_PWD}
             - POSTGRES_DB=tumemes
 
     tumemes-service:
@@ -19,10 +21,13 @@ services:
         environment:
             - DATABASE_CONNECTION=postgres:5432/tumemes
             - DATABASE_USER=tumemes
-            - DATABASE_PWD=test
-            - MEME_FOLDER=/memes
+            - DATABASE_PWD=${DB_PWD}
+            - MEME_FOLDER=/memeImages/
+            - JWT_SECRET=${JWT_SECRET}
+            - SMTP_USERNAME=${SMTP_USERNAME}
+            - SMTP_PASSWORD=${SMTP_PASSWORD}
         volumes:
-            - /var/www/memes:/memes
+            - /var/www/memeImages:/memeImages
         depends_on: 
             - postgres
         build: ./service
