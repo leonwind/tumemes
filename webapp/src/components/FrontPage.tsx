@@ -107,7 +107,6 @@ export class FrontPage extends Component<Props, State> {
                     const memesPromise: Promise<Meme[]> = ans.json();
 
                     memesPromise.then((memes: Meme[]) => {
-                        console.table(memes);
                         if (memes.length === 0) {
                             this.setState({hasMore: false});
                             return;

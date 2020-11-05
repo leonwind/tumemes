@@ -1,6 +1,6 @@
 import {NewMeme} from "../types";
 import {Requests} from "./requests";
-import {AUTH_HEADER} from "./headers";
+import {GENERATE_AUTH_HEADER} from "./headers";
 
 export class MemeService {
 
@@ -13,7 +13,7 @@ export class MemeService {
 
         return await Requests.sendRequest(url, {
             method: "GET",
-            headers: AUTH_HEADER
+            headers: GENERATE_AUTH_HEADER()
 
         }, false);
     }
@@ -24,14 +24,14 @@ export class MemeService {
         const url: string = "memes/user/" + username +  "?limit=" + limitParamValue + queryParam;
         return await Requests.sendRequest(url, {
             method: "GET",
-            headers: AUTH_HEADER
+            headers: GENERATE_AUTH_HEADER()
         });
     }
 
     static async getMemeByID(memeID: string): Promise<Response> {
         return await Requests.sendRequest("memes/meme/" + memeID, {
             method: "GET",
-            headers: AUTH_HEADER
+            headers: GENERATE_AUTH_HEADER()
         }, false);
     }
 
@@ -46,7 +46,7 @@ export class MemeService {
 
         await Requests.sendRequest("upload", {
             method: "POST",
-            headers: AUTH_HEADER,
+            headers: GENERATE_AUTH_HEADER(),
             body: data
         });
     }

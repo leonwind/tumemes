@@ -85,7 +85,7 @@ export class LoginPage extends Component<{}, State> {
                         "Please try again later."
                 });
                 throw new Error(ans.statusText);
-            })
+            });
     }
 
     render() {

@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode"
 import {Token} from "../types";
-import {AUTH_HEADER} from "./headers";
+import {GENERATE_AUTH_HEADER} from "./headers";
 
 export class TokenService {
 
@@ -44,7 +44,7 @@ export class TokenService {
     private static async getNewToken() {
         return await fetch("/api/access_token", {
             method: "GET",
-            headers: AUTH_HEADER
+            headers: GENERATE_AUTH_HEADER()
         });
     }
 }
