@@ -25,6 +25,11 @@ public class EmailSender {
   // See https://stackoverflow.com/a/58749463
   private static final String PORT = "587";
 
+  private static final String footer =
+      String.join(
+          System.getProperty("line.separator"), "<br/> <br/>",
+          "Happy memeing and stay excellent! <br/>", "TUMemes");
+
   private static void sendEmail(
       String to, String smtpUsername, String smtpPassword, String subject, String body)
       throws Exception {
@@ -72,7 +77,7 @@ public class EmailSender {
             System.getProperty("line.separator"),
             "Please verify your TUMemes account by clicking on this " + link,
             "or by copy-pasting the following into your browser:<br/> <br/>",
-            url);
+            url, footer);
 
     sendEmail(to, smtpUsername, smtpPassword, subject, body);
   }
@@ -88,10 +93,9 @@ public class EmailSender {
             System.getProperty("line.separator"),
             "To reset your password please click on this " + link,
             "or copy-paste the following into your browser:<br/> <br/>",
-            url,
-            "<br/> <br/>",
-            "If you do not have requested to reset your password, please ignore this email."
-        );
+            url, "<br/> <br/>",
+            "If you do not have requested to reset your password, please " + "ignore this email.",
+            footer);
 
     sendEmail(to, smtpUsername, smtpPassword, subject, body);
   }

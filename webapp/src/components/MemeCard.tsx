@@ -30,7 +30,7 @@ interface State {
 }
 
 export class MemeCard extends Component<Props, State> {
-    private readonly serverUrl: string = "http://localhost:8080/"
+    private readonly serverUrl: string = "http://tumemes.de/memeImages"
     private readonly timeDiff: string;
 
     constructor(props: Props) {

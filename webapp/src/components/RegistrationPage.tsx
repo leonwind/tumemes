@@ -229,6 +229,11 @@ export class RegistrationPage extends Component<{}, State> {
                         <p className={styles.errorMessage}>
                             {this.state.errors["email"]}
                         </p>
+
+                        <Form.Text className={"text-muted"}>
+                            Please register with your @tum.de or @mytum.de email
+                            address.
+                        </Form.Text>
                     </Form.Group>
 
                     <Form.Group>
@@ -295,7 +300,7 @@ export class RegistrationPage extends Component<{}, State> {
 
                     <Modal.Body>
                         <p>
-                            To verify your TUMemes account, please click on the link you have got sent via email.
+                            To verify your TUMemes account, please click on the link we sent you via email.
                             Note that the link will expire in one day.
                         </p>
                         <p>
