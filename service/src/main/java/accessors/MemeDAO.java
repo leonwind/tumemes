@@ -33,8 +33,8 @@ public interface MemeDAO {
   @SqlQuery(
       "SELECT memes.memeID as memeID, memes.title as title, memes.author as "
           + "author, memes.created as created, "
-          + "COALESCE(v.voteCount, 0) as voteCount,"
-          + "COALESCE(v.userVote, 0) as userVote,"
+          + "COALESCE(v.voteCount, 0) as voteCount, "
+          + "COALESCE(v.userVote, 0) as userVote, "
           + "COALESCE(c.numComments, 0) as numComments "
           + "FROM memes "
           + "LEFT JOIN ( "
@@ -51,8 +51,8 @@ public interface MemeDAO {
           + "WHERE parentID IS NULL "
           + "GROUP BY memeID "
           + ") c on c.memeID = memes.memeID "
-          + "WHERE voteCount <= :maxVote "
-          + "AND (:fromUser IS FALSE OR author = :currUsername)"
+          + "WHERE COALESCE(voteCount, 0) <= :maxVote "
+          + "AND (:fromUser IS FALSE OR author = :currUsername) "
           + "ORDER BY voteCount DESC, created DESC "
           + "LIMIT 10")
   @RegisterRowMapper(MemeMapper.class)
