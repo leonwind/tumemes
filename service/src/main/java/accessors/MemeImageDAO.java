@@ -25,7 +25,7 @@ public class MemeImageDAO {
   private static final long MAX_FILE_SIZE = 1048576;
 
   public static void setMemeFileLocation(Path path) {
-    MEME_FILE_LOCATION = path.toString();
+    MEME_FILE_LOCATION = path.toString() + "/";
   }
 
   public static void saveImage(InputStream image, FormDataContentDisposition fileDetail, Meme meme)

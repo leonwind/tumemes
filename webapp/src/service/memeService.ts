@@ -35,7 +35,7 @@ export class MemeService {
         }, false);
     }
 
-    static async uploadMeme(newMeme: NewMeme): Promise<void> {
+    static async uploadMeme(newMeme: NewMeme): Promise<Response> {
         const currTitle: string = newMeme.title;
         const image: any = newMeme.image;
         const meme: string = JSON.stringify({"title": currTitle})
@@ -44,10 +44,10 @@ export class MemeService {
         data.append("file", image);
         data.append("meme", meme);
 
-        await Requests.sendRequest("upload", {
+        return await Requests.sendRequest("upload", {
             method: "POST",
             headers: GENERATE_AUTH_HEADER(),
             body: data
-        });
+        }, false);
     }
 }

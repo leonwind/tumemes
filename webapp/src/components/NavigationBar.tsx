@@ -20,6 +20,7 @@ export const NavigationBar = () => {
 
     const handleClose = () => {
         setShow(false);
+        window.location.reload();
     }
 
     const logOut = () => {
@@ -98,7 +99,7 @@ export const NavigationBar = () => {
                 </Modal.Header>
 
                 <Modal.Body>
-                    <Upload/>
+                    <Upload closeModal={handleClose}/>
                 </Modal.Body>
             </Modal>
         </>
