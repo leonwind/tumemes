@@ -1,7 +1,6 @@
 import React, {ChangeEvent, Component, FormEvent} from "react";
 import {User} from "../types";
 import {AuthorizationService} from "../service/authorizationService";
-import {Redirect} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import styles from "../styles/Login.css"
 import Form from "react-bootstrap/Form";

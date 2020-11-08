@@ -274,15 +274,21 @@ export class RegistrationPage extends Component<{}, State> {
                         {this.state.errors["unexpected"]}
                     </p>
 
-                    <Button type="submit"
-                            className={styles.registrationSubmitButton}
-                            disabled={this.state.isLoading}>
-                        {this.state.isLoading &&
-                        <Spinner animation="border" role="status" size={"sm"}>
-                            <span className="sr-only">Loading...</span>
-                        </Spinner>} {" "}
-                        Create account
-                    </Button>
+                    <Form.Group>
+                        <Form.Check type={"checkbox"}
+                                    label={"By signing up, you agree to our terms and conditions."}
+                                    required/>
+
+                        <Button type="submit"
+                                className={styles.registrationSubmitButton}
+                                disabled={this.state.isLoading}>
+                            {this.state.isLoading &&
+                            <Spinner animation="border" role="status" size={"sm"}>
+                                <span className="sr-only">Loading...</span>
+                            </Spinner>} {" "}
+                            Create account
+                        </Button>
+                    </Form.Group>
 
                     <p className={styles.loginLink}>
                         Already have an account? <a href={"/login"}>Sign in.</a>
