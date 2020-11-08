@@ -1,5 +1,14 @@
-import accessors.*;
-import auth.*;
+import accessors.CommentDAO;
+import accessors.CommentVoteDAO;
+import accessors.MemeDAO;
+import accessors.MemeImageDAO;
+import accessors.MemeVoteDAO;
+import accessors.UserDAO;
+import auth.JWTAuthFilter;
+import auth.JWTAuthenticator;
+import auth.JWTCredentials;
+import auth.UnauthorizedResourceHandler;
+import auth.UserAuthorizer;
 import core.User;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthFilter;
@@ -14,7 +23,13 @@ import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jdbi.v3.core.Jdbi;
-import resources.*;
+import resources.AccountResource;
+import resources.AuthResource;
+import resources.CommentResource;
+import resources.MemeResource;
+import resources.PingResource;
+import resources.UploadResource;
+import resources.VoteResource;
 
 public class Application extends io.dropwizard.Application<Configuration> {
 

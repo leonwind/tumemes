@@ -5,7 +5,11 @@ import accessors.CommentVoteDAO;
 import accessors.MemeDAO;
 import accessors.MemeVoteDAO;
 import api.VoteService;
-import core.*;
+import core.CommentVote;
+import core.MemeVote;
+import core.NewCommentVote;
+import core.NewMemeVote;
+import core.User;
 import io.dropwizard.auth.Auth;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +52,11 @@ public class VoteResource implements VoteService {
       return Response.status(400).entity("Meme does not exist").build();
     }
 
+    // check if vote is either 1, 0, or -1
+    if (newMemeVote.getVote() > 1 || newMemeVote.getVote() < -1) {
+      return Response.status(400).entity("Vote has wrong value").build();
+    }
+
     log.info("Vote meme");
 
     String username = user.getName();
@@ -77,6 +86,11 @@ public class VoteResource implements VoteService {
 
     if (!commentDAO.commentIDExists(newCommentVote.getCommentID().toString())) {
       return Response.status(400).entity("Comment does not exist").build();
+    }
+
+    // check if vote is either 1, 0, or -1
+    if (newCommentVote.getVote() > 1 || newCommentVote.getVote() < -1) {
+      return Response.status(400).entity("Vote has wrong value").build();
     }
 
     log.info("Vote comment");
