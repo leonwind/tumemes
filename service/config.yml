@@ -13,7 +13,7 @@ database:
   driverClass: org.postgresql.Driver
   user: ${DATABASE_USER}
   password: ${DATABASE_PWD}
-  url: jdbc:postgresql://${DB_CONNECTION}
+  url: jdbc:postgresql://${DATABASE_CONNECTION}
   properties:
     charSet: UTF-8
   maxWaitForConnection: 1s
