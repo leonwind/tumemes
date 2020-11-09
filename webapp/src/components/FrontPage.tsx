@@ -45,8 +45,10 @@ export class FrontPage extends Component<Props, State> {
             }
 
             // load more memes if user hits the end of the page
-            if (window.innerHeight + document.documentElement.scrollTop
-                === document.documentElement.offsetHeight) {
+            // add relative error since android users never reach
+            // the absolute end of the page
+            if (Math.abs(document.documentElement.offsetHeight -
+                (window.innerHeight + document.documentElement.scrollTop)) <= 100) {
                 this.loadMemes();
             }
         }, 500);

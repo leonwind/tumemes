@@ -21,8 +21,8 @@ public class MemeImageDAO {
   // Real image extension does not matter since all browsers only care about
   // the header and not the image extension
   private static final String IMAGE_EXTENSION = ".jpg";
-  // Maximum file size is limited to 1 MiB (1024 * 1024 Bytes)
-  private static final long MAX_FILE_SIZE = 1048576;
+  // Maximum file size is limited to 7 MiB (7 * 1024 * 1024 Bytes)
+  private static final long MAX_FILE_SIZE = 7340032;
 
   public static void setMemeFileLocation(Path path) {
     MEME_FILE_LOCATION = path.toString() + "/";
@@ -30,7 +30,6 @@ public class MemeImageDAO {
 
   public static void saveImage(InputStream image, FormDataContentDisposition fileDetail, Meme meme)
       throws Exception {
-
     if (!isFileExtensionSupported(fileDetail)) {
       throw new FileNotSupportedException();
     }
